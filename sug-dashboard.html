@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z-Node | SUG Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          brand: { 900: '#061416', 800: '#0a2225', 700: '#113136', 100: '#e6f0f1' },
+          accent: { 500: '#10B981', 600: '#059669', 400: '#34d399' },
+          sug:    { 500: '#f59e0b', 600: '#d97706', 400: '#fbbf24', 100: '#fef3c7', 50: '#fffbeb' }
+        },
+        fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }
+      }
+    }
+  }
+</script>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
+body.light { background: #F0F4F8; color: #1e293b; }
+body.dark  { background: #080E1A; color: #f1f5f9; }
+
+.sidebar { width: 260px; flex-shrink: 0; background: #061416; height: 100vh; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.05); overflow-y: auto; }
+.main-content { flex: 1; overflow-y: auto; }
+
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.18s; margin-bottom: 2px; }
+.nav-item:hover { background: rgba(255,255,255,0.04); color: #94a3b8; }
+.nav-item.active { background: rgba(245,158,11,0.12); color: #f59e0b; border-left: 3px solid #f59e0b; border-radius: 0 10px 10px 0; }
+.nav-item .nav-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: rgba(255,255,255,0.04); }
+.nav-item.active .nav-icon { background: rgba(245,158,11,0.15); }
+
+.card { border-radius: 16px; transition: all 0.2s; }
+.light .card { background: #ffffff; border: 1px solid #e8edf2; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+.dark .card  { background: #111827; border: 1px solid #1f2937; }
+
+.stat-card { border-radius: 16px; padding: 22px 24px; }
+.light .stat-card { background: #fff; border: 1px solid #e8edf2; }
+.dark .stat-card  { background: #111827; border: 1px solid #1f2937; }
+
+.input-field { width: 100%; padding: 11px 15px; border-radius: 10px; font-size: 13px; font-weight: 500; outline: none; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; }
+.light .input-field { border: 1px solid #dde3ea; background: #fff; color: #0f172a; }
+.dark .input-field  { border: 1px solid #2d3748; background: #1a2234; color: #f1f5f9; }
+.input-field:focus  { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.1); }
+select.input-field  { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+.btn { padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.18s; border: none; font-family: 'Plus Jakarta Sans', sans-serif; }
+.btn-gold  { background: #f59e0b; color: #fff; }
+.btn-gold:hover  { background: #d97706; transform: translateY(-1px); }
+.btn-dark  { background: #0a2225; color: #fff; }
+.btn-dark:hover  { background: #113136; transform: translateY(-1px); }
+.btn-ghost { background: transparent; border: 1px solid #e2e8f0; color: #64748b; }
+.btn-ghost:hover { background: #f8fafc; color: #1e293b; }
+.dark .btn-ghost { border-color: #2d3748; color: #94a3b8; }
+.dark .btn-ghost:hover { background: #1e293b; color: #f1f5f9; }
+
+.badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.badge-green  { background: #d1fae5; color: #065f46; }
+.badge-amber  { background: #fef3c7; color: #92400e; }
+.badge-red    { background: #fee2e2; color: #991b1b; }
+.badge-gold   { background: #fef3c7; color: #92400e; }
+.badge-indigo { background: #ede9fe; color: #4338ca; }
+.badge-slate  { background: #f1f5f9; color: #475569; }
+.dark .badge-green  { background: rgba(16,185,129,0.15); color: #34d399; }
+.dark .badge-amber  { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.dark .badge-gold   { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.dark .badge-red    { background: rgba(239,68,68,0.15); color: #f87171; }
+.dark .badge-indigo { background: rgba(99,102,241,0.15); color: #a5b4fc; }
+.dark .badge-slate  { background: rgba(148,163,184,0.1); color: #94a3b8; }
+
+.modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(6,20,22,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modal-box { background: #fff; border-radius: 20px; box-shadow: 0 24px 64px rgba(0,0,0,0.18); max-height: 90vh; overflow-y: auto; animation: modal-in 0.22s cubic-bezier(0.16,1,0.3,1); }
+.dark .modal-box { background: #111827; border: 1px solid #1f2937; }
+@keyframes modal-in { from { opacity:0; transform: scale(0.95) translateY(12px); } to { opacity:1; transform: scale(1) translateY(0); } }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { padding: 11px 16px; text-align: left; font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; }
+.data-table td { padding: 13px 16px; border-top: 1px solid #f1f5f9; }
+.dark .data-table td { border-color: #1f2937; }
+.data-table tr:hover td { background: rgba(245,158,11,0.03); }
+
+.spinner { border: 3px solid rgba(245,158,11,0.2); border-top-color: #f59e0b; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.progress-track { background: #e8edf2; border-radius: 999px; height: 6px; overflow: hidden; }
+.dark .progress-track { background: #1f2937; }
+.progress-fill { height: 100%; border-radius: 999px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
+
+#toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
+@keyframes toast-in { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+.toast-show { animation: toast-in 0.25s ease; }
+
+.sug-banner { background: linear-gradient(135deg, #451a03 0%, #78350f 50%, #92400e 100%); border-radius: 16px; padding: 24px 28px; position: relative; overflow: hidden; }
+.sug-banner::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(245,158,11,0.35) 0%, transparent 70%); border-radius: 50%; }
+
+.section-head { font-size: 22px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+.dark .section-head { color: #f1f5f9; }
+.section-sub { font-size: 13px; color: #64748b; margin-top: 4px; font-weight: 500; }
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.dark ::-webkit-scrollbar-thumb { background: #2d3748; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body class="light">
+
+<!-- CONFIG MODAL -->
+<div id="config-modal" class="modal-overlay hidden">
+  <div class="modal-box p-8 w-full max-w-sm">
+    <div class="w-10 h-10 bg-sug-500 rounded-xl flex items-center justify-center text-white font-black text-xl mb-5">S</div>
+    <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">SUG Portal</h2>
+    <p class="text-xs text-slate-500 mb-6">Connect to your Supabase project to continue.</p>
+    <div class="space-y-3 mb-5">
+      <input id="cfg-url" type="url" class="input-field" placeholder="Supabase Project URL">
+      <input id="cfg-key" type="password" class="input-field" placeholder="Anon Public Key">
+    </div>
+    <button onclick="saveConfig()" class="btn btn-gold w-full">Connect</button>
+  </div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loading-overlay" class="modal-overlay hidden" style="z-index:2000">
+  <div class="modal-box p-8 text-center min-w-[180px]">
+    <div class="spinner mx-auto mb-4"></div>
+    <p id="loading-text" class="text-sm font-semibold text-slate-700 dark:text-slate-200">Loading...</p>
+  </div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="screen-login" class="min-h-screen flex items-center justify-center p-4 hidden">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 bg-sug-500 rounded-2xl flex items-center justify-center text-white font-black text-3xl mx-auto mb-4 shadow-lg">S</div>
+      <h1 class="text-2xl font-black text-slate-900 dark:text-white">SUG Portal</h1>
+      <p class="text-sm text-slate-500 mt-1">Student Union Government · Tier 4 Dashboard</p>
+    </div>
+    <div class="card p-8">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Username</label>
+          <input id="login-username" type="text" class="input-field" placeholder="sug_username">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Password</label>
+          <input id="login-password" type="password" class="input-field" placeholder="••••••••" onkeydown="if(event.key==='Enter') handleLogin()">
+        </div>
+        <p id="login-error" class="text-red-500 text-xs font-semibold hidden text-center"></p>
+        <button onclick="handleLogin()" class="btn btn-gold w-full mt-2" style="padding:13px;">Sign In</button>
+      </div>
+      <p class="text-center text-xs text-slate-400 mt-5">Powered by <span class="text-sug-500 font-bold">Z-Node</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="screen-dashboard" class="hidden h-screen flex flex-col">
+
+  <header class="flex-shrink-0 h-14 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#080E1A] z-10">
+    <div class="flex items-center gap-3">
+      <div class="w-7 h-7 bg-sug-500 rounded-lg flex items-center justify-center text-white font-black text-sm">S</div>
+      <div class="w-px h-5 bg-slate-200 dark:bg-slate-700"></div>
+      <div>
+        <span id="hdr-inst" class="text-sm font-bold text-slate-900 dark:text-white"></span>
+        <span class="mx-2 text-slate-300 dark:text-slate-600">·</span>
+        <span class="text-xs text-slate-400 font-semibold">Student Union Government</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <button onclick="toggleTheme()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-lg transition-colors">🌙</button>
+      <div class="flex items-center gap-3">
+        <div id="hdr-avatar" class="w-8 h-8 rounded-full bg-sug-500 text-white flex items-center justify-center text-xs font-black"></div>
+        <div class="hidden md:block">
+          <p id="hdr-name" class="text-xs font-bold text-slate-800 dark:text-slate-200"></p>
+          <button onclick="logout()" class="text-[10px] text-slate-400 hover:text-red-500 font-semibold transition-colors">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+
+    <aside class="sidebar">
+      <div class="p-4 border-b border-white/5">
+        <div class="sug-banner">
+          <div class="text-[9px] font-black text-amber-400/70 uppercase tracking-[0.15em] mb-1">Student Union Govt · Tier 4</div>
+          <div id="sb-name" class="text-white font-bold text-sm leading-tight"></div>
+          <div id="sb-inst" class="text-slate-400 text-xs mt-0.5 font-mono"></div>
+          <div class="mt-3 flex items-center gap-2">
+            <div class="text-[9px] font-bold bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-md">₦100 / PAID STUDENT</div>
+          </div>
+        </div>
+      </div>
+
+      <nav class="p-3 flex-1">
+        <div class="text-[9px] font-black text-slate-600 uppercase tracking-[0.15em] px-3 mb-3 mt-1">Navigation</div>
+        <div class="nav-item active" onclick="navTo('overview')" data-section="overview"><div class="nav-icon">🏛️</div><span>Institution Overview</span></div>
+        <div class="nav-item" onclick="navTo('faculties')" data-section="faculties"><div class="nav-icon">🏫</div><span>Faculties</span></div>
+        <div class="nav-item" onclick="navTo('students')" data-section="students"><div class="nav-icon">👥</div><span>All Students</span></div>
+        <div class="nav-item" onclick="navTo('analytics')" data-section="analytics"><div class="nav-icon">📊</div><span>Analytics</span></div>
+        <div class="nav-item" onclick="navTo('broadcast')" data-section="broadcast"><div class="nav-icon">📣</div><span>Broadcast</span></div>
+        <div class="nav-item" onclick="navTo('leaderboard')" data-section="leaderboard"><div class="nav-icon">🏆</div><span>Leaderboard</span></div>
+        <div class="nav-item" onclick="navTo('support')" data-section="support"><div class="nav-icon">🛟</div><span>Support</span></div>
+      </nav>
+
+      <div class="p-4 border-t border-white/5">
+        <div class="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2 px-1">Earnings (Tier 4 · ₦100/student)</div>
+        <div class="flex justify-between text-xs px-1 mb-1">
+          <span class="text-slate-500 font-semibold">Pending</span>
+          <span id="sb-pending-earn" class="font-black text-amber-400">₦0</span>
+        </div>
+        <div class="flex justify-between text-xs px-1">
+          <span class="text-slate-500 font-semibold">Total Earned</span>
+          <span id="sb-total-earn" class="font-black text-sug-400">₦0</span>
+        </div>
+        <button onclick="navTo('support')" class="mt-3 w-full text-[10px] font-bold text-slate-500 hover:text-amber-400 transition-colors text-left px-1">Request payout →</button>
+      </div>
+    </aside>
+
+    <main class="main-content p-8 transition-colors bg-slate-50 dark:bg-[#080E1A]">
+
+      <!-- OVERVIEW -->
+      <div id="sec-overview">
+        <div class="mb-6">
+          <h2 class="section-head">Institution Overview</h2>
+          <p class="section-sub" id="ov-subtitle">Loading institution data...</p>
+        </div>
+
+        <!-- Top-level KPIs -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+          <div class="stat-card"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Faculties</p><p id="ov-faculties" class="text-3xl font-black text-slate-900 dark:text-white">0</p></div>
+          <div class="stat-card"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Departments</p><p id="ov-depts" class="text-3xl font-black text-slate-900 dark:text-white">0</p></div>
+          <div class="stat-card"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Total Students</p><p id="ov-total" class="text-3xl font-black text-slate-900 dark:text-white">0</p></div>
+          <div class="stat-card"><p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-2">Yearbook Access</p><p id="ov-paid" class="text-3xl font-black text-amber-600 dark:text-amber-400">0</p></div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#451a03,#78350f); border:none;"><p class="text-[10px] font-bold text-amber-200 uppercase tracking-wider mb-2">Your Earnings</p><p id="ov-earnings" class="text-3xl font-black text-white">₦0</p></div>
+        </div>
+
+        <!-- Revenue + funnel -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+          <div class="card p-6">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Revenue Summary</p>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-500 font-semibold">Total Institution Revenue</span>
+                <span id="ov-rev-total" class="font-black text-slate-900 dark:text-white">₦0</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-slate-500 font-semibold">SUG Share (₦100/student)</span>
+                <span id="ov-rev-share" class="font-black text-amber-500">₦0</span>
+              </div>
+              <div class="h-px bg-slate-100 dark:bg-slate-800"></div>
+              <div class="flex justify-between items-center text-xs text-slate-400">
+                <span>Worker cuts (₦70)</span><span id="ov-worker-cut">₦0</span>
+              </div>
+              <div class="flex justify-between items-center text-xs text-slate-400">
+                <span>DOS cuts (₦30)</span><span id="ov-dos-cut">₦0</span>
+              </div>
+              <div class="flex justify-between items-center text-xs text-slate-400">
+                <span>Faculty cuts (₦100)</span><span id="ov-fac-cut">₦0</span>
+              </div>
+              <div class="flex justify-between items-center text-xs text-slate-400">
+                <span>Z-Node infra (₦200)</span><span id="ov-znode-cut">₦0</span>
+              </div>
+            </div>
+            <button onclick="navTo('support')" class="btn btn-ghost w-full mt-4 text-xs">Request Payout</button>
+          </div>
+
+          <div class="card p-6 lg:col-span-2">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Faculty Adoption Snapshot</p>
+            <div id="ov-fac-bars" class="space-y-3"></div>
+          </div>
+        </div>
+
+        <!-- Recent students -->
+        <div class="card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Recent Registrations</p>
+            <button onclick="navTo('students')" class="text-xs text-amber-500 font-bold hover:underline">View all →</button>
+          </div>
+          <div id="ov-recent" class="space-y-2">
+            <div class="text-center py-8 text-slate-400 text-sm">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FACULTIES -->
+      <div id="sec-faculties" class="hidden">
+        <div class="mb-6">
+          <h2 class="section-head">Faculties</h2>
+          <p class="section-sub">All faculties and their department breakdown.</p>
+        </div>
+        <div id="fac-accordion" class="space-y-4"></div>
+      </div>
+
+      <!-- STUDENTS -->
+      <div id="sec-students" class="hidden">
+        <div class="flex items-end justify-between mb-6">
+          <div><h2 class="section-head">All Students</h2><p class="section-sub">Complete student registry for your institution.</p></div>
+          <div class="flex gap-3">
+            <input id="stu-search" type="text" placeholder="Search name or matric…" oninput="filterStudents()" class="input-field" style="width:220px; padding:9px 14px;">
+            <select id="stu-fac-filter" onchange="filterStudents()" class="input-field" style="width:160px; padding:9px 14px;">
+              <option value="ALL">All Faculties</option>
+            </select>
+            <select id="stu-status-filter" onchange="filterStudents()" class="input-field" style="width:140px; padding:9px 14px;">
+              <option value="ALL">All Status</option>
+              <option value="VERIFIED">Verified</option>
+              <option value="PENDING">Pending</option>
+              <option value="YEARBOOK">Yearbook</option>
+            </select>
+          </div>
+        </div>
+        <div class="card overflow-hidden">
+          <table class="data-table">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-900/50">
+                <th>Student</th><th>Matric No.</th><th>Faculty</th><th>Department</th><th>Level</th><th>Verification</th><th>Yearbook</th>
+              </tr>
+            </thead>
+            <tbody id="students-tbody">
+              <tr><td colspan="7" class="text-center py-12 text-slate-400 text-sm">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div id="sec-analytics" class="hidden">
+        <div class="mb-6"><h2 class="section-head">Institution Analytics</h2><p class="section-sub">Adoption, verification, and payment trends across all faculties.</p></div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="stat-card text-center"><p id="an-total" class="text-2xl font-black text-slate-900 dark:text-white">0</p><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Total</p></div>
+          <div class="stat-card text-center"><p id="an-verified" class="text-2xl font-black text-emerald-600">0</p><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Verified</p></div>
+          <div class="stat-card text-center"><p id="an-paid" class="text-2xl font-black text-amber-600">0</p><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Paid Access</p></div>
+          <div class="stat-card text-center" style="background:linear-gradient(135deg,#451a03,#78350f); border:none;"><p id="an-conversion" class="text-2xl font-black text-amber-400">0%</p><p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Conversion</p></div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="card p-6">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Verification Breakdown</p>
+            <div class="relative h-56 flex items-center justify-center"><canvas id="an-donut"></canvas></div>
+          </div>
+          <div class="card p-6">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Adoption by Faculty</p>
+            <div class="relative h-56"><canvas id="an-bar"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BROADCAST -->
+      <div id="sec-broadcast" class="hidden">
+        <div class="mb-6"><h2 class="section-head">Broadcast Center</h2><p class="section-sub">Send institution-wide announcements to all students.</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card p-6">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">New Announcement</p>
+            <div class="space-y-4">
+              <div><label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Title</label><input id="bc-title" type="text" class="input-field" placeholder="e.g. Yearbook deadline reminder"></div>
+              <div><label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Message</label><textarea id="bc-message" class="input-field" rows="4" placeholder="Your message..." style="resize:none;"></textarea></div>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Target</label>
+                <select id="bc-audience" class="input-field">
+                  <option value="ALL">All Students (Institution-wide)</option>
+                  <option value="UNPAID">Students Without Yearbook Access</option>
+                  <option value="FACULTY_LEADS">All Faculty Leads</option>
+                  <option value="DOS">All DOS Officers</option>
+                </select>
+              </div>
+              <button onclick="sendBroadcast()" class="btn btn-gold w-full">📣 Send Institution-wide Announcement</button>
+            </div>
+          </div>
+          <div class="card p-6">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Broadcast History</p>
+            <div id="bc-history"><p class="text-sm text-slate-400 text-center py-8">No broadcasts sent yet.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div id="sec-leaderboard" class="hidden">
+        <div class="mb-6"><h2 class="section-head">Institution Leaderboard</h2><p class="section-sub">Faculty rankings by yearbook adoption and revenue.</p></div>
+        <div class="flex gap-3 mb-6">
+          <button onclick="setLbTab('faculty')" class="btn btn-gold lb-tab" data-tab="faculty">By Faculty</button>
+          <button onclick="setLbTab('dept')" class="btn btn-ghost lb-tab" data-tab="dept">By Department</button>
+        </div>
+        <div class="card overflow-hidden">
+          <table class="data-table">
+            <thead>
+              <tr class="bg-slate-50 dark:bg-slate-900/50">
+                <th style="width:60px">Rank</th>
+                <th id="lb-col-name">Faculty</th>
+                <th>Total Students</th>
+                <th>Paid Access</th>
+                <th>Revenue</th>
+                <th>Adoption</th>
+              </tr>
+            </thead>
+            <tbody id="lb-tbody"><tr><td colspan="6" class="text-center py-10 text-slate-400 text-sm">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUPPORT -->
+      <div id="sec-support" class="hidden">
+        <div class="mb-6"><h2 class="section-head">Support Center</h2><p class="section-sub">Escalate institution-level issues to the Z-Node team.</p></div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card p-6">
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Submit Request</p>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Type</label>
+                <select id="sup-type" class="input-field">
+                  <option value="">Select type...</option>
+                  <option value="PAYOUT">Request Payout</option>
+                  <option value="FACULTY_ISSUE">Escalate Faculty Issue</option>
+                  <option value="STUDENT_COMPLAINT">Student Complaint</option>
+                  <option value="TECHNICAL">Technical Issue</option>
+                  <option value="GENERAL">General Enquiry</option>
+                </select>
+              </div>
+              <div><label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Details</label><textarea id="sup-details" class="input-field" rows="4" placeholder="Describe your request in detail..." style="resize:none;"></textarea></div>
+              <button onclick="submitTicket()" class="btn btn-dark w-full">Submit Request</button>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="card p-6">
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Revenue Split Reference</p>
+              <div class="space-y-2">
+                <div class="flex justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800">
+                  <span class="text-slate-500">Worker (QR scan)</span><span class="font-black text-slate-700 dark:text-slate-300">₦70</span>
+                </div>
+                <div class="flex justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800">
+                  <span class="text-slate-500">DOS (Dept Officer)</span><span class="font-black text-slate-700 dark:text-slate-300">₦30</span>
+                </div>
+                <div class="flex justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800">
+                  <span class="text-slate-500">Faculty Lead</span><span class="font-black text-slate-700 dark:text-slate-300">₦100</span>
+                </div>
+                <div class="flex justify-between text-xs py-1.5 border-b border-slate-100 dark:border-slate-800">
+                  <span class="font-semibold text-amber-600">SUG (You)</span><span class="font-black text-amber-600">₦100</span>
+                </div>
+                <div class="flex justify-between text-xs py-1.5">
+                  <span class="text-slate-500">Z-Node Infrastructure</span><span class="font-black text-slate-700 dark:text-slate-300">₦200</span>
+                </div>
+                <div class="flex justify-between text-xs pt-2 border-t border-slate-200 dark:border-slate-700">
+                  <span class="font-bold text-slate-700 dark:text-slate-300">Total per Student</span><span class="font-black text-slate-900 dark:text-white">₦500</span>
+                </div>
+              </div>
+            </div>
+            <div class="card p-6">
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Contact Z-Node</p>
+              <div class="space-y-2">
+                <a href="mailto:support@znode.ng" class="flex items-center gap-3 text-sm text-amber-600 font-semibold hover:underline"><span>✉️</span> support@znode.ng</a>
+                <a href="https://wa.me/2348000000000" target="_blank" class="flex items-center gap-3 text-sm text-amber-600 font-semibold hover:underline"><span>💬</span> WhatsApp Support</a>
+              </div>
+            </div>
+            <div class="card p-6">
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">My Tickets</p>
+              <div id="sup-tickets"><p class="text-xs text-slate-400 text-center py-4">No tickets yet.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="hidden">
+  <div id="toast-inner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold">
+    <span id="toast-icon"></span><span id="toast-msg"></span>
+  </div>
+</div>
+
+<script>
+// ── REVENUE SPLIT (PDF-defined ₦500 per student) ──────────
+const STUDENT_FEE    = 500;
+const SUG_CUT        = 100;  // ₦100 per paid student
+const WORKER_CUT     = 70;
+const DOS_CUT        = 30;
+const FACULTY_CUT    = 100;
+const ZNODE_CUT      = 200;
+
+let _db = null;
+let currentAdmin = null;
+let allStudents = [];
+let myFaculties = [];
+let myDepts = [];
+let donutChart = null;
+let barChart = null;
+
+const fmt = (n) => new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(n || 0);
+const showEl = (id) => document.getElementById(id)?.classList.remove('hidden');
+const hideEl = (id) => document.getElementById(id)?.classList.add('hidden');
+const getEl  = (id) => document.getElementById(id);
+function showLoader(t='Loading...') { showEl('loading-overlay'); getEl('loading-text').textContent = t; }
+function hideLoader() { hideEl('loading-overlay'); }
+
+// ── CONFIG ─────────────────────────────────────────────────
+function saveConfig() {
+  const url = getEl('cfg-url').value.trim(); const key = getEl('cfg-key').value.trim();
+  if (!url || !key) return alert('Both fields required.');
+  localStorage.setItem('znodeSugUrl', url); localStorage.setItem('znodeSugKey', key);
+  initApp(url, key);
+}
+
+function initApp(url, key) {
+  try { _db = window.supabase.createClient(url, key); hideEl('config-modal'); checkSession(); }
+  catch(e) { alert('Invalid credentials.'); }
+}
+
+async function checkSession() {
+  const saved = localStorage.getItem('znodeSugSession');
+  if (saved) { currentAdmin = JSON.parse(saved); await bootDashboard(); }
+  else showEl('screen-login');
+}
+
+async function hashPassword(p) {
+  const data = new TextEncoder().encode(p + 'znode_salt_2026');
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function handleLogin() {
+  const user = getEl('login-username').value.trim();
+  const pass = getEl('login-password').value;
+  const errEl = getEl('login-error');
+  errEl.classList.add('hidden');
+  if (!user || !pass) { errEl.textContent = 'Username and password required.'; errEl.classList.remove('hidden'); return; }
+  showLoader('Authenticating...');
+  const hash = await hashPassword(pass);
+  const { data: admin, error } = await _db.from('institution_admins').select('*').eq('username', user).eq('password_hash', hash).eq('role', 'SUG').single();
+  hideLoader();
+  if (error || !admin) { errEl.textContent = 'Invalid credentials or not a SUG account.'; errEl.classList.remove('hidden'); return; }
+  currentAdmin = admin;
+  localStorage.setItem('znodeSugSession', JSON.stringify(admin));
+  await bootDashboard();
+}
+
+function logout() { localStorage.removeItem('znodeSugSession'); location.reload(); }
+
+// ── BOOT ───────────────────────────────────────────────────
+async function bootDashboard() {
+  hideEl('screen-login'); showEl('screen-dashboard');
+  const instName = currentAdmin.institution_id || 'Institution';
+  getEl('hdr-name').textContent  = currentAdmin.full_name || currentAdmin.username;
+  getEl('hdr-inst').textContent  = instName;
+  getEl('hdr-avatar').textContent = (currentAdmin.full_name || 'S').charAt(0).toUpperCase();
+  getEl('sb-name').textContent   = currentAdmin.full_name || currentAdmin.username;
+  getEl('sb-inst').textContent   = instName;
+  getEl('ov-subtitle').textContent = `Live data for ${instName}`;
+
+  await fetchStudents();
+  renderOverview();
+  navTo('overview');
+}
+
+// ── DATA ───────────────────────────────────────────────────
+async function fetchStudents() {
+  const { data, error } = await _db.from('students').select('*').eq('institution_id', currentAdmin.institution_id);
+  if (!error) allStudents = data || [];
+
+  const facSet  = new Set(allStudents.map(s => s.faculty).filter(Boolean));
+  const deptSet = new Set(allStudents.map(s => s.department).filter(Boolean));
+  myFaculties = Array.from(facSet).sort();
+  myDepts     = Array.from(deptSet).sort();
+
+  // Faculty filter dropdown
+  const facSel = getEl('stu-fac-filter');
+  if (facSel) {
+    facSel.innerHTML = '<option value="ALL">All Faculties</option>' +
+      myFaculties.map(f => `<option value="${f}">${f}</option>`).join('');
+  }
+}
+
+// ── OVERVIEW ───────────────────────────────────────────────
+function renderOverview() {
+  const total    = allStudents.length;
+  const paid     = allStudents.filter(s => s.yearbook_access).length;
+  const verified = allStudents.filter(s => s.is_verified).length;
+  const myEarnings  = paid * SUG_CUT;
+  const totalRev    = paid * STUDENT_FEE;
+
+  getEl('ov-faculties').textContent  = myFaculties.length;
+  getEl('ov-depts').textContent      = myDepts.length;
+  getEl('ov-total').textContent      = total;
+  getEl('ov-paid').textContent       = paid;
+  getEl('ov-earnings').textContent   = fmt(myEarnings);
+  getEl('ov-rev-total').textContent  = fmt(totalRev);
+  getEl('ov-rev-share').textContent  = fmt(myEarnings);
+  getEl('ov-worker-cut').textContent = fmt(paid * WORKER_CUT);
+  getEl('ov-dos-cut').textContent    = fmt(paid * DOS_CUT);
+  getEl('ov-fac-cut').textContent    = fmt(paid * FACULTY_CUT);
+  getEl('ov-znode-cut').textContent  = fmt(paid * ZNODE_CUT);
+  getEl('sb-pending-earn').textContent = fmt(myEarnings);
+  getEl('sb-total-earn').textContent   = fmt(myEarnings);
+
+  // Faculty adoption bars
+  const barsEl = getEl('ov-fac-bars');
+  if (!myFaculties.length) {
+    barsEl.innerHTML = `<div class="text-sm text-slate-400 text-center py-6">No faculty data yet.</div>`;
+  } else {
+    barsEl.innerHTML = myFaculties.map(fac => {
+      const fStudents = allStudents.filter(s => s.faculty === fac);
+      const fPaid = fStudents.filter(s => s.yearbook_access).length;
+      const pct = fStudents.length > 0 ? Math.round((fPaid/fStudents.length)*100) : 0;
+      const color = pct >= 70 ? '#10B981' : pct >= 40 ? '#f59e0b' : '#6366f1';
+      return `
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-1.5">
+            <span class="text-slate-600 dark:text-slate-400 truncate max-w-[220px]">${fac}</span>
+            <span class="text-slate-900 dark:text-white ml-2 flex-shrink-0">${fPaid}/${fStudents.length} <span class="text-slate-400 font-normal">(${pct}%)</span></span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${pct}%; background:${color};"></div></div>
+        </div>`;
+    }).join('');
+  }
+
+  // Recent 6
+  const recent = [...allStudents].sort((a,b) => new Date(b.created_at||0) - new Date(a.created_at||0)).slice(0,6);
+  if (recent.length) {
+    getEl('ov-recent').innerHTML = recent.map(s => {
+      const badge = s.yearbook_access ? '<span class="badge badge-gold">Yearbook</span>' :
+                    s.is_verified ? '<span class="badge badge-green">Verified</span>' :
+                    '<span class="badge badge-amber">Pending</span>';
+      return `
+        <div class="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-amber-50 dark:bg-slate-800 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-sm">${(s.full_name||'?').charAt(0).toUpperCase()}</div>
+            <div>
+              <p class="text-sm font-semibold text-slate-800 dark:text-slate-200">${s.full_name || '—'}</p>
+              <p class="text-[10px] text-slate-400">${s.faculty||''} · ${s.department||''}</p>
+            </div>
+          </div>
+          ${badge}
+        </div>`;
+    }).join('');
+  }
+}
+
+// ── FACULTIES SECTION ──────────────────────────────────────
+function renderFaculties() {
+  const container = getEl('fac-accordion');
+  if (!myFaculties.length) {
+    container.innerHTML = `<div class="card p-12 text-center text-slate-400">No faculty data available.</div>`;
+    return;
+  }
+  container.innerHTML = myFaculties.map(fac => {
+    const fStudents = allStudents.filter(s => s.faculty === fac);
+    const fPaid     = fStudents.filter(s => s.yearbook_access).length;
+    const fVerified = fStudents.filter(s => s.is_verified).length;
+    const fPct      = fStudents.length > 0 ? Math.round((fPaid/fStudents.length)*100) : 0;
+
+    const facDepts = [...new Set(fStudents.map(s => s.department).filter(Boolean))].sort();
+
+    const deptRows = facDepts.map(dept => {
+      const dStudents = fStudents.filter(s => s.department === dept);
+      const dPaid = dStudents.filter(s => s.yearbook_access).length;
+      const dPct  = dStudents.length > 0 ? Math.round((dPaid/dStudents.length)*100) : 0;
+      return `
+        <tr class="text-xs border-t border-slate-100 dark:border-slate-800">
+          <td class="px-4 py-2.5 font-semibold text-slate-600 dark:text-slate-300 pl-8">${dept}</td>
+          <td class="px-4 py-2.5 text-slate-500">${dStudents.length}</td>
+          <td class="px-4 py-2.5 text-emerald-600 font-semibold">${dStudents.filter(s=>s.is_verified).length}</td>
+          <td class="px-4 py-2.5 text-amber-600 font-semibold">${dPaid}</td>
+          <td class="px-4 py-2.5">
+            <div class="flex items-center gap-2">
+              <div class="progress-track" style="width:60px"><div class="progress-fill" style="width:${dPct}%; background:#f59e0b;"></div></div>
+              <span class="text-slate-500">${dPct}%</span>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="card overflow-hidden">
+        <div class="p-5 flex items-center justify-between cursor-pointer" onclick="toggleFacPanel('fac-${CSS.escape(fac)}')">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-lg">🏫</div>
+            <div>
+              <h3 class="font-bold text-slate-800 dark:text-slate-200">${fac}</h3>
+              <p class="text-xs text-slate-400 mt-0.5">${facDepts.length} depts · ${fStudents.length} students</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="text-right hidden sm:block">
+              <p class="text-sm font-black text-amber-600">${fPaid} paid</p>
+              <p class="text-xs text-slate-400">${fPct}% adoption</p>
+            </div>
+            <span class="text-slate-400 text-lg">▾</span>
+          </div>
+        </div>
+        <div id="fac-${fac.replace(/\s+/g,'-')}" class="hidden border-t border-slate-100 dark:border-slate-800">
+          <table class="w-full">
+            <thead class="bg-slate-50 dark:bg-slate-900/50">
+              <tr class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <th class="px-4 py-2.5 text-left pl-8">Department</th>
+                <th class="px-4 py-2.5 text-left">Total</th>
+                <th class="px-4 py-2.5 text-left">Verified</th>
+                <th class="px-4 py-2.5 text-left">Paid</th>
+                <th class="px-4 py-2.5 text-left">Adoption</th>
+              </tr>
+            </thead>
+            <tbody>${deptRows || '<tr><td colspan="5" class="text-center py-6 text-slate-400 text-xs">No department data.</td></tr>'}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleFacPanel(id) {
+  // id may have spaces replaced
+  const panels = document.querySelectorAll('[id^="fac-"]');
+  panels.forEach(p => {
+    if (p.id === id) p.classList.toggle('hidden');
+  });
+}
+
+// ── STUDENTS TABLE ─────────────────────────────────────────
+function renderStudentsTable(list) {
+  const tbody = getEl('students-tbody');
+  if (!list.length) { tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-slate-400 text-sm">No students found.</td></tr>`; return; }
+  tbody.innerHTML = list.map(s => {
+    const isVer = s.is_verified === true;
+    const isRej = !!s.rejection_reason && !isVer;
+    const hasYB = s.yearbook_access === true;
+    const init  = (s.full_name||'?').charAt(0).toUpperCase();
+    const verBadge = isVer ? '<span class="badge badge-green">Verified</span>' : isRej ? '<span class="badge badge-red">Rejected</span>' : '<span class="badge badge-amber">Pending</span>';
+    const ybBadge  = hasYB ? '<span class="badge badge-gold">✓ Active</span>' : '<span class="badge badge-slate">No Access</span>';
+    return `
+      <tr>
+        <td><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-amber-50 dark:bg-slate-800 text-amber-700 dark:text-amber-400 flex items-center justify-center font-bold text-sm flex-shrink-0">${init}</div><div><p class="font-semibold text-slate-800 dark:text-slate-200">${s.full_name||'—'}</p><p class="text-[10px] text-slate-400">${s.email||''}</p></div></div></td>
+        <td class="font-mono text-xs text-slate-500">${s.matric_number||'—'}</td>
+        <td class="text-sm text-slate-600 dark:text-slate-400">${s.faculty||'—'}</td>
+        <td class="text-sm text-slate-600 dark:text-slate-400">${s.department||'—'}</td>
+        <td class="text-sm text-slate-600 dark:text-slate-400">Lvl ${s.academic_level||'—'}</td>
+        <td>${verBadge}</td>
+        <td>${ybBadge}</td>
+      </tr>`;
+  }).join('');
+}
+
+function filterStudents() {
+  const q      = getEl('stu-search').value.toLowerCase();
+  const fac    = getEl('stu-fac-filter').value;
+  const status = getEl('stu-status-filter').value;
+  let list = allStudents.filter(s => {
+    const matchQ = !q || (s.full_name||'').toLowerCase().includes(q) || (s.matric_number||'').toLowerCase().includes(q);
+    const matchF = fac === 'ALL' || s.faculty === fac;
+    let matchS = true;
+    if (status === 'VERIFIED') matchS = s.is_verified === true;
+    if (status === 'PENDING')  matchS = !s.is_verified && !s.rejection_reason;
+    if (status === 'YEARBOOK') matchS = s.yearbook_access === true;
+    return matchQ && matchF && matchS;
+  });
+  renderStudentsTable(list);
+}
+
+// ── ANALYTICS ──────────────────────────────────────────────
+function renderAnalytics() {
+  const total    = allStudents.length;
+  const verified = allStudents.filter(s => s.is_verified).length;
+  const rejected = allStudents.filter(s => s.rejection_reason && !s.is_verified).length;
+  const pending  = allStudents.filter(s => !s.is_verified && !s.rejection_reason).length;
+  const paid     = allStudents.filter(s => s.yearbook_access).length;
+
+  getEl('an-total').textContent      = total;
+  getEl('an-verified').textContent   = verified;
+  getEl('an-paid').textContent       = paid;
+  getEl('an-conversion').textContent = total > 0 ? Math.round((paid/total)*100)+'%' : '0%';
+
+  const dCtx = getEl('an-donut').getContext('2d');
+  if (donutChart) donutChart.destroy();
+  donutChart = new Chart(dCtx, {
+    type: 'doughnut',
+    data: { labels: ['Verified','Pending','Rejected'], datasets: [{ data: [verified||0,pending||0,rejected||0], backgroundColor: ['#10B981','#F59E0B','#EF4444'], borderWidth: 0 }] },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 11, weight: '700' } } } } }
+  });
+
+  const bCtx = getEl('an-bar').getContext('2d');
+  if (barChart) barChart.destroy();
+  const facLabels = myFaculties.slice(0,7);
+  const facPaid   = facLabels.map(f => allStudents.filter(s => s.faculty === f && s.yearbook_access).length);
+  const facTotal  = facLabels.map(f => allStudents.filter(s => s.faculty === f).length);
+  barChart = new Chart(bCtx, {
+    type: 'bar',
+    data: {
+      labels: facLabels.map(f => f.length > 14 ? f.substring(0,14)+'…' : f),
+      datasets: [
+        { label: 'Total', data: facTotal, backgroundColor: '#e8edf2', borderRadius: 8, borderSkipped: false },
+        { label: 'Paid',  data: facPaid,  backgroundColor: '#f59e0b', borderRadius: 8, borderSkipped: false }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 10 } } } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(148,163,184,0.1)' }, ticks: { font: { family: 'Plus Jakarta Sans', size: 10 } } },
+        x: { grid: { display: false }, ticks: { font: { family: 'Plus Jakarta Sans', size: 9 } } }
+      }
+    }
+  });
+}
+
+// ── LEADERBOARD ────────────────────────────────────────────
+let currentLbTab = 'faculty';
+function setLbTab(tab) {
+  currentLbTab = tab;
+  document.querySelectorAll('.lb-tab').forEach(el => el.className = 'btn lb-tab ' + (el.dataset.tab === tab ? 'btn-gold' : 'btn-ghost'));
+  getEl('lb-col-name').textContent = tab === 'faculty' ? 'Faculty' : 'Department';
+  renderLeaderboard(tab);
+}
+
+function renderLeaderboard(tab) {
+  const tbody = getEl('lb-tbody');
+  const groups = tab === 'faculty' ? myFaculties : myDepts;
+  if (!groups.length) { tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 text-sm">No data available.</td></tr>`; return; }
+
+  const rows = groups.map(name => {
+    const grpStudents = tab === 'faculty'
+      ? allStudents.filter(s => s.faculty === name)
+      : allStudents.filter(s => s.department === name);
+    const grpPaid = grpStudents.filter(s => s.yearbook_access).length;
+    const pct = grpStudents.length > 0 ? Math.round((grpPaid/grpStudents.length)*100) : 0;
+    return { name, total: grpStudents.length, paid: grpPaid, pct };
+  }).sort((a,b) => b.paid - a.paid);
+
+  tbody.innerHTML = rows.map((r, i) => {
+    const rank = i + 1;
+    const rankEl = rank <= 3
+      ? `<div class="w-7 h-7 rounded-lg ${rank===1?'bg-gradient-to-br from-amber-400 to-yellow-500':rank===2?'bg-gradient-to-br from-slate-400 to-slate-500':'bg-gradient-to-br from-amber-700 to-amber-600'} flex items-center justify-center font-black text-white text-xs">${rank}</div>`
+      : `<span class="text-sm font-black text-slate-400">${rank}</span>`;
+    return `
+      <tr>
+        <td><div class="flex items-center">${rankEl}</div></td>
+        <td class="font-bold text-slate-800 dark:text-slate-200">${r.name}</td>
+        <td class="font-semibold text-slate-700 dark:text-slate-300">${r.total}</td>
+        <td class="font-semibold text-amber-600">${r.paid}</td>
+        <td class="font-semibold text-emerald-600">${fmt(r.paid * STUDENT_FEE)}</td>
+        <td>
+          <div class="flex items-center gap-2">
+            <div class="progress-track" style="width:80px"><div class="progress-fill" style="width:${r.pct}%; background:#f59e0b;"></div></div>
+            <span class="text-xs font-bold text-slate-500">${r.pct}%</span>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ── BROADCAST ──────────────────────────────────────────────
+async function sendBroadcast() {
+  const title   = getEl('bc-title').value.trim();
+  const message = getEl('bc-message').value.trim();
+  const audience = getEl('bc-audience').value;
+  if (!title || !message) { showToast('error', 'Title and message required.'); return; }
+  showLoader('Sending...');
+  try {
+    const { error } = await _db.from('sug_broadcasts').insert({
+      admin_id: currentAdmin.id, institution_id: currentAdmin.institution_id,
+      title, message, audience, sent_at: new Date().toISOString()
+    });
+    if (error) throw error;
+    getEl('bc-title').value = ''; getEl('bc-message').value = '';
+    hideLoader(); showToast('success', '📣 Institution-wide announcement sent!');
+  } catch(err) { hideLoader(); showToast('error', err.message); }
+}
+
+// ── SUPPORT ────────────────────────────────────────────────
+async function submitTicket() {
+  const type    = getEl('sup-type').value;
+  const details = getEl('sup-details').value.trim();
+  if (!type) { showToast('error', 'Select a request type.'); return; }
+  if (!details) { showToast('error', 'Please provide details.'); return; }
+  showLoader('Submitting...');
+  try {
+    const { error } = await _db.from('dos_support_tickets').insert({
+      dos_id: currentAdmin.id, institution_id: currentAdmin.institution_id,
+      type, details, status: 'OPEN', created_at: new Date().toISOString()
+    });
+    if (error) throw error;
+    getEl('sup-type').value = ''; getEl('sup-details').value = '';
+    hideLoader(); showToast('success', '✓ Ticket submitted.');
+  } catch(err) { hideLoader(); showToast('error', err.message); }
+}
+
+// ── NAVIGATION ─────────────────────────────────────────────
+const SECTIONS = ['overview','faculties','students','analytics','broadcast','leaderboard','support'];
+
+function navTo(section) {
+  SECTIONS.forEach(s => {
+    const el = getEl(`sec-${s}`);
+    if (el) s === section ? el.classList.remove('hidden') : el.classList.add('hidden');
+  });
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.section === section));
+  if (section === 'faculties')    renderFaculties();
+  if (section === 'students')     renderStudentsTable(allStudents);
+  if (section === 'analytics')    renderAnalytics();
+  if (section === 'leaderboard')  { setLbTab('faculty'); }
+}
+
+// ── UTILITIES ──────────────────────────────────────────────
+function toggleTheme() {
+  const h = document.documentElement; const b = document.body;
+  const isDark = h.classList.contains('dark');
+  h.classList.toggle('dark', !isDark); h.classList.toggle('light', isDark);
+  b.classList.toggle('dark', !isDark); b.classList.toggle('light', isDark);
+}
+
+function showToast(type, msg) {
+  const t = getEl('toast'); const ti = getEl('toast-inner');
+  getEl('toast-icon').textContent = type === 'success' ? '✓' : '✗';
+  getEl('toast-msg').textContent = msg;
+  ti.className = 'flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold ' +
+    (type === 'success' ? 'bg-amber-500 text-white' : 'bg-red-500 text-white');
+  t.classList.remove('hidden'); t.classList.add('toast-show');
+  setTimeout(() => { t.classList.add('hidden'); t.classList.remove('toast-show'); }, 3500);
+}
+
+// ── INIT ───────────────────────────────────────────────────
+(function init() {
+  const url = localStorage.getItem('znodeSugUrl') || 'https://yohndnmwvgcwadkytmix.supabase.co';
+  const key = localStorage.getItem('znodeSugKey') || localStorage.getItem('znodeAdminKey');
+  if (url && key) initApp(url, key);
+  else showEl('config-modal');
+})();
+</script>
+</body>
+</html>
