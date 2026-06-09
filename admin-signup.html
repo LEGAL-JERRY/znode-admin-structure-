@@ -355,83 +355,51 @@ body[data-role="SUG"] .btn-submit:hover:not(:disabled) { background: #b45309; }
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// ── Connection ─────────────────────────────────────────────
 const SUPABASE_URL = 'https://yohndnmwvgcwadkytmix.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvaG5kbm13dmdjd2Fka3l0bWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDEyODgsImV4cCI6MjA5NDYxNzI4OH0.hkUexJ-AS1GpLJL78F7iXDv5PkwuPbShj2fsGVXuEsg';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ── Role → dashboard file map ──────────────────────────────
-const ROLE_DASHBOARDS = {
-  DOS:          'dos-dashboard.html',
-  FACULTY_LEAD: 'faculty-dashboard.html',
-  SUG:          'sug-dashboard.html',
-};
-
+const ROLE_DASHBOARDS = { DOS: 'dos-dashboard.html', FACULTY_LEAD: 'faculty-dashboard.html', SUG: 'sug-dashboard.html' };
 const ROLE_INFO = {
-  DOS: {
-    icon: '🎓', cls: 'role-info-dos',
-    title: 'Director of Socials (DOS)',
-    desc: 'Manage yearbook registrations and access codes for your department. Earn ₦30 per paying student.'
-  },
-  FACULTY_LEAD: {
-    icon: '🏫', cls: 'role-info-fac',
-    title: 'Faculty Lead (Tier 3)',
-    desc: 'Oversee all departments within your faculty. Earn ₦100 for every paying student in your faculty.'
-  },
-  SUG: {
-    icon: '🏛️', cls: 'role-info-sug',
-    title: 'Student Union Government (Tier 4)',
-    desc: 'Institution-wide oversight across all faculties. Earn ₦100 for every paying student in the institution.'
-  },
+  DOS: { icon: '🎓', cls: 'role-info-dos', title: 'Director of Socials (DOS)', desc: 'Manage yearbook registrations and access codes for your department. Earn ₦30 per paying student.' },
+  FACULTY_LEAD: { icon: '🏫', cls: 'role-info-fac', title: 'Faculty Lead (Tier 3)', desc: 'Oversee all departments within your faculty. Earn ₦100 for every paying student in your faculty.' },
+  SUG: { icon: '🏛️', cls: 'role-info-sug', title: 'Student Union Government (Tier 4)', desc: 'Institution-wide oversight across all faculties. Earn ₦100 for every paying student in the institution.' }
 };
 
-// ── DOM refs ───────────────────────────────────────────────
-const form         = document.getElementById('signup-form');
-const statusEl     = document.getElementById('status');
-const submitBtn    = document.getElementById('submit-btn');
-const loadingBar   = document.getElementById('loading-bar');
-const instSelect   = document.getElementById('institution');
+const form = document.getElementById('signup-form');
+const statusEl = document.getElementById('status');
+const submitBtn = document.getElementById('submit-btn');
+const loadingBar = document.getElementById('loading-bar');
+const instSelect = document.getElementById('institution');
 const fieldFacWrap = document.getElementById('field-faculty-wrap');
 const fieldDeptWrap = document.getElementById('field-dept-wrap');
 const fieldRefWrap = document.getElementById('field-referral-wrap');
-const roleInfoEl   = document.getElementById('role-info');
+const roleInfoEl = document.getElementById('role-info');
 
 let currentRole = 'DOS';
 
-// ── Role switching ─────────────────────────────────────────
 window.setRole = function(role) {
   currentRole = role;
   document.body.dataset.role = role;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.toggle('active', t.dataset.role === role));
 
-  // Update tabs
-  document.querySelectorAll('.role-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.role === role);
-  });
-
-  // Update info badge
   const info = ROLE_INFO[role];
   roleInfoEl.className = `role-info ${info.cls}`;
   roleInfoEl.innerHTML = `<span class="role-info-icon">${info.icon}</span><div><strong>${info.title}</strong>${info.desc}</div>`;
 
-  // Show/hide conditional fields
   const showFaculty = (role === 'DOS' || role === 'FACULTY_LEAD');
-  const showDept    = role === 'DOS';
-  const showRef     = role === 'DOS';
+  const showDept = role === 'DOS';
+  const showRef = role === 'DOS';
 
   fieldFacWrap.classList.toggle('visible', showFaculty);
   fieldDeptWrap.classList.toggle('visible', showDept);
   fieldRefWrap.classList.toggle('visible', showRef);
 
-  // Required attrs
-  document.getElementById('faculty').required    = showFaculty;
+  document.getElementById('faculty').required = showFaculty;
   document.getElementById('department').required = showDept;
-
-  // Button label
-  const labels = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' };
-  submitBtn.textContent = labels[role];
+  submitBtn.textContent = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' }[role];
 };
 
-// ── Load institutions ──────────────────────────────────────
 async function loadInstitutions() {
   loadingBar.style.display = 'block';
   try {
@@ -440,15 +408,13 @@ async function loadInstitutions() {
     instSelect.innerHTML = '<option value="">Select your institution...</option>' +
       (data || []).map(i => `<option value="${i.id}">${i.name}</option>`).join('');
   } catch(err) {
-    statusEl.textContent = 'Failed to load institutions. Check your connection.';
+    statusEl.textContent = 'Failed to safely connect to institution data registry.';
     statusEl.className = 'status error';
   }
   loadingBar.style.display = 'none';
 }
-
 loadInstitutions();
 
-// ── Password strength ──────────────────────────────────────
 window.checkPasswordStrength = function(val) {
   const fill = document.getElementById('pw-fill');
   let score = 0;
@@ -456,120 +422,59 @@ window.checkPasswordStrength = function(val) {
   if (/[A-Z]/.test(val)) score++;
   if (/[0-9]/.test(val)) score++;
   if (/[^A-Za-z0-9]/.test(val)) score++;
-  const pct   = score * 25;
-  const color = score <= 1 ? '#ef4444' : score === 2 ? '#f59e0b' : score === 3 ? '#10B981' : '#059669';
-  fill.style.width = pct + '%';
-  fill.style.background = color;
+  fill.style.width = (score * 25) + '%';
+  fill.style.background = score <= 1 ? '#ef4444' : score === 2 ? '#f59e0b' : score === 3 ? '#10B981' : '#059669';
 };
 
-// ── Hash password (same salt as dashboards) ────────────────
-async function hashPassword(password) {
-  const data = new TextEncoder().encode(password + 'znode_salt_2026');
-  const buf  = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-// ── Form submit ────────────────────────────────────────────
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   statusEl.textContent = '';
   statusEl.className = 'status';
 
-  const fullName   = document.getElementById('fullName').value.trim();
-  const username   = document.getElementById('username').value.trim().toLowerCase();
-  const email      = document.getElementById('email').value.trim().toLowerCase();
-  const instId     = instSelect.value;
-  const faculty    = document.getElementById('faculty').value.trim();
-  const department = document.getElementById('department').value.trim();
-  const referral   = document.getElementById('referral').value.trim().toUpperCase();
-  const password   = document.getElementById('password').value;
-  const confirm    = document.getElementById('confirmPassword').value;
-
-  // Validate
-  if (!fullName || !username || !email || !instId || !password) {
-    statusEl.textContent = 'Please fill in all required fields.';
-    statusEl.className = 'status error'; return;
-  }
-  if (currentRole === 'DOS' && !department) {
-    statusEl.textContent = 'Department is required for DOS accounts.';
-    statusEl.className = 'status error'; return;
-  }
-  if ((currentRole === 'DOS' || currentRole === 'FACULTY_LEAD') && !faculty) {
-    statusEl.textContent = 'Faculty is required.';
-    statusEl.className = 'status error'; return;
-  }
-  if (password !== confirm) {
+  const password = document.getElementById('password').value;
+  if (password !== document.getElementById('confirmPassword').value) {
     statusEl.textContent = 'Passwords do not match.';
-    statusEl.className = 'status error'; return;
-  }
-  if (password.length < 8) {
-    statusEl.textContent = 'Password must be at least 8 characters.';
     statusEl.className = 'status error'; return;
   }
 
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Creating account...';
+  submitBtn.textContent = 'Contacting registration engine...';
+
+  // Construct payload mapping cleanly to Edge Function execution requirements
+  const registrationPayload = {
+    fullName: document.getElementById('fullName').value,
+    username: document.getElementById('username').value,
+    email: document.getElementById('email').value,
+    institutionId: instSelect.value,
+    role: currentRole,
+    faculty: document.getElementById('faculty').value,
+    department: document.getElementById('department').value,
+    referralCode: document.getElementById('referral').value,
+    password: password
+  };
 
   try {
-    // Check username taken
-    const { data: existing } = await supabase
-      .from('institution_admins').select('id').eq('username', username).maybeSingle();
-    if (existing) throw new Error('Username already taken. Choose a different one.');
+    // Invoke the secure Edge Function module directly
+    const { data, error } = await supabase.functions.invoke('znode-register', {
+      body: registrationPayload
+    });
 
-    const passwordHash = await hashPassword(password);
+    if (error || data?.error) throw new Error(data?.error || error?.message || 'Registration failed.');
 
-    // Build insert payload
-    const payload = {
-      username, full_name: fullName, email,
-      institution_id: instId,
-      password_hash: passwordHash,
-      role: currentRole,
-      created_at: new Date().toISOString(),
-    };
-    if (faculty)    payload.faculty    = faculty;
-    if (department) payload.department = department;
-
-    const { data: newAdmin, error: insertErr } = await supabase
-      .from('institution_admins').insert(payload).select().single();
-    if (insertErr) throw insertErr;
-
-    // Handle referral code for DOS
-    if (currentRole === 'DOS' && referral && newAdmin?.id) {
-      const { data: referrer } = await supabase
-        .from('institution_admins').select('id').eq('id', referral.replace('DOS-','')).maybeSingle()
-        .catch(() => ({ data: null }));
-      if (referrer) {
-        await supabase.from('dos_referrals').insert({
-          referrer_id: referrer.id,
-          referred_dos_id: newAdmin.id,
-          status: 'signed_up',
-          created_at: new Date().toISOString()
-        }).catch(() => {});
-      }
-    }
-
-    // Store session keys so dashboard auto-connects
-    localStorage.setItem('znodeAdminKey',  SUPABASE_ANON_KEY);
-    if (currentRole === 'DOS')          localStorage.setItem('znodeDosKey',  SUPABASE_ANON_KEY);
-    if (currentRole === 'FACULTY_LEAD') localStorage.setItem('znodeFacKey',  SUPABASE_ANON_KEY);
-    if (currentRole === 'SUG')          localStorage.setItem('znodeSugKey',  SUPABASE_ANON_KEY);
-
-    // Show success
-    statusEl.textContent = '✓ Account created successfully!';
+    statusEl.textContent = '✓ System account created successfully!';
     statusEl.className = 'status success';
     form.reset();
     document.getElementById('pw-fill').style.width = '0%';
 
-    // Show dashboard link
-    const dashLinks = document.getElementById('dash-links');
-    const dashLink  = document.getElementById('dash-link-main');
-    const dashLabel = document.getElementById('dash-link-label');
-    const dashFile  = ROLE_DASHBOARDS[currentRole];
-    dashLink.href   = dashFile;
-    dashLabel.textContent = `Open ${ROLE_INFO[currentRole].title} Dashboard →`;
-    dashLinks.style.display = 'block';
+    // Expose Session and redirect securely
+    localStorage.setItem('znodeAdminKey', SUPABASE_ANON_KEY);
+    localStorage.setItem(`znode${currentRole.charAt(0) + currentRole.slice(1).toLowerCase().replace('_', '')}Key`, SUPABASE_ANON_KEY);
 
-    // Auto-redirect after 1.6s
+    const dashFile = ROLE_DASHBOARDS[currentRole];
+    document.getElementById('dash-link-main').href = dashFile;
+    document.getElementById('dash-link-label').textContent = `Open ${ROLE_INFO[currentRole].title} Dashboard →`;
+    document.getElementById('dash-links').style.display = 'block';
+
     setTimeout(() => { window.location.href = dashFile; }, 1600);
 
   } catch(err) {
@@ -577,12 +482,10 @@ form.addEventListener('submit', async (e) => {
     statusEl.className = 'status error';
   }
 
-  const labels = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' };
   submitBtn.disabled = false;
-  submitBtn.textContent = labels[currentRole];
+  submitBtn.textContent = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' }[currentRole];
 });
 
-// Apply initial role
 window.setRole('DOS');
 </script>
 </body>
