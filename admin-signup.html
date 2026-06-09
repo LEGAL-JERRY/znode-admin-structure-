@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z-Node | Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #F0F4F8;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container { width: 100%; max-width: 540px; }
+
+/* ── Brand strip ── */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.brand-mark {
+  width: 44px; height: 44px;
+  background: #0a2225;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 900; font-size: 22px;
+  box-shadow: 0 4px 16px rgba(10,34,37,0.2);
+}
+.brand-name { font-size: 22px; font-weight: 800; color: #0a2225; letter-spacing: -0.02em; }
+.brand-sub  { font-size: 11px; font-weight: 600; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 36px 40px;
+  box-shadow: 0 8px 32px rgba(10,34,37,0.07), 0 1px 3px rgba(10,34,37,0.04);
+  border: 1px solid #e8edf2;
+}
+
+/* ── Role selector tabs ── */
+.role-tabs {
+  display: flex;
+  background: #f4f8f8;
+  border-radius: 14px;
+  padding: 5px;
+  gap: 4px;
+  margin-bottom: 28px;
+  border: 1px solid #e8edf2;
+}
+.role-tab {
+  flex: 1;
+  padding: 10px 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  color: #94a3b8;
+  transition: all 0.18s;
+  border: none;
+  background: transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.4;
+}
+.role-tab:hover { color: #475569; }
+.role-tab.active {
+  background: #fff;
+  color: #0a2225;
+  box-shadow: 0 2px 8px rgba(10,34,37,0.08);
+}
+.role-tab .tab-emoji { font-size: 16px; display: block; margin-bottom: 2px; }
+
+/* ── Form ── */
+.form-section { margin-bottom: 24px; }
+.section-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.form-row { display: flex; gap: 14px; }
+.form-group { margin-bottom: 16px; flex: 1; }
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 7px;
+  letter-spacing: 0.01em;
+}
+input, select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #dde3ea;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #0f172a;
+  outline: none;
+  background: #fff;
+  transition: all 0.18s;
+  appearance: none;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 34px;
+}
+input:focus, select:focus {
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+}
+input::placeholder { color: #c4cdd6; }
+input[disabled], select[disabled] { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+
+/* Role-specific accent on focus */
+body[data-role="FACULTY_LEAD"] input:focus,
+body[data-role="FACULTY_LEAD"] select:focus {
+  border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+}
+body[data-role="SUG"] input:focus,
+body[data-role="SUG"] select:focus {
+  border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.1);
+}
+
+/* ── Role info badge ── */
+.role-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+.role-info-dos    { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+.role-info-fac    { background: #f5f3ff; border: 1px solid #ddd6fe; color: #5b21b6; }
+.role-info-sug    { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.role-info-icon   { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.role-info strong { font-weight: 700; display: block; margin-bottom: 2px; }
+
+/* ── Conditional fields ── */
+.field-conditional { display: none; }
+.field-conditional.visible { display: block; }
+.field-conditional-row { display: none; }
+.field-conditional-row.visible { display: flex; }
+
+/* ── Button ── */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #0a2225;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.01em;
+  margin-top: 4px;
+}
+.btn-submit:hover:not(:disabled) { background: #113136; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(10,34,37,0.15); }
+.btn-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+
+body[data-role="FACULTY_LEAD"] .btn-submit { background: #7c3aed; }
+body[data-role="FACULTY_LEAD"] .btn-submit:hover:not(:disabled) { background: #6d28d9; }
+body[data-role="SUG"] .btn-submit { background: #d97706; }
+body[data-role="SUG"] .btn-submit:hover:not(:disabled) { background: #b45309; }
+
+/* ── Status messages ── */
+.status { margin-top: 14px; text-align: center; font-size: 13px; font-weight: 600; min-height: 20px; }
+.status.success { color: #059669; }
+.status.error   { color: #dc2626; }
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 13px;
+  color: #64748b;
+}
+.footer a { color: #10B981; font-weight: 700; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ── Loading indicator ── */
+.loading-bar { display: none; text-align: center; color: #94a3b8; font-size: 12px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; margin-bottom: 12px; }
+
+/* ── Password strength ── */
+.pw-strength { height: 3px; border-radius: 999px; background: #e8edf2; margin-top: 7px; overflow: hidden; }
+.pw-strength-fill { height: 100%; border-radius: 999px; transition: width 0.3s, background 0.3s; width: 0%; }
+
+/* ── Dashboard links (post-register) ── */
+.dash-links { display: none; margin-top: 20px; }
+.dash-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #e8edf2;
+  text-decoration: none;
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.18s;
+  margin-bottom: 8px;
+}
+.dash-link:hover { border-color: #10B981; color: #059669; background: #f0fdf4; }
+</style>
+</head>
+<body data-role="DOS">
+
+<div class="container">
+  <div class="brand">
+    <div class="brand-mark">Z</div>
+    <div>
+      <div class="brand-name">Z-Node</div>
+      <div class="brand-sub">Officer Registration</div>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <!-- Role selector -->
+    <div class="role-tabs" role="tablist">
+      <button class="role-tab active" onclick="setRole('DOS')" data-role="DOS" type="button">
+        <span class="tab-emoji">🎓</span>Dept Officer<br><span style="color:#94a3b8;font-weight:600">(DOS)</span>
+      </button>
+      <button class="role-tab" onclick="setRole('FACULTY_LEAD')" data-role="FACULTY_LEAD" type="button">
+        <span class="tab-emoji">🏫</span>Faculty Lead<br><span style="color:#94a3b8;font-weight:600">(Tier 3)</span>
+      </button>
+      <button class="role-tab" onclick="setRole('SUG')" data-role="SUG" type="button">
+        <span class="tab-emoji">🏛️</span>Student Union<br><span style="color:#94a3b8;font-weight:600">(SUG)</span>
+      </button>
+    </div>
+
+    <!-- Role info badge -->
+    <div id="role-info" class="role-info role-info-dos">
+      <span class="role-info-icon">🎓</span>
+      <div>
+        <strong>Director of Socials (DOS)</strong>
+        Manage yearbook registrations and access codes for your department. Earn ₦30 per paying student.
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading-bar" class="loading-bar">Loading institutions...</div>
+
+    <form id="signup-form" autocomplete="off">
+
+      <!-- Personal info -->
+      <div class="form-section">
+        <div class="section-label">Personal Information</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="fullName" required placeholder="e.g. Amaka Okonkwo">
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="username" required placeholder="e.g. amaka_cs" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" required placeholder="e.g. amaka@uni.edu.ng">
+        </div>
+      </div>
+
+      <!-- Academic info -->
+      <div class="form-section">
+        <div class="section-label">Academic Assignment</div>
+        <div class="form-group">
+          <label>Institution</label>
+          <select id="institution" required>
+            <option value="">Select your institution...</option>
+          </select>
+        </div>
+
+        <!-- Faculty (shown for Faculty Lead + DOS) -->
+        <div class="form-group field-conditional visible" id="field-faculty-wrap">
+          <label>Faculty</label>
+          <input type="text" id="faculty" placeholder="e.g. Faculty of Engineering">
+        </div>
+
+        <!-- Department (DOS only) -->
+        <div class="form-group field-conditional visible" id="field-dept-wrap">
+          <label>Department</label>
+          <input type="text" id="department" placeholder="e.g. Computer Science">
+        </div>
+
+        <!-- Referral code (DOS only, optional) -->
+        <div class="form-group field-conditional visible" id="field-referral-wrap">
+          <label>Referral Code <span style="color:#94a3b8;font-weight:500">(optional)</span></label>
+          <input type="text" id="referral" placeholder="e.g. DOS-ABC123" style="font-family:'JetBrains Mono',monospace; font-size:12px;">
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="form-section">
+        <div class="section-label">Account Security</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" required placeholder="Min. 8 characters" oninput="checkPasswordStrength(this.value)" autocomplete="new-password">
+            <div class="pw-strength"><div id="pw-fill" class="pw-strength-fill"></div></div>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="confirmPassword" required placeholder="Repeat password" autocomplete="new-password">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn-submit">Create Account</button>
+      <div id="status" class="status"></div>
+
+    </form>
+
+    <!-- Post-registration dashboard links -->
+    <div id="dash-links" class="dash-links">
+      <div class="section-label" style="margin-top:16px;">Go to your dashboard</div>
+      <a id="dash-link-main" href="#" class="dash-link">
+        <span id="dash-link-label">Open Dashboard →</span>
+        <span>↗</span>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Already have an account? <a href="admin-login.html">Sign in</a>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+// ── Connection ─────────────────────────────────────────────
+const SUPABASE_URL = 'https://yohndnmwvgcwadkytmix.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvaG5kbm13dmdjd2Fka3l0bWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDEyODgsImV4cCI6MjA5NDYxNzI4OH0.hkUexJ-AS1GpLJL78F7iXDv5PkwuPbShj2fsGVXuEsg';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── Role → dashboard file map ──────────────────────────────
+const ROLE_DASHBOARDS = {
+  DOS:          'dos-dashboard.html',
+  FACULTY_LEAD: 'faculty-dashboard.html',
+  SUG:          'sug-dashboard.html',
+};
+
+const ROLE_INFO = {
+  DOS: {
+    icon: '🎓', cls: 'role-info-dos',
+    title: 'Director of Socials (DOS)',
+    desc: 'Manage yearbook registrations and access codes for your department. Earn ₦30 per paying student.'
+  },
+  FACULTY_LEAD: {
+    icon: '🏫', cls: 'role-info-fac',
+    title: 'Faculty Lead (Tier 3)',
+    desc: 'Oversee all departments within your faculty. Earn ₦100 for every paying student in your faculty.'
+  },
+  SUG: {
+    icon: '🏛️', cls: 'role-info-sug',
+    title: 'Student Union Government (Tier 4)',
+    desc: 'Institution-wide oversight across all faculties. Earn ₦100 for every paying student in the institution.'
+  },
+};
+
+// ── DOM refs ───────────────────────────────────────────────
+const form         = document.getElementById('signup-form');
+const statusEl     = document.getElementById('status');
+const submitBtn    = document.getElementById('submit-btn');
+const loadingBar   = document.getElementById('loading-bar');
+const instSelect   = document.getElementById('institution');
+const fieldFacWrap = document.getElementById('field-faculty-wrap');
+const fieldDeptWrap = document.getElementById('field-dept-wrap');
+const fieldRefWrap = document.getElementById('field-referral-wrap');
+const roleInfoEl   = document.getElementById('role-info');
+
+let currentRole = 'DOS';
+
+// ── Role switching ─────────────────────────────────────────
+window.setRole = function(role) {
+  currentRole = role;
+  document.body.dataset.role = role;
+
+  // Update tabs
+  document.querySelectorAll('.role-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.role === role);
+  });
+
+  // Update info badge
+  const info = ROLE_INFO[role];
+  roleInfoEl.className = `role-info ${info.cls}`;
+  roleInfoEl.innerHTML = `<span class="role-info-icon">${info.icon}</span><div><strong>${info.title}</strong>${info.desc}</div>`;
+
+  // Show/hide conditional fields
+  const showFaculty = (role === 'DOS' || role === 'FACULTY_LEAD');
+  const showDept    = role === 'DOS';
+  const showRef     = role === 'DOS';
+
+  fieldFacWrap.classList.toggle('visible', showFaculty);
+  fieldDeptWrap.classList.toggle('visible', showDept);
+  fieldRefWrap.classList.toggle('visible', showRef);
+
+  // Required attrs
+  document.getElementById('faculty').required    = showFaculty;
+  document.getElementById('department').required = showDept;
+
+  // Button label
+  const labels = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' };
+  submitBtn.textContent = labels[role];
+};
+
+// ── Load institutions ──────────────────────────────────────
+async function loadInstitutions() {
+  loadingBar.style.display = 'block';
+  try {
+    const { data, error } = await supabase.from('institutions').select('id, name').order('name');
+    if (error) throw error;
+    instSelect.innerHTML = '<option value="">Select your institution...</option>' +
+      (data || []).map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+  } catch(err) {
+    statusEl.textContent = 'Failed to load institutions. Check your connection.';
+    statusEl.className = 'status error';
+  }
+  loadingBar.style.display = 'none';
+}
+
+loadInstitutions();
+
+// ── Password strength ──────────────────────────────────────
+window.checkPasswordStrength = function(val) {
+  const fill = document.getElementById('pw-fill');
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const pct   = score * 25;
+  const color = score <= 1 ? '#ef4444' : score === 2 ? '#f59e0b' : score === 3 ? '#10B981' : '#059669';
+  fill.style.width = pct + '%';
+  fill.style.background = color;
+};
+
+// ── Hash password (same salt as dashboards) ────────────────
+async function hashPassword(password) {
+  const data = new TextEncoder().encode(password + 'znode_salt_2026');
+  const buf  = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── Form submit ────────────────────────────────────────────
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  statusEl.textContent = '';
+  statusEl.className = 'status';
+
+  const fullName   = document.getElementById('fullName').value.trim();
+  const username   = document.getElementById('username').value.trim().toLowerCase();
+  const email      = document.getElementById('email').value.trim().toLowerCase();
+  const instId     = instSelect.value;
+  const faculty    = document.getElementById('faculty').value.trim();
+  const department = document.getElementById('department').value.trim();
+  const referral   = document.getElementById('referral').value.trim().toUpperCase();
+  const password   = document.getElementById('password').value;
+  const confirm    = document.getElementById('confirmPassword').value;
+
+  // Validate
+  if (!fullName || !username || !email || !instId || !password) {
+    statusEl.textContent = 'Please fill in all required fields.';
+    statusEl.className = 'status error'; return;
+  }
+  if (currentRole === 'DOS' && !department) {
+    statusEl.textContent = 'Department is required for DOS accounts.';
+    statusEl.className = 'status error'; return;
+  }
+  if ((currentRole === 'DOS' || currentRole === 'FACULTY_LEAD') && !faculty) {
+    statusEl.textContent = 'Faculty is required.';
+    statusEl.className = 'status error'; return;
+  }
+  if (password !== confirm) {
+    statusEl.textContent = 'Passwords do not match.';
+    statusEl.className = 'status error'; return;
+  }
+  if (password.length < 8) {
+    statusEl.textContent = 'Password must be at least 8 characters.';
+    statusEl.className = 'status error'; return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating account...';
+
+  try {
+    // Check username taken
+    const { data: existing } = await supabase
+      .from('institution_admins').select('id').eq('username', username).maybeSingle();
+    if (existing) throw new Error('Username already taken. Choose a different one.');
+
+    const passwordHash = await hashPassword(password);
+
+    // Build insert payload
+    const payload = {
+      username, full_name: fullName, email,
+      institution_id: instId,
+      password_hash: passwordHash,
+      role: currentRole,
+      created_at: new Date().toISOString(),
+    };
+    if (faculty)    payload.faculty    = faculty;
+    if (department) payload.department = department;
+
+    const { data: newAdmin, error: insertErr } = await supabase
+      .from('institution_admins').insert(payload).select().single();
+    if (insertErr) throw insertErr;
+
+    // Handle referral code for DOS
+    if (currentRole === 'DOS' && referral && newAdmin?.id) {
+      const { data: referrer } = await supabase
+        .from('institution_admins').select('id').eq('id', referral.replace('DOS-','')).maybeSingle()
+        .catch(() => ({ data: null }));
+      if (referrer) {
+        await supabase.from('dos_referrals').insert({
+          referrer_id: referrer.id,
+          referred_dos_id: newAdmin.id,
+          status: 'signed_up',
+          created_at: new Date().toISOString()
+        }).catch(() => {});
+      }
+    }
+
+    // Store session keys so dashboard auto-connects
+    localStorage.setItem('znodeAdminKey',  SUPABASE_ANON_KEY);
+    if (currentRole === 'DOS')          localStorage.setItem('znodeDosKey',  SUPABASE_ANON_KEY);
+    if (currentRole === 'FACULTY_LEAD') localStorage.setItem('znodeFacKey',  SUPABASE_ANON_KEY);
+    if (currentRole === 'SUG')          localStorage.setItem('znodeSugKey',  SUPABASE_ANON_KEY);
+
+    // Show success
+    statusEl.textContent = '✓ Account created successfully!';
+    statusEl.className = 'status success';
+    form.reset();
+    document.getElementById('pw-fill').style.width = '0%';
+
+    // Show dashboard link
+    const dashLinks = document.getElementById('dash-links');
+    const dashLink  = document.getElementById('dash-link-main');
+    const dashLabel = document.getElementById('dash-link-label');
+    const dashFile  = ROLE_DASHBOARDS[currentRole];
+    dashLink.href   = dashFile;
+    dashLabel.textContent = `Open ${ROLE_INFO[currentRole].title} Dashboard →`;
+    dashLinks.style.display = 'block';
+
+    // Auto-redirect after 1.6s
+    setTimeout(() => { window.location.href = dashFile; }, 1600);
+
+  } catch(err) {
+    statusEl.textContent = err.message;
+    statusEl.className = 'status error';
+  }
+
+  const labels = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' };
+  submitBtn.disabled = false;
+  submitBtn.textContent = labels[currentRole];
+});
+
+// Apply initial role
+window.setRole('DOS');
+</script>
+</body>
+</html>
