@@ -1,3 +1,5 @@
+html
+
 <!DOCTYPE html>
 <html lang="en" class="light">
 <head>
@@ -28,11 +30,9 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; }
 body.light { background: #F8FAFC; color: #1e293b; }
 body.dark  { background: #0B1120; color: #f8fafc; }
 
-/* ── Layout ── */
 .sidebar { width: 280px; flex-shrink: 0; background: #061416; height: 100vh; display: flex; flex-direction: column; border-right: 1px solid rgba(255,255,255,0.05); overflow-y: auto; }
 .main-content { flex: 1; overflow-y: auto; }
 
-/* ── Nav ── */
 .nav-section { padding: 6px 12px; font-size: 9px; font-weight: 800; color: #4b5563; text-transform: uppercase; letter-spacing: 0.14em; margin: 16px 0 6px; }
 .nav-item { display: flex; align-items: center; gap: 11px; padding: 10px 14px; border-radius: 10px; font-size: 12.5px; font-weight: 600; color: #64748b; cursor: pointer; transition: all 0.18s; margin: 1px 0; }
 .nav-item:hover { background: rgba(255,255,255,0.04); color: #94a3b8; }
@@ -40,22 +40,20 @@ body.dark  { background: #0B1120; color: #f8fafc; }
 .nav-item .nav-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; background: rgba(255,255,255,0.04); }
 .nav-item.active .nav-icon { background: rgba(16,185,129,0.15); }
 
-/* ── Cards ── */
 .card { border-radius: 16px; transition: all 0.2s; }
 .light .card { background: #ffffff; border: 1px solid #e8edf2; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 .dark .card  { background: #1e293b; border: 1px solid #334155; }
-.stat-card { border-radius: 16px; padding: 22px 24px; }
+.stat-card { border-radius: 16px; padding: 22px 24px; cursor: pointer; transition: all 0.2s; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
 .light .stat-card { background: #fff; border: 1px solid #e8edf2; }
 .dark .stat-card  { background: #1e293b; border: 1px solid #334155; }
 
-/* ── Inputs ── */
 .input-field { width: 100%; padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 500; outline: none; transition: all 0.2s; font-family: 'Plus Jakarta Sans', sans-serif; }
 .light .input-field { border: 1px solid #dde3ea; background: #fff; color: #0f172a; }
 .dark .input-field  { border: 1px solid #334155; background: #1e293b; color: #f1f5f9; }
 .input-field:focus  { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
 select.input-field  { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
 
-/* ── Buttons ── */
 .btn { padding: 9px 18px; border-radius: 10px; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.18s; border: none; font-family: 'Plus Jakarta Sans', sans-serif; }
 .btn-green  { background: #10B981; color: #fff; }
 .btn-green:hover  { background: #059669; transform: translateY(-1px); }
@@ -70,34 +68,64 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
 .btn-amber  { background: #f59e0b; color: #fff; }
 .btn-amber:hover  { background: #d97706; transform: translateY(-1px); }
 
-/* ── Badges ── */
 .badge { display: inline-flex; align-items: center; padding: 2.5px 9px; border-radius: 5px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
 .badge-green  { background: #d1fae5; color: #065f46; }
 .badge-amber  { background: #fef3c7; color: #92400e; }
 .badge-red    { background: #fee2e2; color: #991b1b; }
 .badge-slate  { background: #f1f5f9; color: #475569; }
 .badge-blue   { background: #dbeafe; color: #1e40af; }
+.badge-indigo { background: #ede9fe; color: #4338ca; }
 .dark .badge-green  { background: rgba(16,185,129,0.15); color: #34d399; }
 .dark .badge-amber  { background: rgba(245,158,11,0.15); color: #fbbf24; }
 .dark .badge-red    { background: rgba(239,68,68,0.15); color: #f87171; }
 .dark .badge-slate  { background: rgba(148,163,184,0.1); color: #94a3b8; }
 .dark .badge-blue   { background: rgba(59,130,246,0.15); color: #93c5fd; }
+.dark .badge-indigo { background: rgba(99,102,241,0.15); color: #a5b4fc; }
 
-/* ── Modals ── */
 .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(6,20,22,0.55); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 16px; }
 .modal-box { background: #fff; border-radius: 20px; box-shadow: 0 24px 64px rgba(0,0,0,0.2); max-height: 92vh; overflow-y: auto; animation: modal-in 0.2s cubic-bezier(0.16,1,0.3,1); }
 .dark .modal-box { background: #1e293b; border: 1px solid #334155; }
 @keyframes modal-in { from { opacity:0; transform: scale(0.95) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
 
-/* ── Tables ── */
 .data-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .data-table th { padding: 10px 15px; text-align: left; font-size: 9.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; white-space: nowrap; }
 .data-table td { padding: 12px 15px; border-top: 1px solid #f1f5f9; }
 .dark .data-table td { border-color: #1f2937; }
 .data-table tr:hover td { background: rgba(16,185,129,0.03); }
 
-/* ── Tree sidebar ── */
-details > summary { list-style: none; cursor: pointer; padding: 9px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: #94a3b8; display: flex; align-items: center; justify-content: space-between; transition: all 0.18s; }
+/* Filter pills */
+.filter-pill { padding: 5px 13px; border-radius: 20px; font-size: 10.5px; font-weight: 700; cursor: pointer; border: 1px solid #e2e8f0; color: #64748b; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.05em; background: transparent; }
+.filter-pill:hover { border-color: #10B981; color: #10B981; }
+.filter-pill.active { background: #10B981; color: #fff; border-color: #10B981; }
+.filter-pill.active-amber { background: #f59e0b; color: #fff; border-color: #f59e0b; }
+.dark .filter-pill { border-color: #334155; color: #94a3b8; }
+
+/* Student card */
+.student-card { cursor: pointer; transition: all 0.2s; }
+.student-card:hover { transform: translateY(-2px); }
+.light .student-card:hover { box-shadow: 0 12px 32px -8px rgba(0,0,0,0.1); }
+.dark .student-card:hover  { box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4); }
+
+/* Pending banner */
+.pending-banner { background: linear-gradient(135deg, #78350f, #92400e); border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+
+.spinner { border: 3px solid rgba(16,185,129,0.2); border-top-color: #10B981; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
+@keyframes toast-in { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+.toast-show { animation: toast-in 0.25s ease; }
+
+.progress-track { background: #e8edf2; border-radius: 999px; height: 5px; overflow: hidden; }
+.dark .progress-track { background: #1f2937; }
+.progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg,#10B981,#34d399); transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+.section-head { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+.dark .section-head { color: #f1f5f9; }
+.section-sub  { font-size: 12.5px; color: #64748b; margin-top: 3px; font-weight: 500; }
+
+/* Tree */
+details > summary { list-style: none; cursor: pointer; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: #94a3b8; display: flex; align-items: center; justify-content: space-between; transition: all 0.18s; }
 details > summary::-webkit-details-marker { display: none; }
 details > summary:hover { background: rgba(255,255,255,0.03); color: #f8fafc; }
 details[open] > summary { color: #fff; }
@@ -108,43 +136,6 @@ details details[open] > summary { color: #10B981; }
 .tree-level:hover { color: #f8fafc; background: rgba(255,255,255,0.02); }
 .tree-level.active { background: rgba(16,185,129,0.1); color: #10B981; font-weight: 600; border-left: 3px solid #10B981; border-radius: 0 8px 8px 0; }
 
-/* ── Filter pills ── */
-.filter-pill { padding: 5px 13px; border-radius: 20px; font-size: 10.5px; font-weight: 700; cursor: pointer; border: 1px solid #e2e8f0; color: #64748b; transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.05em; background: transparent; }
-.filter-pill:hover { border-color: #10B981; color: #10B981; }
-.filter-pill.active { background: #10B981; color: #fff; border-color: #10B981; }
-.dark .filter-pill { border-color: #334155; color: #94a3b8; }
-.dark .filter-pill.active { background: #10B981; color: #fff; }
-
-/* ── Student card ── */
-.student-card { cursor: pointer; transition: all 0.2s; }
-.student-card:hover { transform: translateY(-2px); }
-.light .student-card:hover { box-shadow: 0 12px 32px -8px rgba(0,0,0,0.1); }
-.dark .student-card:hover  { box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4); }
-
-/* ── Ledger ── */
-.ledger-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f1f5f9; }
-.dark .ledger-row { border-color: #1f2937; }
-.ledger-row:last-child { border-bottom: none; }
-
-/* ── Spinner + toast ── */
-.spinner { border: 3px solid rgba(16,185,129,0.2); border-top-color: #10B981; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-#toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; }
-@keyframes toast-in { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
-.toast-show { animation: toast-in 0.25s ease; }
-
-/* ── Progress ── */
-.progress-track { background: #e8edf2; border-radius: 999px; height: 5px; overflow: hidden; }
-.dark .progress-track { background: #1f2937; }
-.progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg,#10B981,#34d399); transition: width 0.5s cubic-bezier(0.16,1,0.3,1); }
-
-/* ── Code monospace ── */
-.mono { font-family: 'JetBrains Mono', monospace; }
-
-.section-head { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-.dark .section-head { color: #f1f5f9; }
-.section-sub  { font-size: 12.5px; color: #64748b; margin-top: 3px; font-weight: 500; }
-
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 .dark ::-webkit-scrollbar-thumb { background: #334155; }
@@ -153,7 +144,7 @@ details details[open] > summary { color: #10B981; }
 </head>
 <body class="light">
 
-<!-- ═══ AUTH MODAL ═══ -->
+<!-- AUTH MODAL -->
 <div id="auth-modal" class="modal-overlay hidden">
   <div class="modal-box w-full max-w-sm p-8">
     <div class="flex items-center gap-3 mb-6">
@@ -169,11 +160,10 @@ details details[open] > summary { color: #10B981; }
     </div>
     <p id="auth-error" class="text-red-500 text-xs font-semibold mb-3 hidden text-center"></p>
     <button onclick="handleLogin()" class="btn btn-dark w-full" style="padding:12px;">Authenticate</button>
-    <p class="text-center text-[10px] text-slate-400 mt-4">Supabase auth · Z-Node Tier 5</p>
   </div>
 </div>
 
-<!-- ═══ LOADING ═══ -->
+<!-- LOADING -->
 <div id="loading-overlay" class="modal-overlay hidden" style="z-index:2000">
   <div class="modal-box p-8 text-center min-w-[180px]">
     <div class="spinner mx-auto mb-4"></div>
@@ -181,12 +171,12 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- ═══ APPROVAL CONFIRM MODAL ═══ -->
+<!-- APPROVAL MODAL -->
 <div id="approval-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('approval-modal')">
   <div class="modal-box w-full max-w-sm p-7" onclick="event.stopPropagation()">
     <div id="acm-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5"></div>
     <h3 id="acm-title" class="text-lg font-bold text-slate-900 dark:text-white text-center mb-2"></h3>
-    <p id="acm-desc" class="text-sm text-slate-500 text-center mb-5 leading-relaxed"></p>
+    <p id="acm-desc"  class="text-sm text-slate-500 text-center mb-5 leading-relaxed"></p>
     <div id="acm-reason-wrap" class="hidden mb-4">
       <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Rejection Reason</label>
       <textarea id="acm-reason" class="input-field" rows="3" placeholder="State the reason clearly..." style="resize:none;"></textarea>
@@ -198,7 +188,7 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- ═══ STUDENT DETAIL MODAL ═══ -->
+<!-- STUDENT DETAIL MODAL -->
 <div id="student-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('student-modal')">
   <div class="modal-box w-full max-w-md p-7" onclick="event.stopPropagation()">
     <div class="flex items-start justify-between mb-5">
@@ -212,37 +202,19 @@ details details[open] > summary { color: #10B981; }
           <h4 id="sdm-name"  class="font-bold text-slate-900 dark:text-white text-base"></h4>
           <span id="sdm-badge" class="badge"></span>
         </div>
-        <p id="sdm-matric" class="text-xs mono text-slate-400 mt-0.5"></p>
+        <p id="sdm-matric"     class="text-xs mono text-slate-400 mt-0.5"></p>
         <p id="sdm-breadcrumb" class="text-xs text-slate-400 mt-0.5"></p>
       </div>
     </div>
     <div class="space-y-3 mb-5">
       <div class="grid grid-cols-2 gap-3">
         <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-          <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Fee Total</p>
-          <p id="sdm-fee-total" class="text-sm font-bold text-slate-700 dark:text-slate-300"></p>
-        </div>
-        <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-          <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Amount Paid</p>
-          <p id="sdm-fee-paid" class="text-sm font-bold text-emerald-600"></p>
-        </div>
-        <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-          <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Balance Due</p>
-          <p id="sdm-fee-balance" class="text-sm font-bold text-red-500"></p>
-        </div>
-        <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-          <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Fee Status</p>
-          <span id="sdm-fee-status" class="badge"></span>
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
           <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Email</p>
           <p id="sdm-email" class="text-xs font-semibold text-slate-700 dark:text-slate-300 truncate"></p>
         </div>
         <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3">
-          <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Phone</p>
-          <p id="sdm-phone" class="text-xs font-semibold text-slate-700 dark:text-slate-300"></p>
+          <p class="text-[9.5px] text-slate-400 font-bold uppercase mb-1">Yearbook</p>
+          <p id="sdm-yearbook" class="text-xs font-semibold"></p>
         </div>
       </div>
       <div class="bg-brand-50 dark:bg-slate-800 rounded-xl p-3">
@@ -258,32 +230,14 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- ═══ SETTLEMENT MODAL ═══ -->
-<div id="settlement-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('settlement-modal')">
-  <div class="modal-box w-full max-w-sm p-7" onclick="event.stopPropagation()">
-    <h3 class="text-base font-black text-slate-900 dark:text-white mb-5">Authorise Settlement</h3>
-    <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 mb-5 space-y-3">
-      <div><p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Institution</p><p id="stl-inst" class="font-bold text-slate-800 dark:text-slate-200 text-sm"></p></div>
-      <div><p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Tx Reference</p><p id="stl-ref" class="mono text-xs text-slate-600 dark:text-slate-400 break-all"></p></div>
-      <div><p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Amount</p><p id="stl-amt" class="text-2xl font-black text-slate-900 dark:text-white"></p></div>
-    </div>
-    <div class="flex gap-3">
-      <button onclick="closeModal('settlement-modal')" class="btn btn-ghost flex-1" style="padding:12px;">Abort</button>
-      <button id="stl-confirm-btn" onclick="executeSettlement()" class="btn btn-green flex-1" style="padding:12px;">Execute</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ TOAST ═══ -->
+<!-- TOAST -->
 <div id="toast" class="hidden">
   <div id="toast-inner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold">
     <span id="toast-icon"></span><span id="toast-msg"></span>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- MAIN LAYOUT                                            -->
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- MAIN LAYOUT -->
 <div id="screen-dashboard" class="hidden h-screen flex flex-col">
 
   <!-- HEADER -->
@@ -292,7 +246,7 @@ details details[open] > summary { color: #10B981; }
       <div class="w-7 h-7 bg-brand-800 rounded-lg flex items-center justify-center text-white font-black text-sm">Z</div>
       <div class="w-px h-5 bg-slate-200 dark:bg-slate-700"></div>
       <div>
-        <span id="hdr-inst" class="text-sm font-bold text-slate-900 dark:text-white">Z-Node Admin</span>
+        <span class="text-sm font-bold text-slate-900 dark:text-white">Z-Node Admin</span>
         <span class="mx-2 text-slate-300 dark:text-slate-600">·</span>
         <span class="text-xs text-slate-400 font-semibold">Tier 5 · Central Operations</span>
       </div>
@@ -324,22 +278,31 @@ details details[open] > summary { color: #10B981; }
 
       <div class="p-3">
         <div class="nav-section">Operations</div>
-        <div class="nav-item active" onclick="navTo('overview')" data-section="overview"><div class="nav-icon">📡</div><span>Telemetry</span></div>
-        <div class="nav-item" onclick="navTo('institutions')" data-section="institutions"><div class="nav-icon">🏛️</div><span>Institutions</span></div>
-        <div class="nav-item" onclick="navTo('financials')" data-section="financials"><div class="nav-icon">💳</div><span>Financials</span></div>
-        <div class="nav-item" onclick="navTo('settlement')" data-section="settlement"><div class="nav-icon">⚡</div><span>Settlement</span><span id="nb-settlement" class="ml-auto text-[9.5px] font-black bg-amber-500 text-white px-1.5 rounded hidden"></span></div>
-
-        <div class="nav-section">Verification</div>
-        <div class="nav-item" onclick="navTo('students')" data-section="students"><div class="nav-icon">👥</div><span>Student Registry</span></div>
-
+        <div class="nav-item active" onclick="navTo('overview')" data-section="overview">
+          <div class="nav-icon">📡</div><span>Telemetry</span>
+        </div>
+        <div class="nav-item" onclick="navTo('students')" data-section="students">
+          <div class="nav-icon">👥</div><span>Student Registry</span>
+          <span id="nb-pending" class="ml-auto text-[9.5px] font-black bg-amber-500 text-white px-1.5 rounded hidden"></span>
+        </div>
+        <div class="nav-item" onclick="navTo('institutions')" data-section="institutions">
+          <div class="nav-icon">🏛️</div><span>Institutions</span>
+        </div>
+        <div class="nav-item" onclick="navTo('financials')" data-section="financials">
+          <div class="nav-icon">💳</div><span>Financials</span>
+        </div>
         <div class="nav-section">System</div>
-        <div class="nav-item" onclick="navTo('audit')" data-section="audit"><div class="nav-icon">🔐</div><span>Audit Trail</span></div>
-        <div class="nav-item" onclick="navTo('dos-list')" data-section="dos-list"><div class="nav-icon">🧑‍💼</div><span>Officers</span></div>
+        <div class="nav-item" onclick="navTo('audit')" data-section="audit">
+          <div class="nav-icon">🔐</div><span>Audit Trail</span>
+        </div>
+        <div class="nav-item" onclick="navTo('dos-list')" data-section="dos-list">
+          <div class="nav-icon">🧑‍💼</div><span>Officers</span>
+        </div>
       </div>
 
-      <!-- Faculty tree (appears when student section active) -->
+      <!-- Faculty tree (students section) -->
       <div id="faculty-tree-wrap" class="px-3 pb-4 hidden flex-1 overflow-y-auto">
-        <div class="nav-section">Faculty Browser</div>
+        <div class="nav-section">Filter by</div>
         <div id="sidebar-tree" class="space-y-1 text-xs"></div>
       </div>
     </aside>
@@ -347,92 +310,78 @@ details details[open] > summary { color: #10B981; }
     <!-- MAIN VIEWPORT -->
     <main class="main-content p-8 bg-slate-50 dark:bg-[#0B1120]">
 
-      <!-- ── TELEMETRY ── -->
+      <!-- TELEMETRY -->
       <div id="sec-overview">
         <div class="mb-6">
           <h2 class="section-head">Global Telemetry</h2>
           <p class="section-sub">Network-wide snapshot across all institutions.</p>
         </div>
+
+        <!-- Clickable stat cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div class="stat-card"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Total Records</p><p id="ov-total" class="text-3xl font-black text-slate-900 dark:text-white">0</p></div>
-          <div class="stat-card"><p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Verified Passports</p><p id="ov-verified" class="text-3xl font-black text-emerald-600 dark:text-emerald-400">0</p></div>
-          <div class="stat-card"><p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-2">Pending Auth</p><p id="ov-pending" class="text-3xl font-black text-amber-600 dark:text-amber-400">0</p></div>
-          <div class="stat-card" style="background:linear-gradient(135deg,#061416,#0a2225);border:none;"><p class="text-[10px] font-bold text-brand-100 uppercase tracking-wider mb-2">Total Collection</p><p id="ov-revenue" class="text-2xl font-black text-white">₦0</p></div>
+          <div class="stat-card" onclick="navTo('students'); setFilter('ALL')">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Total Students</p>
+            <p id="ov-total" class="text-3xl font-black text-slate-900 dark:text-white">0</p>
+            <p class="text-[10px] text-slate-400 mt-2 font-semibold">↗ click to view all</p>
+          </div>
+          <div class="stat-card" onclick="navTo('students'); setFilter('VERIFIED')">
+            <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Verified</p>
+            <p id="ov-verified" class="text-3xl font-black text-emerald-600 dark:text-emerald-400">0</p>
+            <p class="text-[10px] text-slate-400 mt-2 font-semibold">↗ click to view</p>
+          </div>
+          <div class="stat-card" onclick="navTo('students'); setFilter('PENDING')" style="border: 1px solid #fde68a;">
+            <p class="text-[10px] font-bold text-amber-600 uppercase tracking-wider mb-2">⏳ Pending Approval</p>
+            <p id="ov-pending" class="text-3xl font-black text-amber-600 dark:text-amber-400">0</p>
+            <p class="text-[10px] text-amber-500 mt-2 font-semibold">↗ click to review & approve</p>
+          </div>
+          <div class="stat-card" style="background:linear-gradient(135deg,#061416,#0a2225);border:none;">
+            <p class="text-[10px] font-bold text-brand-100 uppercase tracking-wider mb-2">Yearbook Activated</p>
+            <p id="ov-yearbook" class="text-3xl font-black text-white">0</p>
+            <p class="text-[10px] text-slate-400 mt-2 font-semibold">paid access granted</p>
+          </div>
         </div>
+
+        <!-- Chart + revenue split -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div class="card p-6">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">Verification Matrix</p>
             <div class="relative h-52 flex items-center justify-center"><canvas id="ov-donut"></canvas></div>
           </div>
           <div class="card p-6 lg:col-span-2">
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">Revenue Split (₦500/student)</p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">Revenue Split (₦2,000/code sold)</p>
             <div class="space-y-2.5">
               <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800 text-sm">
-                <span class="text-slate-500 font-medium">Worker (QR scan)</span><span id="split-worker" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
+                <span class="text-slate-500 font-medium">DOS Share (20%)</span>
+                <span id="split-dos" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800 text-sm">
-                <span class="text-slate-500 font-medium">DOS (Dept Officer)</span><span id="split-dos" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
+                <span class="text-slate-500 font-medium">Faculty Lead (₦100/student)</span>
+                <span id="split-fac" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
               </div>
               <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800 text-sm">
-                <span class="text-slate-500 font-medium">Faculty Lead</span><span id="split-fac" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
-              </div>
-              <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800 text-sm">
-                <span class="text-slate-500 font-medium">SUG</span><span id="split-sug" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
+                <span class="text-slate-500 font-medium">SUG (₦100/student)</span>
+                <span id="split-sug" class="font-bold text-slate-700 dark:text-slate-300">₦0</span>
               </div>
               <div class="flex justify-between items-center py-2 text-sm">
-                <span class="text-emerald-600 font-bold">Z-Node Infrastructure (₦200)</span><span id="split-znode" class="font-black text-emerald-600">₦0</span>
+                <span class="text-emerald-600 font-bold">Z-Node Net Revenue</span>
+                <span id="split-znode" class="font-black text-emerald-600">₦0</span>
               </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <span class="text-xs text-slate-400 font-semibold">Total codes sold</span>
+              <span id="split-total-codes" class="text-sm font-black text-slate-700 dark:text-slate-300">0 codes · ₦0</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ── INSTITUTIONS ── -->
-      <div id="sec-institutions" class="hidden">
-        <div class="mb-6 flex items-end justify-between">
-          <div><h2 class="section-head">Tenant Registry</h2><p class="section-sub">All institution nodes on the Z-Node network.</p></div>
-          <button onclick="loadInstitutions()" class="btn btn-ghost text-xs">↻ Refresh</button>
-        </div>
-        <div class="card overflow-hidden">
-          <table class="data-table">
-            <thead><tr class="bg-slate-50 dark:bg-slate-900/50"><th>Institution</th><th>Code</th><th>Students</th><th>Verified</th><th>Revenue</th><th>Escrow Balance</th><th>Status</th></tr></thead>
-            <tbody id="inst-tbody"><tr><td colspan="7" class="text-center py-12 text-slate-400 text-sm">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ── FINANCIALS (LEDGER) ── -->
-      <div id="sec-financials" class="hidden">
-        <div class="mb-6 flex items-end justify-between">
-          <div><h2 class="section-head">Master Ledger</h2><p class="section-sub">Immutable financial record across all institutions.</p></div>
-          <button onclick="exportLedgerCSV()" class="btn btn-ghost text-xs">⬇ Export CSV</button>
-        </div>
-        <div class="card overflow-hidden">
-          <table class="data-table">
-            <thead><tr class="bg-slate-50 dark:bg-slate-900/50"><th>Date</th><th>Institution</th><th>Reference</th><th>Amount</th><th>Status</th></tr></thead>
-            <tbody id="ledger-tbody"><tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ── SETTLEMENT ── -->
-      <div id="sec-settlement" class="hidden">
-        <div class="mb-6"><h2 class="section-head">Settlement Console</h2><p class="section-sub">Pending escrow transactions awaiting clearance.</p></div>
-        <div class="card overflow-hidden">
-          <table class="data-table">
-            <thead><tr class="bg-slate-50 dark:bg-slate-900/50"><th>Institution</th><th>Reference</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="stl-tbody"><tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">Loading...</td></tr></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ── STUDENTS ── -->
+      <!-- STUDENT REGISTRY -->
       <div id="sec-students" class="hidden">
         <div class="mb-5">
           <div class="flex items-end justify-between mb-4">
             <div>
               <h2 id="stu-view-title" class="section-head">Student Registry</h2>
-              <p id="stu-view-sub" class="section-sub">Select a level from the faculty tree to review students.</p>
+              <p id="stu-view-sub" class="section-sub">All students across the network.</p>
             </div>
             <div class="flex gap-3 items-center">
               <input id="stu-search" type="text" placeholder="Search name or matric…" oninput="filterStudents()" class="input-field" style="width:200px;padding:8px 14px;">
@@ -440,24 +389,68 @@ details details[open] > summary { color: #10B981; }
               <button onclick="syncAll()" class="btn btn-ghost text-xs">↻ Sync</button>
             </div>
           </div>
+
+          <!-- Filter pills -->
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">Filter:</span>
             <button onclick="setFilter('ALL')"      class="filter-pill active" data-filter="ALL">All</button>
             <button onclick="setFilter('PENDING')"  class="filter-pill" data-filter="PENDING">⏳ Pending</button>
             <button onclick="setFilter('VERIFIED')" class="filter-pill" data-filter="VERIFIED">✓ Verified</button>
             <button onclick="setFilter('REJECTED')" class="filter-pill" data-filter="REJECTED">✗ Rejected</button>
+            <button onclick="setFilter('YEARBOOK')" class="filter-pill" data-filter="YEARBOOK">📖 Yearbook</button>
             <span id="filter-count" class="ml-2 text-[10.5px] text-slate-400 font-semibold"></span>
           </div>
         </div>
+
+        <!-- Pending alert banner (shows when pending > 0) -->
+        <div id="pending-banner" class="pending-banner hidden">
+          <div>
+            <p class="text-white font-bold text-sm">⏳ Students awaiting approval</p>
+            <p id="pending-banner-count" class="text-amber-200 text-xs font-semibold mt-0.5"></p>
+          </div>
+          <button onclick="setFilter('PENDING')" class="btn btn-amber text-xs">Review Now →</button>
+        </div>
+
         <div id="students-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          <div class="col-span-full text-center py-16 text-slate-400 text-sm border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">Select a faculty → department → level from the sidebar to view students.</div>
+          <div class="col-span-full text-center py-16 text-slate-400 text-sm">
+            <div class="spinner mx-auto mb-4"></div>
+            Loading students...
+          </div>
         </div>
       </div>
 
-      <!-- ── AUDIT TRAIL ── -->
+      <!-- INSTITUTIONS -->
+      <div id="sec-institutions" class="hidden">
+        <div class="mb-6 flex items-end justify-between">
+          <div><h2 class="section-head">Tenant Registry</h2><p class="section-sub">All institution nodes on the Z-Node network.</p></div>
+          <button onclick="loadInstitutions()" class="btn btn-ghost text-xs">↻ Refresh</button>
+        </div>
+        <div class="card overflow-hidden">
+          <table class="data-table">
+            <thead><tr class="bg-slate-50 dark:bg-slate-900/50"><th>Institution</th><th>Students</th><th>Verified</th><th>Yearbook</th><th>Pending</th><th>Status</th></tr></thead>
+            <tbody id="inst-tbody"><tr><td colspan="6" class="text-center py-12 text-slate-400 text-sm">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FINANCIALS -->
+      <div id="sec-financials" class="hidden">
+        <div class="mb-6 flex items-end justify-between">
+          <div><h2 class="section-head">Master Ledger</h2><p class="section-sub">Yearbook access code transactions.</p></div>
+          <button onclick="exportLedgerCSV()" class="btn btn-ghost text-xs">⬇ Export CSV</button>
+        </div>
+        <div class="card overflow-hidden">
+          <table class="data-table">
+            <thead><tr class="bg-slate-50 dark:bg-slate-900/50"><th>Date</th><th>Department</th><th>Code</th><th>Assigned To</th><th>Status</th></tr></thead>
+            <tbody id="ledger-tbody"><tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- AUDIT -->
       <div id="sec-audit" class="hidden">
         <div class="mb-6 flex items-end justify-between">
-          <div><h2 class="section-head">Audit Trail</h2><p class="section-sub">Cryptographic log of all admin actions.</p></div>
+          <div><h2 class="section-head">Audit Trail</h2><p class="section-sub">Log of all admin verification actions.</p></div>
           <button onclick="loadAudit()" class="btn btn-ghost text-xs">↻ Refresh</button>
         </div>
         <div class="card overflow-hidden">
@@ -468,9 +461,9 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <!-- ── DOS / OFFICERS LIST ── -->
+      <!-- OFFICERS -->
       <div id="sec-dos-list" class="hidden">
-        <div class="mb-6"><h2 class="section-head">Officers Directory</h2><p class="section-sub">All DOS, Faculty Leads, and SUG officers on the network.</p></div>
+        <div class="mb-6"><h2 class="section-head">Officers Directory</h2><p class="section-sub">All DOS, Faculty Leads, and SUG officers.</p></div>
         <div class="card overflow-hidden">
           <table class="data-table">
             <thead><tr class="bg-slate-50 dark:bg-slate-900/50"><th>Name</th><th>Username</th><th>Role</th><th>Faculty / Dept</th><th>Institution</th><th>Joined</th></tr></thead>
@@ -484,42 +477,34 @@ details details[open] > summary { color: #10B981; }
 </div>
 
 <script>
-// ════════════════════════════════════════════════════════════
-// CONSTANTS
-// ════════════════════════════════════════════════════════════
 const SUPABASE_URL  = 'https://yohndnmwvgcwadkytmix.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvaG5kbm13dmdjd2Fka3l0bWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDEyODgsImV4cCI6MjA5NDYxNzI4OH0.hkUexJ-AS1GpLJL78F7iXDv5PkwuPbShj2fsGVXuEsg';
 
-// Revenue split (₦500 per student)
-const SPLIT = { worker: 70, dos: 30, faculty: 100, sug: 100, znode: 200 };
-const fmt   = (n) => new Intl.NumberFormat('en-NG', { style:'currency', currency:'NGN', minimumFractionDigits:0 }).format(n||0);
-const instN = (i) => i?.institution_name || i?.name || i?.short_name || '—';
-const instC = (i) => i?.institution_code || i?.short_name || '—';
+const CODE_PRICE  = 2000;
+const DOS_SHARE   = 0.20;
+const FAC_CUT     = 100;
+const SUG_CUT     = 100;
+
+const fmt = (n) => new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',minimumFractionDigits:0}).format(n||0);
+const showEl = (id) => document.getElementById(id)?.classList.remove('hidden');
+const hideEl = (id) => document.getElementById(id)?.classList.add('hidden');
+const getEl  = (id) => document.getElementById(id);
+function showLoader(t='Loading...') { showEl('loading-overlay'); getEl('loading-text').textContent=t; }
+function hideLoader() { hideEl('loading-overlay'); }
 
 let _db = null;
 let currentUser = null;
 let allStudents = [];
-let rawLedger   = [];
-let rawStudents = [];
-let viewCtx = { faculty: null, dept: null, level: null };
+let allCodes = [];
 let activeFilter = 'ALL';
 let searchQuery  = '';
-let pendingAction = { type: null, studentId: null, studentName: null };
-let activeSettlement = null;
+let pendingAction = { type:null, studentId:null, studentName:null };
 let donutChart = null;
 
-const showEl = (id) => document.getElementById(id)?.classList.remove('hidden');
-const hideEl = (id) => document.getElementById(id)?.classList.add('hidden');
-const getEl  = (id) => document.getElementById(id);
-function showLoader(t='Loading...') { showEl('loading-overlay'); getEl('loading-text').textContent = t; }
-function hideLoader() { hideEl('loading-overlay'); }
-
-// ════════════════════════════════════════════════════════════
-// BOOT
-// ════════════════════════════════════════════════════════════
+// ── BOOT ─────────────────────────────────────────────────
 (async function init() {
   _db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-  const { data: { session } } = await _db.auth.getSession();
+  const { data:{ session } } = await _db.auth.getSession();
   if (session) { currentUser = session.user; bootDashboard(); }
   else showEl('auth-modal');
 })();
@@ -529,235 +514,117 @@ async function handleLogin() {
   const pass  = getEl('auth-password').value;
   const errEl = getEl('auth-error');
   errEl.classList.add('hidden');
-  if (!email || !pass) { errEl.textContent = 'Email and password required.'; errEl.classList.remove('hidden'); return; }
+  if (!email || !pass) { errEl.textContent='Email and password required.'; errEl.classList.remove('hidden'); return; }
   showLoader('Authenticating...');
   const { data, error } = await _db.auth.signInWithPassword({ email, password: pass });
   hideLoader();
-  if (error) { errEl.textContent = error.message; errEl.classList.remove('hidden'); return; }
+  if (error) { errEl.textContent=error.message; errEl.classList.remove('hidden'); return; }
   currentUser = data.user;
   hideEl('auth-modal');
   bootDashboard();
 }
 
-async function handleLogout() {
-  await _db.auth.signOut();
-  location.reload();
-}
+async function handleLogout() { await _db.auth.signOut(); location.reload(); }
 
 async function bootDashboard() {
   showEl('screen-dashboard');
   getEl('hdr-email').textContent = currentUser.email || '';
   getEl('sb-email').textContent  = currentUser.email || '';
-  getEl('hdr-avatar').textContent = (currentUser.email || 'A').charAt(0).toUpperCase();
+  getEl('hdr-avatar').textContent = (currentUser.email||'A').charAt(0).toUpperCase();
   await syncAll();
   navTo('overview');
 }
 
+// ── SYNC ─────────────────────────────────────────────────
 async function syncAll() {
-  showLoader('Syncing network data...');
-  const { data, error } = await _db.from('students').select('*, institutions(name, short_name)').order('created_at', { ascending: false });
+  showLoader('Syncing...');
+  const [stuRes, codeRes] = await Promise.all([
+    _db.from('students').select('*').order('created_at', { ascending: false }),
+    _db.from('yearbook_access_codes').select('*').order('created_at', { ascending: false })
+  ]);
   hideLoader();
-  if (error) { showToast('error', 'Sync failed: ' + error.message); return; }
-  allStudents = rawStudents = data || [];
+  if (stuRes.error)  { showToast('error', 'Student sync failed: ' + stuRes.error.message); return; }
+  if (codeRes.error) { showToast('error', 'Codes sync failed: '   + codeRes.error.message); }
+  allStudents = stuRes.data  || [];
+  allCodes    = codeRes.data || [];
+
   buildFacultyTree();
+  updatePendingBadge();
   renderTelemetry();
 }
 
-// ════════════════════════════════════════════════════════════
-// TELEMETRY
-// ════════════════════════════════════════════════════════════
+// ── TELEMETRY ─────────────────────────────────────────────
 function renderTelemetry() {
   const total    = allStudents.length;
   const verified = allStudents.filter(s => s.is_verified === true).length;
   const pending  = allStudents.filter(s => !s.is_verified && !s.rejection_reason).length;
   const rejected = allStudents.filter(s => s.rejection_reason && !s.is_verified).length;
-  const revenue  = allStudents.reduce((a,s) => a + (Number(s.fee_paid)||0), 0);
-  const paid = allStudents.filter(s => s.yearbook_access === true || s.yearbook_verified === true).length;
+  // ✅ FIX: count EITHER yearbook_access OR yearbook_verified
+  const yearbook = allStudents.filter(s => s.yearbook_access === true || s.yearbook_verified === true).length;
+  const codesUsed = allCodes.filter(c => c.status === 'used').length;
+  const totalRevenue = codesUsed * CODE_PRICE;
+  const dosShare  = totalRevenue * DOS_SHARE;
+  const facShare  = yearbook * FAC_CUT;
+  const sugShare  = yearbook * SUG_CUT;
+  const znodeNet  = totalRevenue - dosShare - facShare - sugShare;
 
   getEl('ov-total').textContent    = total;
   getEl('ov-verified').textContent = verified;
   getEl('ov-pending').textContent  = pending;
-  getEl('ov-revenue').textContent  = fmt(revenue);
+  getEl('ov-yearbook').textContent = yearbook;
+  getEl('split-dos').textContent   = fmt(dosShare);
+  getEl('split-fac').textContent   = fmt(facShare);
+  getEl('split-sug').textContent   = fmt(sugShare);
+  getEl('split-znode').textContent = fmt(znodeNet > 0 ? znodeNet : 0);
+  getEl('split-total-codes').textContent = `${codesUsed} codes · ${fmt(totalRevenue)}`;
 
-  // Revenue split (using paid student count × per-student cuts)
-  getEl('split-worker').textContent = fmt(paid * SPLIT.worker);
-  getEl('split-dos').textContent    = fmt(paid * SPLIT.dos);
-  getEl('split-fac').textContent    = fmt(paid * SPLIT.faculty);
-  getEl('split-sug').textContent    = fmt(paid * SPLIT.sug);
-  getEl('split-znode').textContent  = fmt(paid * SPLIT.znode);
-
-  // Donut chart
+  // Donut
   const ctx = getEl('ov-donut').getContext('2d');
   if (donutChart) donutChart.destroy();
   donutChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Verified', 'Pending', 'Rejected'],
-      datasets: [{ data: [verified||0, pending||0, rejected||0], backgroundColor: ['#10B981','#F59E0B','#EF4444'], borderWidth: 0, hoverOffset: 4 }]
+      labels: ['Verified','Pending','Rejected'],
+      datasets: [{ data:[verified||0,pending||0,rejected||0], backgroundColor:['#10B981','#F59E0B','#EF4444'], borderWidth:0, hoverOffset:4 }]
     },
-    options: { responsive: true, maintainAspectRatio: false, cutout: '74%', plugins: { legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans', size: 10, weight: '700' } } } } }
+    options: { responsive:true, maintainAspectRatio:false, cutout:'74%',
+      plugins: { legend: { position:'bottom', labels: { font:{ family:'Plus Jakarta Sans', size:10, weight:'700' } } } }
+    }
   });
 }
 
-// ════════════════════════════════════════════════════════════
-// INSTITUTIONS
-// ════════════════════════════════════════════════════════════
-async function loadInstitutions() {
-  getEl('inst-tbody').innerHTML = `<tr><td colspan="7" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
-  const { data, error } = await _db.from('institutions').select('*').order('created_at', { ascending: false });
-  if (error) { getEl('inst-tbody').innerHTML = `<tr><td colspan="7" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
-
-  getEl('inst-tbody').innerHTML = (data||[]).map(inst => {
-    const instStudents = allStudents.filter(s => s.institution_id === inst.id);
-    const verified     = instStudents.filter(s => s.is_verified).length;
-    const revenue      = instStudents.reduce((a,s) => a + (Number(s.fee_paid)||0), 0);
-    const balance      = inst.current_escrow_balance ?? inst.escrow_balance ?? 0;
-    const status       = inst.status || 'ACTIVE';
-    const statusBadge  = status === 'ACTIVE' ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-slate">Inactive</span>';
-    return `
-      <tr>
-        <td><p class="font-semibold text-slate-800 dark:text-slate-200">${instN(inst)}</p></td>
-        <td class="mono text-xs text-slate-400">${instC(inst)}</td>
-        <td class="font-semibold text-slate-700 dark:text-slate-300">${instStudents.length}</td>
-        <td class="font-semibold text-emerald-600">${verified}</td>
-        <td class="font-semibold text-slate-700 dark:text-slate-300">${fmt(revenue)}</td>
-        <td class="font-semibold text-amber-600">${fmt(balance)}</td>
-        <td>${statusBadge}</td>
-      </tr>`;
-  }).join('') || `<tr><td colspan="7" class="text-center py-12 text-slate-400 text-sm">No institutions found.</td></tr>`;
-}
-
-// ════════════════════════════════════════════════════════════
-// FINANCIALS / LEDGER
-// ════════════════════════════════════════════════════════════
-async function loadLedger() {
-  getEl('ledger-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
-  const { data, error } = await _db.from('global_financial_ledger')
-    .select('*, institutions(*)')
-    .order('created_at', { ascending: false })
-    .limit(60);
-  if (error) { getEl('ledger-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
-  rawLedger = data || [];
-
-  getEl('ledger-tbody').innerHTML = rawLedger.map(tx => {
-    const statusBadge = tx.status === 'SETTLED'
-      ? '<span class="badge badge-green">Settled</span>'
-      : tx.status === 'HELD_IN_ESCROW' || tx.status === 'PENDING'
-      ? '<span class="badge badge-amber">Escrow</span>'
-      : `<span class="badge badge-slate">${tx.status||'—'}</span>`;
-    const ts = tx.created_at ? new Date(tx.created_at).toLocaleDateString('en-NG', { dateStyle: 'medium' }) : '—';
-    return `
-      <tr>
-        <td class="text-xs text-slate-400 mono">${ts}</td>
-        <td class="font-semibold text-slate-700 dark:text-slate-300">${instN(tx.institutions)}</td>
-        <td class="mono text-xs text-slate-400 max-w-[160px] truncate">${tx.transaction_reference||'—'}</td>
-        <td class="font-bold text-slate-800 dark:text-slate-200">${fmt(tx.amount)}</td>
-        <td>${statusBadge}</td>
-      </tr>`;
-  }).join('') || `<tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">Ledger is empty.</td></tr>`;
-}
-
-function exportLedgerCSV() {
-  if (!rawLedger.length) { showToast('error', 'No ledger data to export.'); return; }
-  const rows = [['Date','Institution','Reference','Amount','Status'],
-    ...rawLedger.map(tx => [new Date(tx.created_at).toISOString(), instN(tx.institutions), tx.transaction_reference, tx.amount, tx.status])];
-  const uri = 'data:text/csv;charset=utf-8,' + rows.map(r => r.join(',')).join('\n');
-  const a = Object.assign(document.createElement('a'), { href: encodeURI(uri), download: `ZNode_Ledger_${Date.now()}.csv` });
-  document.body.appendChild(a); a.click(); a.remove();
-  showToast('success', 'Ledger exported.');
-}
-
-// ════════════════════════════════════════════════════════════
-// SETTLEMENT
-// ════════════════════════════════════════════════════════════
-async function loadSettlement() {
-  getEl('stl-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
-  const { data, error } = await _db.from('global_financial_ledger')
-    .select('*, institutions(*)')
-    .in('status', ['PENDING','HELD_IN_ESCROW'])
-    .order('created_at', { ascending: false });
-  if (error) { getEl('stl-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
-
-  const rows = data || [];
-  // Update badge
-  if (rows.length > 0) { showEl('nb-settlement'); getEl('nb-settlement').textContent = rows.length; }
-  else hideEl('nb-settlement');
-
-  getEl('stl-tbody').innerHTML = rows.map(tx => {
-    const iName = instN(tx.institutions);
-    return `
-      <tr>
-        <td class="font-semibold text-slate-800 dark:text-slate-200">${iName}</td>
-        <td class="mono text-xs text-slate-400 max-w-[160px] truncate">${tx.transaction_reference||'—'}</td>
-        <td class="font-black text-slate-900 dark:text-white">${fmt(tx.amount)}</td>
-        <td><span class="badge badge-amber">Escrow</span></td>
-        <td>
-          <button onclick="openSettlementModal('${tx.id}','${iName.replace(/'/g,"\\'")}','${tx.transaction_reference||''}',${tx.amount||0})"
-            class="btn btn-amber text-xs py-1.5 px-3">Clear Block</button>
-        </td>
-      </tr>`;
-  }).join('') || `<tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">Settlement queue is empty.</td></tr>`;
-}
-
-function openSettlementModal(txId, inst, ref, amount) {
-  activeSettlement = { txId };
-  getEl('stl-inst').textContent = inst;
-  getEl('stl-ref').textContent  = ref;
-  getEl('stl-amt').textContent  = fmt(amount);
-  showEl('settlement-modal');
-}
-
-async function executeSettlement() {
-  if (!activeSettlement?.txId || !currentUser) return;
-  const btn = getEl('stl-confirm-btn');
-  btn.textContent = 'Executing...'; btn.disabled = true;
-  try {
-    const { error } = await _db.rpc('execute_settlement', {
-      p_transaction_id: activeSettlement.txId,
-      p_admin_user_id:  currentUser.id
-    });
-    if (error) throw error;
-    closeModal('settlement-modal');
-    showToast('success', '✓ Settlement executed.');
-    await loadSettlement();
-  } catch(err) {
-    // Graceful: RPC may not exist yet
-    const msg = err.message?.includes('function') || err.code === 'PGRST202'
-      ? 'execute_settlement RPC not set up yet. Create this stored procedure in Supabase.'
-      : err.message;
-    showToast('error', msg);
+// ── PENDING BADGE ─────────────────────────────────────────
+function updatePendingBadge() {
+  const pending = allStudents.filter(s => !s.is_verified && !s.rejection_reason).length;
+  const badge = getEl('nb-pending');
+  if (pending > 0) {
+    showEl('nb-pending');
+    badge.textContent = pending;
+  } else {
+    hideEl('nb-pending');
   }
-  btn.textContent = 'Execute'; btn.disabled = false;
 }
 
-// ════════════════════════════════════════════════════════════
-// FACULTY TREE (for student section)
-// ════════════════════════════════════════════════════════════
+// ── FACULTY TREE ──────────────────────────────────────────
 function buildFacultyTree() {
   const facMap = {};
   allStudents.forEach(s => {
     const f = s.faculty || 'Unassigned';
     const d = s.department || 'Unassigned';
-    const l = String(s.academic_level || '100');
     if (!facMap[f]) facMap[f] = {};
-    if (!facMap[f][d]) facMap[f][d] = {};
-    if (!facMap[f][d][l]) facMap[f][d][l] = 0;
-    facMap[f][d][l]++;
+    if (!facMap[f][d]) facMap[f][d] = 0;
+    facMap[f][d]++;
   });
 
-  let html = `<div onclick="showAllStudents()" class="tree-level" style="padding-left:14px;font-weight:700;">🌐 All Students (${allStudents.length})</div>`;
+  let html = `<div onclick="showAllStudents()" class="tree-level active" id="tree-all" style="padding-left:14px;font-weight:700;">🌐 All Students (${allStudents.length})</div>`;
   Object.keys(facMap).sort().forEach(fac => {
-    html += `<details class="mb-1"><summary>🏛 ${fac}</summary><div class="pl-3 border-l border-brand-800/50 ml-3 mt-1 space-y-0.5">`;
+    const facTotal = Object.values(facMap[fac]).reduce((a,b)=>a+b,0);
+    html += `<details class="mb-1"><summary>🏛 ${fac} <span style="font-size:10px;color:#64748b">(${facTotal})</span></summary><div class="pl-3 border-l border-brand-800/50 ml-3 mt-1 space-y-0.5">`;
     Object.keys(facMap[fac]).sort().forEach(dept => {
-      html += `<details class="mb-0.5"><summary>📚 ${dept}</summary><div class="pl-3 border-l border-brand-800/50 ml-3 mt-0.5 space-y-0.5">`;
-      Object.keys(facMap[fac][dept]).sort().forEach(lvl => {
-        const count = facMap[fac][dept][lvl];
-        html += `<div onclick="loadLevelView('${esc(fac)}','${esc(dept)}','${esc(lvl)}')" class="tree-level flex justify-between">
-          <span>Level ${lvl}</span>
-          <span class="bg-brand-800/50 text-slate-300 px-1.5 rounded text-[9.5px]">${count}</span>
-        </div>`;
-      });
-      html += `</div></details>`;
+      const count = facMap[fac][dept];
+      html += `<div onclick="filterByDept('${esc(fac)}','${esc(dept)}')" class="tree-level dept-node" data-fac="${esc(fac)}" data-dept="${esc(dept)}">
+        📚 ${dept} <span style="font-size:10px;background:rgba(16,185,129,0.1);color:#10B981;padding:1px 6px;border-radius:4px;">${count}</span>
+      </div>`;
     });
     html += `</div></details>`;
   });
@@ -765,47 +632,42 @@ function buildFacultyTree() {
   getEl('sidebar-tree').innerHTML = html;
 }
 
-const esc = (s) => (s||'').replace(/'/g, "\\'").replace(/\\/g,'\\\\');
+const esc = (s) => (s||'').replace(/'/g,"\\'");
 
 function showAllStudents() {
-  viewCtx = { faculty: null, dept: null, level: null };
-  getEl('stu-view-title').textContent = 'All Students';
-  getEl('stu-view-sub').textContent   = `${allStudents.length} total records across all institutions`;
-  document.querySelectorAll('.tree-level').forEach(el => el.classList.remove('active'));
+  getEl('stu-view-title').textContent = 'Student Registry';
+  getEl('stu-view-sub').textContent   = `${allStudents.length} students across all departments`;
+  document.querySelectorAll('.dept-node').forEach(el => el.classList.remove('active'));
+  document.getElementById('tree-all')?.classList.add('active');
   reRenderStudents(allStudents);
 }
 
-function loadLevelView(faculty, dept, level) {
-  viewCtx = { faculty, dept, level };
-  getEl('stu-view-title').textContent = `${dept} · Level ${level}`;
+function filterByDept(faculty, dept) {
+  getEl('stu-view-title').textContent = dept;
   getEl('stu-view-sub').textContent   = faculty;
-  document.querySelectorAll('.tree-level').forEach(el => el.classList.remove('active'));
-  if (event?.currentTarget) event.currentTarget.classList.add('active');
-  activeFilter = 'ALL';
-  searchQuery  = '';
-  getEl('stu-search').value = '';
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.filter === 'ALL'));
-  reRenderStudents(getViewStudents());
+  document.querySelectorAll('.dept-node').forEach(el => {
+    el.classList.toggle('active', el.dataset.dept === dept && el.dataset.fac === faculty);
+  });
+  document.getElementById('tree-all')?.classList.remove('active');
+  const list = allStudents.filter(s => s.faculty === faculty && s.department === dept);
+  reRenderStudents(list);
 }
 
-function getViewStudents() {
-  if (!viewCtx.faculty) return allStudents;
-  return allStudents.filter(s =>
-    s.faculty === viewCtx.faculty &&
-    s.department === viewCtx.dept &&
-    String(s.academic_level||'100') === viewCtx.level
-  );
-}
-
+// ── STUDENT GRID ──────────────────────────────────────────
 function setFilter(filter) {
   activeFilter = filter;
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.toggle('active', p.dataset.filter === filter));
-  reRenderStudents(getViewStudents());
+  document.querySelectorAll('.filter-pill').forEach(p => {
+    p.classList.remove('active','active-amber');
+    if (p.dataset.filter === filter) {
+      p.classList.add(filter === 'PENDING' ? 'active-amber' : 'active');
+    }
+  });
+  reRenderStudents(allStudents);
 }
 
 function filterStudents() {
   searchQuery = getEl('stu-search').value.trim().toLowerCase();
-  reRenderStudents(getViewStudents());
+  reRenderStudents(allStudents);
 }
 
 function reRenderStudents(base) {
@@ -815,6 +677,7 @@ function reRenderStudents(base) {
       if (activeFilter === 'PENDING')   return !s.is_verified && !s.rejection_reason;
       if (activeFilter === 'VERIFIED')  return s.is_verified === true;
       if (activeFilter === 'REJECTED')  return !!s.rejection_reason;
+      if (activeFilter === 'YEARBOOK')  return s.yearbook_access === true || s.yearbook_verified === true;
       return true;
     });
   }
@@ -826,85 +689,87 @@ function reRenderStudents(base) {
     );
   }
   getEl('filter-count').textContent = `Showing ${list.length} of ${base.length}`;
+
+  // Show/hide pending banner
+  const pendingCount = allStudents.filter(s => !s.is_verified && !s.rejection_reason).length;
+  if (pendingCount > 0 && activeFilter !== 'PENDING') {
+    showEl('pending-banner');
+    getEl('pending-banner-count').textContent = `${pendingCount} student${pendingCount>1?'s':''} waiting for your review`;
+  } else {
+    hideEl('pending-banner');
+  }
+
   renderStudentGrid(list);
 }
 
 function renderStudentGrid(students) {
   const grid = getEl('students-grid');
   if (!students.length) {
-    grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400 text-sm border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">No records match.</div>`;
+    const msg = activeFilter === 'PENDING'
+      ? '✅ No pending students — all caught up!'
+      : 'No records match your filter.';
+    grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400 text-sm border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">${msg}</div>`;
     return;
   }
 
   grid.innerHTML = students.map(st => {
-    const isVer = st.is_verified === true;
-    const isRej = !!st.rejection_reason && !isVer;
+    const isVer  = st.is_verified === true;
+    const isRej  = !!st.rejection_reason && !isVer;
     const isPend = !isVer && !isRej;
-    const hasPaid = st.yearbook_access === true || st.yearbook_verified === true;
+    const hasYB  = st.yearbook_access === true || st.yearbook_verified === true;
+    const init   = (st.full_name||'?').charAt(0).toUpperCase();
 
     const statusBadge = isVer
       ? '<span class="badge badge-green">VERIFIED</span>'
       : isRej
       ? '<span class="badge badge-red">REJECTED</span>'
-      : '<span class="badge badge-amber" style="animation:pulse 1.5s infinite">PENDING</span>';
+      : '<span class="badge badge-amber">PENDING</span>';
 
-    const avatarHtml = st.avatar_url
-      ? `<img src="${st.avatar_url}" class="w-11 h-11 rounded-full object-cover border border-brand-100 dark:border-slate-700" alt="">`
-      : `<div class="w-11 h-11 rounded-full bg-brand-50 dark:bg-slate-800 text-brand-800 dark:text-white flex items-center justify-center font-bold text-base border border-brand-100 dark:border-slate-700">${(st.full_name||'?').charAt(0).toUpperCase()}</div>`;
+    const ybBadge = hasYB ? '<span class="badge badge-indigo ml-1">YEARBOOK</span>' : '';
 
     const actions = isPend
       ? `<div class="flex gap-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
-           <button onclick="event.stopPropagation(); triggerApprove('${st.id}','${(st.full_name||'').replace(/'/g,"\\'")}')" class="btn btn-green flex-1 py-1.5 text-[11px]">✓ Approve</button>
-           <button onclick="event.stopPropagation(); triggerReject('${st.id}','${(st.full_name||'').replace(/'/g,"\\'")}')"  class="btn btn-danger flex-1 py-1.5 text-[11px]">✗ Reject</button>
+           <button onclick="event.stopPropagation(); triggerApprove('${st.id}','${(st.full_name||'').replace(/'/g,"\\'")}')" class="btn btn-green flex-1 py-2 text-[11px]">✓ Approve</button>
+           <button onclick="event.stopPropagation(); triggerReject('${st.id}','${(st.full_name||'').replace(/'/g,"\\'")}')"  class="btn btn-danger flex-1 py-2 text-[11px]">✗ Reject</button>
          </div>`
-      : `<div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[10.5px] font-semibold ${isVer?'text-emerald-600':'text-red-500'}">${isVer?'✓ Passport Active':'✗ Application Rejected'}</div>`;
+      : `<div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-[10.5px] font-semibold ${isVer?'text-emerald-600':'text-red-500'}">${isVer?'✓ Passport active':'✗ Application rejected'}</div>`;
 
     return `
       <div onclick="openStudentModal('${st.id}')" class="student-card card p-5">
-        <div class="flex justify-between items-start mb-4">${avatarHtml}${statusBadge}</div>
+        <div class="flex justify-between items-start mb-3">
+          <div class="w-11 h-11 rounded-full bg-brand-50 dark:bg-slate-800 text-brand-800 dark:text-white flex items-center justify-center font-bold text-base border border-brand-100 dark:border-slate-700">${init}</div>
+          <div class="flex flex-col items-end gap-1">${statusBadge}${ybBadge}</div>
+        </div>
         <h4 class="font-bold text-slate-900 dark:text-white text-sm">${st.full_name||'—'}</h4>
         <p class="text-xs text-slate-500 mono mt-0.5">${st.matric_number||'No Matric'}</p>
-        <p class="text-[10.5px] text-slate-400 mt-0.5">${st.faculty||'—'} › ${st.department||'—'} · Lvl ${st.academic_level||'—'}</p>
-        <div class="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-          <p class="text-[9px] text-slate-400 uppercase font-bold mb-1">Z-Node Passport</p>
-          <p class="text-[10.5px] mono font-bold truncate ${isVer?'text-brand-700 dark:text-emerald-400':'text-slate-400'}">${passport}</p>
-        </div>
+        <p class="text-[10.5px] text-slate-400 mt-0.5">${st.department||'—'} · Lvl ${st.academic_level||'—'}</p>
         ${actions}
       </div>`;
   }).join('');
 }
 
-// ════════════════════════════════════════════════════════════
-// STUDENT DETAIL MODAL
-// ════════════════════════════════════════════════════════════
+// ── STUDENT MODAL ─────────────────────────────────────────
 function openStudentModal(studentId) {
   const st = allStudents.find(s => s.id === studentId);
   if (!st) return;
   const isVer = st.is_verified === true;
   const isRej = !!st.rejection_reason && !isVer;
   const isPend = !isVer && !isRej;
-  const balance = (st.fee_total||0) - (st.fee_paid||0);
+  const hasYB  = st.yearbook_access === true || st.yearbook_verified === true;
 
-  if (st.avatar_url) getEl('sdm-avatar').innerHTML = `<img src="${st.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:1rem;" alt="">`;
-  else getEl('sdm-avatar').textContent = (st.full_name||'?').charAt(0).toUpperCase();
-
+  getEl('sdm-avatar').textContent     = (st.full_name||'?').charAt(0).toUpperCase();
   getEl('sdm-name').textContent       = st.full_name || st.username;
   getEl('sdm-matric').textContent     = st.matric_number || 'No Matric';
   getEl('sdm-breadcrumb').textContent = `${st.faculty||'—'} · ${st.department||'—'} · Level ${st.academic_level||'—'}`;
-  getEl('sdm-fee-total').textContent   = fmt(st.fee_total);
-  getEl('sdm-fee-paid').textContent    = fmt(st.fee_paid);
-  getEl('sdm-fee-balance').textContent = fmt(balance);
-  getEl('sdm-email').textContent = st.email || 'Not provided';
-  getEl('sdm-phone').textContent = st.phone || 'Not provided';
-  getEl('sdm-passport').textContent = st.znode_passport_id || 'Not yet issued';
+  getEl('sdm-email').textContent      = st.email || 'Not provided';
+  getEl('sdm-yearbook').innerHTML     = hasYB
+    ? '<span class="text-indigo-600 font-bold">✓ Active</span>'
+    : '<span class="text-slate-400">Not activated</span>';
+  getEl('sdm-passport').textContent   = st.znode_passport_id || 'Not yet issued';
 
   const badge = getEl('sdm-badge');
   badge.textContent = isVer ? 'VERIFIED' : isRej ? 'REJECTED' : 'PENDING';
-  badge.className   = 'badge ' + (isVer?'badge-green':isRej?'badge-red':'badge-amber');
-
-  const feeStatus = getEl('sdm-fee-status');
-  feeStatus.textContent = st.fee_status || 'UNPAID';
-  feeStatus.className   = 'badge ' + (st.fee_status==='PAID'?'badge-green':st.fee_status==='PARTIAL'?'badge-amber':'badge-red');
+  badge.className = 'badge ' + (isVer?'badge-green':isRej?'badge-red':'badge-amber');
 
   if (isRej && st.rejection_reason) {
     showEl('sdm-rejection-block');
@@ -919,19 +784,16 @@ function openStudentModal(studentId) {
   } else {
     actEl.innerHTML = `<div class="text-center text-sm font-semibold w-full py-2 ${isVer?'text-emerald-600':'text-red-500'}">${isVer?'✓ Passport already active.':'✗ Application rejected.'}</div>`;
   }
-
   showEl('student-modal');
 }
 
-// ════════════════════════════════════════════════════════════
-// APPROVAL ENGINE
-// ════════════════════════════════════════════════════════════
+// ── APPROVAL ENGINE ───────────────────────────────────────
 function triggerApprove(id, name) {
-  pendingAction = { type: 'APPROVE', studentId: id, studentName: name };
-  getEl('acm-icon').textContent   = '✅';
-  getEl('acm-icon').className     = 'w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 bg-emerald-50 dark:bg-emerald-900/20';
-  getEl('acm-title').textContent  = 'Approve Student?';
-  getEl('acm-desc').textContent   = `Verify ${name} and issue a Z-Node Passport.`;
+  pendingAction = { type:'APPROVE', studentId:id, studentName:name };
+  getEl('acm-icon').textContent  = '✅';
+  getEl('acm-icon').className    = 'w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 bg-emerald-50 dark:bg-emerald-900/20';
+  getEl('acm-title').textContent = 'Approve Student?';
+  getEl('acm-desc').textContent  = `Verify ${name} and issue a Z-Node Passport.`;
   hideEl('acm-reason-wrap');
   const btn = getEl('acm-confirm-btn');
   btn.textContent = 'Confirm Approval';
@@ -940,11 +802,11 @@ function triggerApprove(id, name) {
 }
 
 function triggerReject(id, name) {
-  pendingAction = { type: 'REJECT', studentId: id, studentName: name };
-  getEl('acm-icon').textContent   = '⛔';
-  getEl('acm-icon').className     = 'w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 bg-red-50 dark:bg-red-900/20';
-  getEl('acm-title').textContent  = 'Reject Application?';
-  getEl('acm-desc').textContent   = `Reject ${name}'s application. A reason is required.`;
+  pendingAction = { type:'REJECT', studentId:id, studentName:name };
+  getEl('acm-icon').textContent  = '⛔';
+  getEl('acm-icon').className    = 'w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5 bg-red-50 dark:bg-red-900/20';
+  getEl('acm-title').textContent = 'Reject Application?';
+  getEl('acm-desc').textContent  = `Reject ${name}'s application. A reason is required.`;
   showEl('acm-reason-wrap');
   getEl('acm-reason').value = '';
   const btn = getEl('acm-confirm-btn');
@@ -971,7 +833,7 @@ async function executeAction() {
       showToast('success', `✓ ${pendingAction.studentName} approved — passport issued`);
     } else {
       const reason = getEl('acm-reason').value.trim();
-      if (!reason) { alert('Rejection reason required.'); btn.textContent = 'Confirm Rejection'; btn.disabled = false; return; }
+      if (!reason) { alert('Rejection reason required.'); btn.textContent='Confirm Rejection'; btn.disabled=false; return; }
       const { error } = await _db.from('students').update({
         is_verified: false, rejection_reason: reason, updated_at: new Date().toISOString()
       }).eq('id', pendingAction.studentId);
@@ -983,19 +845,71 @@ async function executeAction() {
       showToast('error', `✗ ${pendingAction.studentName}'s application rejected`);
     }
     renderTelemetry();
-    buildFacultyTree();
-    reRenderStudents(getViewStudents());
+    updatePendingBadge();
+    reRenderStudents(allStudents);
   } catch(err) {
     showToast('error', 'Operation failed: ' + err.message);
   }
   btn.disabled = false;
   btn.textContent = pendingAction.type === 'APPROVE' ? 'Confirm Approval' : 'Confirm Rejection';
-  pendingAction = { type: null, studentId: null, studentName: null };
+  pendingAction = { type:null, studentId:null, studentName:null };
 }
 
-// ════════════════════════════════════════════════════════════
-// AUDIT TRAIL
-// ════════════════════════════════════════════════════════════
+// ── INSTITUTIONS ──────────────────────────────────────────
+async function loadInstitutions() {
+  getEl('inst-tbody').innerHTML = `<tr><td colspan="6" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
+  const { data, error } = await _db.from('institutions').select('*').order('name');
+  if (error) { getEl('inst-tbody').innerHTML = `<tr><td colspan="6" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
+
+  getEl('inst-tbody').innerHTML = (data||[]).map(inst => {
+    const instStudents = allStudents.filter(s => s.institution_id === inst.id);
+    const verified     = instStudents.filter(s => s.is_verified).length;
+    const yearbook     = instStudents.filter(s => s.yearbook_access || s.yearbook_verified).length;
+    const pending      = instStudents.filter(s => !s.is_verified && !s.rejection_reason).length;
+    return `
+      <tr>
+        <td><p class="font-semibold text-slate-800 dark:text-slate-200">${inst.name||'—'}</p></td>
+        <td class="font-semibold text-slate-700 dark:text-slate-300">${instStudents.length}</td>
+        <td class="font-semibold text-emerald-600">${verified}</td>
+        <td class="font-semibold text-indigo-600">${yearbook}</td>
+        <td>${pending > 0 ? `<span class="badge badge-amber">${pending} pending</span>` : '<span class="badge badge-green">clear</span>'}</td>
+        <td><span class="badge badge-green">Active</span></td>
+      </tr>`;
+  }).join('') || `<tr><td colspan="6" class="text-center py-12 text-slate-400 text-sm">No institutions found.</td></tr>`;
+}
+
+// ── FINANCIALS ────────────────────────────────────────────
+async function loadLedger() {
+  getEl('ledger-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
+  const { data, error } = await _db.from('yearbook_access_codes').select('*, students(full_name)').order('created_at', { ascending: false }).limit(60);
+  if (error) { getEl('ledger-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
+
+  getEl('ledger-tbody').innerHTML = (data||[]).map(c => {
+    const ts = c.created_at ? new Date(c.created_at).toLocaleDateString('en-NG',{dateStyle:'medium'}) : '—';
+    const statusBadge = c.status === 'used'
+      ? '<span class="badge badge-indigo">Used</span>'
+      : '<span class="badge badge-green">Available</span>';
+    return `
+      <tr>
+        <td class="text-xs text-slate-400 mono">${ts}</td>
+        <td class="font-semibold text-slate-700 dark:text-slate-300">${c.department||'—'}</td>
+        <td class="mono text-xs text-slate-500">${c.code||'—'}</td>
+        <td class="text-sm text-slate-600 dark:text-slate-400">${c.students?.full_name || '—'}</td>
+        <td>${statusBadge}</td>
+      </tr>`;
+  }).join('') || `<tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">No codes found.</td></tr>`;
+}
+
+function exportLedgerCSV() {
+  const rows = [['Date','Department','Code','Status'],
+    ...allCodes.map(c => [c.created_at, c.department, c.code, c.status])];
+  const uri = 'data:text/csv;charset=utf-8,' + rows.map(r=>r.join(',')).join('\n');
+  const a = Object.assign(document.createElement('a'),{href:encodeURI(uri),download:`ZNode_Codes_${Date.now()}.csv`});
+  document.body.appendChild(a); a.click(); a.remove();
+  showToast('success','Exported.');
+}
+
+// ── AUDIT ─────────────────────────────────────────────────
 async function writeAuditLog(action, targetName, targetId) {
   try {
     await _db.from('admin_audit_logs').insert({
@@ -1008,111 +922,95 @@ async function writeAuditLog(action, targetName, targetId) {
 
 async function loadAudit() {
   getEl('audit-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
-  const { data, error } = await _db.from('admin_audit_logs').select('*').order('timestamp', { ascending: false }).limit(60);
+  const { data, error } = await _db.from('admin_audit_logs').select('*').order('timestamp',{ascending:false}).limit(60);
   if (error) { getEl('audit-tbody').innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
-
-  const actionColor = (a) => a === 'STUDENT_APPROVED' ? 'text-emerald-600' : a === 'STUDENT_REJECTED' ? 'text-red-500' : 'text-slate-500';
-
+  const color = (a) => a==='STUDENT_APPROVED'?'text-emerald-600':a==='STUDENT_REJECTED'?'text-red-500':'text-slate-500';
   getEl('audit-tbody').innerHTML = (data||[]).map(log => {
-    const ts = new Date(log.timestamp).toLocaleString('en-NG', { dateStyle: 'short', timeStyle: 'medium' });
-    return `
-      <tr>
-        <td class="mono text-xs text-slate-400">${ts}</td>
-        <td class="font-semibold text-slate-700 dark:text-slate-300">${log.admin_name||'—'}</td>
-        <td class="font-bold ${actionColor(log.action)}">${log.action||'—'}</td>
-        <td class="text-sm text-slate-500">${log.target_name||'—'}</td>
-        <td><span class="badge ${log.status==='SUCCESS'?'badge-green':'badge-red'}">${log.status||'OK'}</span></td>
-      </tr>`;
+    const ts = new Date(log.timestamp).toLocaleString('en-NG',{dateStyle:'short',timeStyle:'medium'});
+    return `<tr>
+      <td class="mono text-xs text-slate-400">${ts}</td>
+      <td class="font-semibold text-slate-700 dark:text-slate-300">${log.admin_name||'—'}</td>
+      <td class="font-bold ${color(log.action)}">${log.action||'—'}</td>
+      <td class="text-sm text-slate-500">${log.target_name||'—'}</td>
+      <td><span class="badge ${log.status==='SUCCESS'?'badge-green':'badge-red'}">${log.status||'OK'}</span></td>
+    </tr>`;
   }).join('') || `<tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">No audit logs yet.</td></tr>`;
 }
 
-// ════════════════════════════════════════════════════════════
-// DOS / OFFICERS
-// ════════════════════════════════════════════════════════════
+// ── OFFICERS ──────────────────────────────────────────────
 async function loadDOSList() {
   getEl('dos-tbody').innerHTML = `<tr><td colspan="6" class="text-center py-10"><div class="spinner mx-auto"></div></td></tr>`;
-  const { data, error } = await _db.from('institution_admins').select('*, institutions(name)').order('created_at', { ascending: false });
+  const { data, error } = await _db.from('institution_admins').select('*').order('role');
   if (error) { getEl('dos-tbody').innerHTML = `<tr><td colspan="6" class="text-center py-8 text-red-400 text-sm">${error.message}</td></tr>`; return; }
-
   const roleBadge = (r) => {
-    if (r === 'DOS')          return '<span class="badge badge-green">DOS</span>';
-    if (r === 'FACULTY_LEAD') return '<span class="badge badge-blue">Faculty Lead</span>';
-    if (r === 'SUG')          return '<span class="badge badge-amber">SUG</span>';
+    if (r==='DOS')          return '<span class="badge badge-green">DOS</span>';
+    if (r==='FACULTY_LEAD') return '<span class="badge badge-blue">Faculty Lead</span>';
+    if (r==='SUG')          return '<span class="badge badge-amber">SUG</span>';
     return `<span class="badge badge-slate">${r||'—'}</span>`;
   };
-
   getEl('dos-tbody').innerHTML = (data||[]).map(a => {
     const ts = a.created_at ? new Date(a.created_at).toLocaleDateString('en-NG') : '—';
-    const scopeText = [a.faculty, a.department].filter(Boolean).join(' › ') || '—';
-    return `
-      <tr>
-        <td><p class="font-semibold text-slate-800 dark:text-slate-200">${a.full_name||'—'}</p><p class="text-[10px] text-slate-400 mono">${a.email||''}</p></td>
-        <td class="mono text-xs text-slate-500">${a.username||'—'}</td>
-        <td>${roleBadge(a.role)}</td>
-        <td class="text-xs text-slate-500">${scopeText}</td>
-        <td class="text-xs text-slate-500">${a.institutions?.name||a.institution_id||'—'}</td>
-        <td class="text-xs text-slate-400">${ts}</td>
-      </tr>`;
+    const scope = [a.faculty, a.department].filter(Boolean).join(' › ') || '—';
+    return `<tr>
+      <td><p class="font-semibold text-slate-800 dark:text-slate-200">${a.full_name||'—'}</p><p class="text-[10px] text-slate-400 mono">${a.email||''}</p></td>
+      <td class="mono text-xs text-slate-500">${a.username||'—'}</td>
+      <td>${roleBadge(a.role)}</td>
+      <td class="text-xs text-slate-500">${scope}</td>
+      <td class="text-xs text-slate-500">${a.institution_id||'—'}</td>
+      <td class="text-xs text-slate-400">${ts}</td>
+    </tr>`;
   }).join('') || `<tr><td colspan="6" class="text-center py-12 text-slate-400 text-sm">No officers found.</td></tr>`;
 }
 
-// ════════════════════════════════════════════════════════════
-// STUDENT CSV EXPORT
-// ════════════════════════════════════════════════════════════
+// ── CSV EXPORT ────────────────────────────────────────────
 function exportStudentsCSV() {
-  const src = viewCtx.faculty ? getViewStudents() : allStudents;
-  if (!src.length) { showToast('error', 'No student data to export.'); return; }
-  const headers = ['Full Name','Matric','Faculty','Department','Level','Email','Passport ID','Verified','Yearbook'];
-  const rows = src.map(s => [s.full_name,s.matric_number,s.faculty,s.department,s.academic_level,s.email,s.znode_passport_id,s.is_verified,s.yearbook_access]);
-  const uri = 'data:text/csv;charset=utf-8,' + [headers,...rows].map(r => r.join(',')).join('\n');
-  const a = Object.assign(document.createElement('a'), { href: encodeURI(uri), download: `ZNode_Students_${Date.now()}.csv` });
+  if (!allStudents.length) { showToast('error','No data to export.'); return; }
+  const headers = ['Full Name','Matric','Faculty','Department','Level','Email','Passport','Verified','Yearbook'];
+  const rows = allStudents.map(s=>[s.full_name,s.matric_number,s.faculty,s.department,s.academic_level,s.email,s.znode_passport_id,s.is_verified,s.yearbook_access]);
+  const uri = 'data:text/csv;charset=utf-8,' + [headers,...rows].map(r=>r.join(',')).join('\n');
+  const a = Object.assign(document.createElement('a'),{href:encodeURI(uri),download:`ZNode_Students_${Date.now()}.csv`});
   document.body.appendChild(a); a.click(); a.remove();
-  showToast('success', 'Students exported.');
+  showToast('success','Students exported.');
 }
 
-// ════════════════════════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════════════════════════
-const SECTIONS = ['overview','institutions','financials','settlement','students','audit','dos-list'];
+// ── NAVIGATION ────────────────────────────────────────────
+const SECTIONS = ['overview','students','institutions','financials','audit','dos-list'];
 
 function navTo(section) {
   SECTIONS.forEach(s => {
     const el = getEl(`sec-${s}`);
-    if (el) s === section ? el.classList.remove('hidden') : el.classList.add('hidden');
+    if (el) s===section ? el.classList.remove('hidden') : el.classList.add('hidden');
   });
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.section === section));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.section===section));
 
-  // Show/hide faculty tree
-  section === 'students' ? showEl('faculty-tree-wrap') : hideEl('faculty-tree-wrap');
+  section==='students'   ? showEl('faculty-tree-wrap') : hideEl('faculty-tree-wrap');
 
-  if (section === 'institutions')  loadInstitutions();
-  if (section === 'financials')    loadLedger();
-  if (section === 'settlement')    loadSettlement();
-  if (section === 'students')      { /* tree already built */ }
-  if (section === 'audit')         loadAudit();
-  if (section === 'dos-list')      loadDOSList();
+  if (section === 'students') {
+    // Auto-load all students immediately — no tree click required
+    showAllStudents();
+  }
+  if (section === 'institutions') loadInstitutions();
+  if (section === 'financials')   loadLedger();
+  if (section === 'audit')        loadAudit();
+  if (section === 'dos-list')     loadDOSList();
 }
 
-// ════════════════════════════════════════════════════════════
-// UTILITIES
-// ════════════════════════════════════════════════════════════
+// ── UTILITIES ─────────────────────────────────────────────
 function toggleTheme() {
-  const h = document.documentElement; const b = document.body;
-  const isDark = h.classList.contains('dark');
-  h.classList.toggle('dark', !isDark); h.classList.toggle('light', isDark);
-  b.classList.toggle('dark', !isDark); b.classList.toggle('light', isDark);
+  const h=document.documentElement; const b=document.body;
+  const isDark=h.classList.contains('dark');
+  h.classList.toggle('dark',!isDark); h.classList.toggle('light',isDark);
+  b.classList.toggle('dark',!isDark); b.classList.toggle('light',isDark);
 }
-
 function closeModal(id) { hideEl(id); }
-
 function showToast(type, msg) {
-  const t = getEl('toast'); const ti = getEl('toast-inner');
-  getEl('toast-icon').textContent = type === 'success' ? '✓' : '✗';
+  const t=getEl('toast'); const ti=getEl('toast-inner');
+  getEl('toast-icon').textContent = type==='success'?'✓':'✗';
   getEl('toast-msg').textContent  = msg;
   ti.className = 'flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold ' +
-    (type === 'success' ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white');
+    (type==='success'?'bg-emerald-500 text-white':'bg-red-500 text-white');
   t.classList.remove('hidden'); t.classList.add('toast-show');
-  setTimeout(() => { t.classList.add('hidden'); t.classList.remove('toast-show'); }, 3500);
+  setTimeout(()=>{ t.classList.add('hidden'); t.classList.remove('toast-show'); }, 3500);
 }
 </script>
 </body>
