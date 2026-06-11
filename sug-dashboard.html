@@ -115,7 +115,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
 </head>
 <body class="light">
 
-<!-- CONFIG MODAL -->
 <div id="config-modal" class="modal-overlay hidden">
   <div class="modal-box p-8 w-full max-w-sm">
     <div class="w-10 h-10 bg-sug-500 rounded-xl flex items-center justify-center text-white font-black text-xl mb-5">S</div>
@@ -129,7 +128,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- LOADING OVERLAY -->
 <div id="loading-overlay" class="modal-overlay hidden" style="z-index:2000">
   <div class="modal-box p-8 text-center min-w-[180px]">
     <div class="spinner mx-auto mb-4"></div>
@@ -137,7 +135,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- LOGIN SCREEN -->
 <div id="screen-login" class="min-h-screen flex items-center justify-center p-4 hidden">
   <div class="w-full max-w-md">
     <div class="text-center mb-8">
@@ -163,7 +160,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- MAIN DASHBOARD -->
 <div id="screen-dashboard" class="hidden h-screen flex flex-col">
 
   <header class="flex-shrink-0 h-14 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#080E1A] z-10">
@@ -182,8 +178,10 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         <div id="hdr-avatar" class="w-8 h-8 rounded-full bg-sug-500 text-white flex items-center justify-center text-xs font-black"></div>
         <div class="hidden md:block">
           <p id="hdr-name" class="text-xs font-bold text-slate-800 dark:text-slate-200"></p>
-          <button onclick="logout()" class="text-[10px] text-slate-400 hover:text-red-500 font-semibold transition-colors">Sign out</button>
         </div>
+        <button onclick="logout()" class="ml-2 px-3 py-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 text-xs font-bold transition-all flex items-center gap-2">
+          🚪 <span class="hidden sm:inline">Sign Out</span>
+        </button>
       </div>
     </div>
   </header>
@@ -202,7 +200,7 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <nav class="p-3 flex-1">
+      <nav class="p-3 flex-1 flex flex-col">
         <div class="text-[9px] font-black text-slate-600 uppercase tracking-[0.15em] px-3 mb-3 mt-1">Navigation</div>
         <div class="nav-item active" onclick="navTo('overview')" data-section="overview"><div class="nav-icon">🏛️</div><span>Institution Overview</span></div>
         <div class="nav-item" onclick="navTo('faculties')" data-section="faculties"><div class="nav-icon">🏫</div><span>Faculties</span></div>
@@ -211,6 +209,11 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         <div class="nav-item" onclick="navTo('broadcast')" data-section="broadcast"><div class="nav-icon">📣</div><span>Broadcast</span></div>
         <div class="nav-item" onclick="navTo('leaderboard')" data-section="leaderboard"><div class="nav-icon">🏆</div><span>Leaderboard</span></div>
         <div class="nav-item" onclick="navTo('support')" data-section="support"><div class="nav-icon">🛟</div><span>Support</span></div>
+        <div class="pt-2 mt-auto border-t border-white/5">
+          <div class="nav-item text-red-400 hover:bg-red-500/10 hover:text-red-300" onclick="logout()">
+            <div class="nav-icon bg-red-500/10 text-red-400">🚪</div><span>Sign Out</span>
+          </div>
+        </div>
       </nav>
 
       <div class="p-4 border-t border-white/5">
@@ -229,14 +232,12 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
 
     <main class="main-content p-8 transition-colors bg-slate-50 dark:bg-[#080E1A]">
 
-      <!-- OVERVIEW -->
       <div id="sec-overview">
         <div class="mb-6">
           <h2 class="section-head">Institution Overview</h2>
           <p class="section-sub" id="ov-subtitle">Loading institution data...</p>
         </div>
 
-        <!-- Top-level KPIs -->
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <div class="stat-card"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Faculties</p><p id="ov-faculties" class="text-3xl font-black text-slate-900 dark:text-white">0</p></div>
           <div class="stat-card"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Departments</p><p id="ov-depts" class="text-3xl font-black text-slate-900 dark:text-white">0</p></div>
@@ -245,7 +246,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           <div class="stat-card" style="background:linear-gradient(135deg,#451a03,#78350f); border:none;"><p class="text-[10px] font-bold text-amber-200 uppercase tracking-wider mb-2">Your Earnings</p><p id="ov-earnings" class="text-3xl font-black text-white">₦0</p></div>
         </div>
 
-        <!-- Revenue + funnel -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
           <div class="card p-6">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Revenue Summary</p>
@@ -281,7 +281,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </div>
         </div>
 
-        <!-- Recent students -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Recent Registrations</p>
@@ -293,7 +292,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- FACULTIES -->
       <div id="sec-faculties" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Faculties</h2>
@@ -302,7 +300,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         <div id="fac-accordion" class="space-y-4"></div>
       </div>
 
-      <!-- STUDENTS -->
       <div id="sec-students" class="hidden">
         <div class="flex items-end justify-between mb-6">
           <div><h2 class="section-head">All Students</h2><p class="section-sub">Complete student registry for your institution.</p></div>
@@ -333,7 +330,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ANALYTICS -->
       <div id="sec-analytics" class="hidden">
         <div class="mb-6"><h2 class="section-head">Institution Analytics</h2><p class="section-sub">Adoption, verification, and payment trends across all faculties.</p></div>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -354,7 +350,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- BROADCAST -->
       <div id="sec-broadcast" class="hidden">
         <div class="mb-6"><h2 class="section-head">Broadcast Center</h2><p class="section-sub">Send institution-wide announcements to all students.</p></div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -382,7 +377,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- LEADERBOARD -->
       <div id="sec-leaderboard" class="hidden">
         <div class="mb-6"><h2 class="section-head">Institution Leaderboard</h2><p class="section-sub">Faculty rankings by yearbook adoption and revenue.</p></div>
         <div class="flex gap-3 mb-6">
@@ -406,7 +400,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- SUPPORT -->
       <div id="sec-support" class="hidden">
         <div class="mb-6"><h2 class="section-head">Support Center</h2><p class="section-sub">Escalate institution-level issues to the Z-Node team.</p></div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -471,7 +464,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast" class="hidden">
   <div id="toast-inner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold">
     <span id="toast-icon"></span><span id="toast-msg"></span>
