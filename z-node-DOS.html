@@ -143,9 +143,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
 </head>
 <body class="light">
 
-<!-- ══════════════════════════════════════ -->
-<!-- CONFIG MODAL                          -->
-<!-- ══════════════════════════════════════ -->
 <div id="config-modal" class="modal-overlay hidden">
   <div class="modal-box p-8 w-full max-w-sm">
     <div class="w-10 h-10 bg-brand-800 rounded-xl flex items-center justify-center text-white font-black text-xl mb-5">Z</div>
@@ -159,9 +156,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- LOADING OVERLAY                       -->
-<!-- ══════════════════════════════════════ -->
 <div id="loading-overlay" class="modal-overlay hidden" style="z-index:2000">
   <div class="modal-box p-8 text-center min-w-[180px]">
     <div class="spinner mx-auto mb-4"></div>
@@ -169,12 +163,8 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- LOGIN SCREEN                          -->
-<!-- ══════════════════════════════════════ -->
 <div id="screen-login" class="min-h-screen flex items-center justify-center p-4 hidden">
   <div class="w-full max-w-md">
-    <!-- Brand header -->
     <div class="text-center mb-8">
       <div class="w-14 h-14 bg-brand-800 rounded-2xl flex items-center justify-center text-white font-black text-3xl mx-auto mb-4 shadow-lg">Z</div>
       <h1 class="text-2xl font-black text-slate-900 dark:text-white">DOS Portal</h1>
@@ -198,12 +188,8 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- MAIN DASHBOARD                        -->
-<!-- ══════════════════════════════════════ -->
 <div id="screen-dashboard" class="hidden h-screen flex flex-col">
 
-  <!-- TOP HEADER -->
   <header class="flex-shrink-0 h-14 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#080E1A] z-10">
     <div class="flex items-center gap-3">
       <div class="w-7 h-7 bg-brand-800 rounded-lg flex items-center justify-center text-white font-black text-sm">Z</div>
@@ -220,17 +206,17 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         <div id="hdr-avatar" class="w-8 h-8 rounded-full bg-brand-800 text-white flex items-center justify-center text-xs font-black"></div>
         <div class="hidden md:block">
           <p id="hdr-name" class="text-xs font-bold text-slate-800 dark:text-slate-200"></p>
-          <button onclick="logout()" class="text-[10px] text-slate-400 hover:text-red-500 font-semibold transition-colors">Sign out</button>
         </div>
+        <button onclick="logout()" class="ml-2 px-3 py-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 text-xs font-bold transition-all flex items-center gap-2">
+          🚪 <span class="hidden sm:inline">Sign Out</span>
+        </button>
       </div>
     </div>
   </header>
 
   <div class="flex flex-1 overflow-hidden">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-      <!-- DOS identity card -->
       <div class="p-4 border-b border-white/5">
         <div class="dos-banner">
           <div class="text-[9px] font-black text-emerald-400/70 uppercase tracking-[0.15em] mb-1">Director of Socials</div>
@@ -242,8 +228,7 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- Nav -->
-      <nav class="p-3 flex-1">
+      <nav class="p-3 flex-1 flex flex-col">
         <div class="text-[9px] font-black text-slate-600 uppercase tracking-[0.15em] px-3 mb-3 mt-1">Navigation</div>
         <div class="nav-item active" onclick="navTo('overview')" data-section="overview">
           <div class="nav-icon">🏠</div><span>Overview</span>
@@ -274,9 +259,13 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         <div class="nav-item" onclick="navTo('support')" data-section="support">
           <div class="nav-icon">🛟</div><span>Support</span>
         </div>
+        <div class="pt-2 mt-auto border-t border-white/5">
+          <div class="nav-item text-red-400 hover:bg-red-500/10 hover:text-red-300" onclick="logout()">
+            <div class="nav-icon bg-red-500/10 text-red-400">🚪</div><span>Sign Out</span>
+          </div>
+        </div>
       </nav>
 
-      <!-- Payout summary -->
       <div class="p-4 border-t border-white/5">
         <div class="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2 px-1">Earnings</div>
         <div class="flex justify-between text-xs px-1 mb-1">
@@ -291,17 +280,14 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
       </div>
     </aside>
 
-    <!-- MAIN VIEWPORT -->
     <main class="main-content p-8 transition-colors bg-slate-50 dark:bg-[#080E1A]">
 
-      <!-- ── SECTION: OVERVIEW ── -->
       <div id="sec-overview">
         <div class="mb-6">
           <h2 class="section-head">Good to see you, <span id="ov-name" class="text-emerald-500"></span> 👋</h2>
           <p class="section-sub">Here's what's happening in your department today.</p>
         </div>
 
-        <!-- Stats row -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="stat-card">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Total Students</p>
@@ -325,9 +311,7 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </div>
         </div>
 
-        <!-- Revenue + conversion -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-          <!-- Revenue block -->
           <div class="card p-6 lg:col-span-1">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Revenue Summary</p>
             <div class="space-y-4">
@@ -352,14 +336,12 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
             <button onclick="navTo('support')" class="btn btn-ghost w-full mt-5 text-xs">Request Early Payout</button>
           </div>
 
-          <!-- Conversion funnel -->
           <div class="card p-6 lg:col-span-2">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Adoption Funnel</p>
             <div id="ov-funnel" class="space-y-3"></div>
           </div>
         </div>
 
-        <!-- Recent activity -->
         <div class="card p-6">
           <div class="flex items-center justify-between mb-4">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Recent Activity</p>
@@ -371,7 +353,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: STUDENTS ── -->
       <div id="sec-students" class="hidden">
         <div class="flex items-end justify-between mb-6">
           <div>
@@ -409,7 +390,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: ACCESS CODES ── -->
       <div id="sec-codes" class="hidden">
         <div class="flex items-end justify-between mb-6">
           <div>
@@ -421,7 +401,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </button>
         </div>
 
-        <!-- Code stats -->
         <div class="grid grid-cols-3 gap-4 mb-6">
           <div class="stat-card text-center">
             <p id="codes-unused" class="text-3xl font-black text-emerald-500">0</p>
@@ -437,7 +416,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </div>
         </div>
 
-        <!-- Codes table -->
         <div class="card overflow-hidden">
           <table class="data-table">
             <thead>
@@ -456,7 +434,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: YEARBOOK ── -->
       <div id="sec-yearbook" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Yearbook Management</h2>
@@ -464,7 +441,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Department info -->
           <div class="card p-6">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Department Info</p>
             <div class="space-y-3">
@@ -483,7 +459,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
             </div>
           </div>
 
-          <!-- Theme & deadlines -->
           <div class="card p-6">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Theme & Deadlines</p>
             <div class="space-y-3">
@@ -509,7 +484,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
             </div>
           </div>
 
-          <!-- Announcement -->
           <div class="card p-6 lg:col-span-2">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Pinned Announcement</p>
             <textarea id="yb-announcement" class="input-field" rows="3" placeholder="e.g. Picture submission closes Friday. Payment deadline is June 20." style="resize:none;"></textarea>
@@ -518,14 +492,12 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: ANALYTICS ── -->
       <div id="sec-analytics" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Department Analytics</h2>
           <p class="section-sub">Track adoption, registration, and payment progress.</p>
         </div>
 
-        <!-- Funnel metrics -->
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <div class="stat-card text-center">
             <p id="an-eligible" class="text-2xl font-black text-slate-900 dark:text-white">0</p>
@@ -549,7 +521,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </div>
         </div>
 
-        <!-- Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div class="card p-6">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Verification Breakdown</p>
@@ -566,7 +537,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: BROADCAST ── -->
       <div id="sec-broadcast" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Broadcast Center</h2>
@@ -606,14 +576,12 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: REFERRALS ── -->
       <div id="sec-referrals" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Referral Program</h2>
           <p class="section-sub">Invite other DOS and earn when they onboard paying students.</p>
         </div>
 
-        <!-- Referral link card -->
         <div class="card p-6 mb-6">
           <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Your Referral Link</p>
           <div class="flex gap-3">
@@ -624,7 +592,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </div>
         </div>
 
-        <!-- Referral stats -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="stat-card text-center">
             <p id="ref-invited" class="text-3xl font-black text-slate-900 dark:text-white">0</p>
@@ -644,7 +611,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
           </div>
         </div>
 
-        <!-- Referral table -->
         <div class="card overflow-hidden">
           <table class="data-table">
             <thead>
@@ -663,7 +629,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: LEADERBOARD ── -->
       <div id="sec-leaderboard" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Leaderboard</h2>
@@ -695,7 +660,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
-      <!-- ── SECTION: SUPPORT ── -->
       <div id="sec-support" class="hidden">
         <div class="mb-6">
           <h2 class="section-head">Support Center</h2>
@@ -703,7 +667,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Submit ticket -->
           <div class="card p-6">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Submit a Request</p>
             <div class="space-y-4">
@@ -718,7 +681,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
                 </select>
               </div>
 
-              <!-- Student removal fields (conditional) -->
               <div id="sup-removal-fields" class="hidden space-y-3">
                 <div>
                   <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Student</label>
@@ -746,7 +708,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
             </div>
           </div>
 
-          <!-- Quick actions + contact -->
           <div class="space-y-4">
             <div class="card p-6">
               <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Quick Actions</p>
@@ -776,7 +737,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
               </div>
             </div>
 
-            <!-- Previous tickets -->
             <div class="card p-6">
               <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">My Tickets</p>
               <div id="sup-tickets" class="space-y-2">
@@ -791,9 +751,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- MODAL: BUY ACCESS CODES               -->
-<!-- ══════════════════════════════════════ -->
 <div id="buy-codes-modal" class="modal-overlay hidden" onclick="handleBackdrop(event,'buy-codes-modal')">
   <div class="modal-box w-full max-w-md p-7" onclick="event.stopPropagation()">
     <div class="flex items-center justify-between mb-6">
@@ -801,13 +758,11 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
       <button onclick="closeModal('buy-codes-modal')" class="text-slate-400 hover:text-slate-700 text-2xl font-light leading-none">×</button>
     </div>
 
-    <!-- Purchase type toggle -->
     <div class="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-6">
       <button onclick="setPurchaseType('individual')" id="pt-individual" class="flex-1 py-2.5 rounded-lg font-bold text-sm transition-all bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm">Individual</button>
       <button onclick="setPurchaseType('bulk')" id="pt-bulk" class="flex-1 py-2.5 rounded-lg font-bold text-sm transition-all text-slate-500">Bulk Purchase</button>
     </div>
 
-    <!-- Individual mode -->
     <div id="buy-individual" class="space-y-4">
       <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4 text-center">
         <p class="text-xs text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider mb-1">1 Access Code</p>
@@ -821,7 +776,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
       <button onclick="initiatePurchase('individual')" class="btn btn-green w-full py-3">Pay ₦2,000 via Paystack</button>
     </div>
 
-    <!-- Bulk mode -->
     <div id="buy-bulk" class="space-y-4 hidden">
       <div>
         <label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Number of Codes</label>
@@ -847,9 +801,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- MODAL: ASSIGN CODE TO STUDENT         -->
-<!-- ══════════════════════════════════════ -->
 <div id="assign-code-modal" class="modal-overlay hidden" onclick="handleBackdrop(event,'assign-code-modal')">
   <div class="modal-box w-full max-w-sm p-7" onclick="event.stopPropagation()">
     <div class="flex items-center justify-between mb-6">
@@ -870,9 +821,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- MODAL: STUDENT DETAIL                 -->
-<!-- ══════════════════════════════════════ -->
 <div id="student-detail-modal" class="modal-overlay hidden" onclick="handleBackdrop(event,'student-detail-modal')">
   <div class="modal-box w-full max-w-md p-7" onclick="event.stopPropagation()">
     <div class="flex items-center justify-between mb-5">
@@ -910,9 +858,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════ -->
-<!-- TOAST                                 -->
-<!-- ══════════════════════════════════════ -->
 <div id="toast" class="hidden">
   <div id="toast-inner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold">
     <span id="toast-icon"></span>
@@ -920,9 +865,6 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════ -->
-<!-- JAVASCRIPT ENGINE                                            -->
-<!-- ══════════════════════════════════════════════════════════════ -->
 <script>
 // ── CONFIG ──────────────────────────────────────────────
 const PAYSTACK_PUBLIC_KEY = 'pk_test_dccd17d3dc8769dbe258fe66f7c1cec8658d96d9'; // Replace with your key
