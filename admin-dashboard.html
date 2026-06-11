@@ -248,8 +248,10 @@ details details[open] > summary { color: #10B981; }
         <div id="hdr-avatar" class="w-8 h-8 rounded-full bg-brand-800 text-white flex items-center justify-center text-xs font-black">A</div>
         <div class="hidden md:block">
           <p id="hdr-email" class="text-xs font-bold text-slate-800 dark:text-slate-200 mono truncate max-w-[180px]"></p>
-          <button onclick="handleLogout()" class="text-[10px] text-slate-400 hover:text-red-500 font-semibold transition-colors">Sign out</button>
         </div>
+        <button onclick="handleLogout()" class="ml-2 px-3 py-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 text-xs font-bold transition-all flex items-center gap-2">
+          🚪 <span class="hidden sm:inline">Sign Out</span>
+        </button>
       </div>
     </div>
   </header>
@@ -266,35 +268,31 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <div class="p-3 flex-1 flex flex-col justify-between">
-        <div class="space-y-1">
-          <div class="nav-section">Operations</div>
-          <div class="nav-item active" onclick="navTo('overview')" data-section="overview">
-            <div class="nav-icon">📡</div><span>Telemetry</span>
-          </div>
-          <div class="nav-item" onclick="navTo('students')" data-section="students">
-            <div class="nav-icon">👥</div><span>Student Registry</span>
-            <span id="nb-pending" class="ml-auto text-[9.5px] font-black bg-amber-500 text-white px-1.5 rounded hidden"></span>
-          </div>
-          <div class="nav-item" onclick="navTo('institutions')" data-section="institutions">
-            <div class="nav-icon">🏛️</div><span>Institutions</span>
-          </div>
-          <div class="nav-item" onclick="navTo('financials')" data-section="financials">
-            <div class="nav-icon">💳</div><span>Financials</span>
-          </div>
-          <div class="nav-section">System</div>
-          <div class="nav-item" onclick="navTo('audit')" data-section="audit">
-            <div class="nav-icon">🔐</div><span>Audit Trail</span>
-          </div>
-          <div class="nav-item" onclick="navTo('dos-list')" data-section="dos-list">
-            <div class="nav-icon">🧑‍💼</div><span>Officers</span>
-          </div>
+      <div class="p-3">
+        <div class="nav-section">Operations</div>
+        <div class="nav-item active" onclick="navTo('overview')" data-section="overview">
+          <div class="nav-icon">📡</div><span>Telemetry</span>
         </div>
-
-        <div class="pt-4 mt-4 border-t border-white/5">
+        <div class="nav-item" onclick="navTo('students')" data-section="students">
+          <div class="nav-icon">👥</div><span>Student Registry</span>
+          <span id="nb-pending" class="ml-auto text-[9.5px] font-black bg-amber-500 text-white px-1.5 rounded hidden"></span>
+        </div>
+        <div class="nav-item" onclick="navTo('institutions')" data-section="institutions">
+          <div class="nav-icon">🏛️</div><span>Institutions</span>
+        </div>
+        <div class="nav-item" onclick="navTo('financials')" data-section="financials">
+          <div class="nav-icon">💳</div><span>Financials</span>
+        </div>
+        <div class="nav-section">System</div>
+        <div class="nav-item" onclick="navTo('audit')" data-section="audit">
+          <div class="nav-icon">🔐</div><span>Audit Trail</span>
+        </div>
+        <div class="nav-item" onclick="navTo('dos-list')" data-section="dos-list">
+          <div class="nav-icon">🧑‍💼</div><span>Officers</span>
+        </div>
+        <div class="pt-2 mt-2 border-t border-white/5">
           <div class="nav-item text-red-400 hover:bg-red-500/10 hover:text-red-300" onclick="handleLogout()">
-            <div class="nav-icon bg-red-500/10 text-red-400">🚪</div>
-            <span>Sign Out Admin</span>
+            <div class="nav-icon bg-red-500/10 text-red-400">🚪</div><span>Sign Out</span>
           </div>
         </div>
       </div>
@@ -689,7 +687,6 @@ function reRenderStudents(base) {
   renderStudentGrid(list);
 }
 
-// ── STUDENT DETAIL MODAL ──────────────────────────────────
 function renderStudentGrid(students) {
   const grid = getEl('students-grid');
   if (!students.length) {
@@ -888,7 +885,6 @@ async function loadLedger() {
   }).join('') || `<tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">No codes found.</td></tr>`;
 }
 
-// ── CSV EXPORT ────────────────────────────────────────────
 function exportLedgerCSV() {
   const rows = [['Date','Department','Code','Status'],
     ...allCodes.map(c => [c.created_at, c.department, c.code, c.status])];
@@ -898,7 +894,7 @@ function exportLedgerCSV() {
   showToast('success','Exported.');
 }
 
-// ── AUDIT LOGS ────────────────────────────────────────────
+// ── AUDIT ─────────────────────────────────────────────────
 async function writeAuditLog(action, targetName, targetId) {
   try {
     await _db.from('admin_audit_logs').insert({
