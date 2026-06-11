@@ -142,7 +142,6 @@ details details[open] > summary { color: #10B981; }
 </head>
 <body class="light">
 
-<!-- AUTH MODAL -->
 <div id="auth-modal" class="modal-overlay hidden">
   <div class="modal-box w-full max-w-sm p-8">
     <div class="flex items-center gap-3 mb-6">
@@ -161,7 +160,6 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- LOADING -->
 <div id="loading-overlay" class="modal-overlay hidden" style="z-index:2000">
   <div class="modal-box p-8 text-center min-w-[180px]">
     <div class="spinner mx-auto mb-4"></div>
@@ -169,7 +167,6 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- APPROVAL MODAL -->
 <div id="approval-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('approval-modal')">
   <div class="modal-box w-full max-w-sm p-7" onclick="event.stopPropagation()">
     <div id="acm-icon" class="w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5"></div>
@@ -186,7 +183,6 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- STUDENT DETAIL MODAL -->
 <div id="student-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal('student-modal')">
   <div class="modal-box w-full max-w-md p-7" onclick="event.stopPropagation()">
     <div class="flex items-start justify-between mb-5">
@@ -228,17 +224,14 @@ details details[open] > summary { color: #10B981; }
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast" class="hidden">
   <div id="toast-inner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold">
     <span id="toast-icon"></span><span id="toast-msg"></span>
   </div>
 </div>
 
-<!-- MAIN LAYOUT -->
 <div id="screen-dashboard" class="hidden h-screen flex flex-col">
 
-  <!-- HEADER -->
   <header class="flex-shrink-0 h-14 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0B1120] z-10">
     <div class="flex items-center gap-3">
       <div class="w-7 h-7 bg-brand-800 rounded-lg flex items-center justify-center text-white font-black text-sm">Z</div>
@@ -263,7 +256,6 @@ details details[open] > summary { color: #10B981; }
 
   <div class="flex flex-1 overflow-hidden">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="p-4 border-b border-white/5">
         <div style="background:linear-gradient(135deg,#061416,#0a2225,#113136); border-radius:12px; padding:16px 20px; position:relative; overflow:hidden;">
@@ -274,48 +266,53 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <div class="p-3">
-        <div class="nav-section">Operations</div>
-        <div class="nav-item active" onclick="navTo('overview')" data-section="overview">
-          <div class="nav-icon">📡</div><span>Telemetry</span>
+      <div class="p-3 flex-1 flex flex-col justify-between">
+        <div class="space-y-1">
+          <div class="nav-section">Operations</div>
+          <div class="nav-item active" onclick="navTo('overview')" data-section="overview">
+            <div class="nav-icon">📡</div><span>Telemetry</span>
+          </div>
+          <div class="nav-item" onclick="navTo('students')" data-section="students">
+            <div class="nav-icon">👥</div><span>Student Registry</span>
+            <span id="nb-pending" class="ml-auto text-[9.5px] font-black bg-amber-500 text-white px-1.5 rounded hidden"></span>
+          </div>
+          <div class="nav-item" onclick="navTo('institutions')" data-section="institutions">
+            <div class="nav-icon">🏛️</div><span>Institutions</span>
+          </div>
+          <div class="nav-item" onclick="navTo('financials')" data-section="financials">
+            <div class="nav-icon">💳</div><span>Financials</span>
+          </div>
+          <div class="nav-section">System</div>
+          <div class="nav-item" onclick="navTo('audit')" data-section="audit">
+            <div class="nav-icon">🔐</div><span>Audit Trail</span>
+          </div>
+          <div class="nav-item" onclick="navTo('dos-list')" data-section="dos-list">
+            <div class="nav-icon">🧑‍💼</div><span>Officers</span>
+          </div>
         </div>
-        <div class="nav-item" onclick="navTo('students')" data-section="students">
-          <div class="nav-icon">👥</div><span>Student Registry</span>
-          <span id="nb-pending" class="ml-auto text-[9.5px] font-black bg-amber-500 text-white px-1.5 rounded hidden"></span>
-        </div>
-        <div class="nav-item" onclick="navTo('institutions')" data-section="institutions">
-          <div class="nav-icon">🏛️</div><span>Institutions</span>
-        </div>
-        <div class="nav-item" onclick="navTo('financials')" data-section="financials">
-          <div class="nav-icon">💳</div><span>Financials</span>
-        </div>
-        <div class="nav-section">System</div>
-        <div class="nav-item" onclick="navTo('audit')" data-section="audit">
-          <div class="nav-icon">🔐</div><span>Audit Trail</span>
-        </div>
-        <div class="nav-item" onclick="navTo('dos-list')" data-section="dos-list">
-          <div class="nav-icon">🧑‍💼</div><span>Officers</span>
+
+        <div class="pt-4 mt-4 border-t border-white/5">
+          <div class="nav-item text-red-400 hover:bg-red-500/10 hover:text-red-300" onclick="handleLogout()">
+            <div class="nav-icon bg-red-500/10 text-red-400">🚪</div>
+            <span>Sign Out Admin</span>
+          </div>
         </div>
       </div>
 
-      <!-- Faculty tree (students section) -->
       <div id="faculty-tree-wrap" class="px-3 pb-4 hidden flex-1 overflow-y-auto">
         <div class="nav-section">Filter by</div>
         <div id="sidebar-tree" class="space-y-1 text-xs"></div>
       </div>
     </aside>
 
-    <!-- MAIN VIEWPORT -->
     <main class="main-content p-8 bg-slate-50 dark:bg-[#0B1120]">
 
-      <!-- TELEMETRY -->
       <div id="sec-overview">
         <div class="mb-6">
           <h2 class="section-head">Global Telemetry</h2>
           <p class="section-sub">Network-wide snapshot across all institutions.</p>
         </div>
 
-        <!-- Clickable stat cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="stat-card" onclick="navTo('students'); setFilter('ALL')">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Total Students</p>
@@ -339,7 +336,6 @@ details details[open] > summary { color: #10B981; }
           </div>
         </div>
 
-        <!-- Chart + revenue split -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div class="card p-6">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-4">Verification Matrix</p>
@@ -373,7 +369,6 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <!-- STUDENT REGISTRY -->
       <div id="sec-students" class="hidden">
         <div class="mb-5">
           <div class="flex items-end justify-between mb-4">
@@ -388,7 +383,6 @@ details details[open] > summary { color: #10B981; }
             </div>
           </div>
 
-          <!-- Filter pills -->
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">Filter:</span>
             <button onclick="setFilter('ALL')"      class="filter-pill active" data-filter="ALL">All</button>
@@ -400,7 +394,6 @@ details details[open] > summary { color: #10B981; }
           </div>
         </div>
 
-        <!-- Pending alert banner (shows when pending > 0) -->
         <div id="pending-banner" class="pending-banner hidden">
           <div>
             <p class="text-white font-bold text-sm">⏳ Students awaiting approval</p>
@@ -417,7 +410,6 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <!-- INSTITUTIONS -->
       <div id="sec-institutions" class="hidden">
         <div class="mb-6 flex items-end justify-between">
           <div><h2 class="section-head">Tenant Registry</h2><p class="section-sub">All institution nodes on the Z-Node network.</p></div>
@@ -431,7 +423,6 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <!-- FINANCIALS -->
       <div id="sec-financials" class="hidden">
         <div class="mb-6 flex items-end justify-between">
           <div><h2 class="section-head">Master Ledger</h2><p class="section-sub">Yearbook access code transactions.</p></div>
@@ -445,7 +436,6 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <!-- AUDIT -->
       <div id="sec-audit" class="hidden">
         <div class="mb-6 flex items-end justify-between">
           <div><h2 class="section-head">Audit Trail</h2><p class="section-sub">Log of all admin verification actions.</p></div>
@@ -459,7 +449,6 @@ details details[open] > summary { color: #10B981; }
         </div>
       </div>
 
-      <!-- OFFICERS -->
       <div id="sec-dos-list" class="hidden">
         <div class="mb-6"><h2 class="section-head">Officers Directory</h2><p class="section-sub">All DOS, Faculty Leads, and SUG officers.</p></div>
         <div class="card overflow-hidden">
@@ -700,6 +689,7 @@ function reRenderStudents(base) {
   renderStudentGrid(list);
 }
 
+// ── STUDENT DETAIL MODAL ──────────────────────────────────
 function renderStudentGrid(students) {
   const grid = getEl('students-grid');
   if (!students.length) {
@@ -898,6 +888,7 @@ async function loadLedger() {
   }).join('') || `<tr><td colspan="5" class="text-center py-12 text-slate-400 text-sm">No codes found.</td></tr>`;
 }
 
+// ── CSV EXPORT ────────────────────────────────────────────
 function exportLedgerCSV() {
   const rows = [['Date','Department','Code','Status'],
     ...allCodes.map(c => [c.created_at, c.department, c.code, c.status])];
@@ -907,7 +898,7 @@ function exportLedgerCSV() {
   showToast('success','Exported.');
 }
 
-// ── AUDIT ─────────────────────────────────────────────────
+// ── AUDIT LOGS ────────────────────────────────────────────
 async function writeAuditLog(action, targetName, targetId) {
   try {
     await _db.from('admin_audit_logs').insert({
