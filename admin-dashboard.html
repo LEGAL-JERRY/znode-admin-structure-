@@ -572,7 +572,7 @@ function renderTelemetry() {
   const pending  = allStudents.filter(s => !s.is_verified && !s.rejection_reason).length;
   const rejected = allStudents.filter(s => s.rejection_reason && !s.is_verified).length;
   const revenue  = allStudents.reduce((a,s) => a + (Number(s.fee_paid)||0), 0);
-  const paid     = allStudents.filter(s => s.yearbook_access).length;
+  const paid = allStudents.filter(s => s.yearbook_access === true || s.yearbook_verified === true).length;
 
   getEl('ov-total').textContent    = total;
   getEl('ov-verified').textContent = verified;
@@ -840,7 +840,7 @@ function renderStudentGrid(students) {
     const isVer = st.is_verified === true;
     const isRej = !!st.rejection_reason && !isVer;
     const isPend = !isVer && !isRej;
-    const passport = st.znode_passport_id || 'Not yet issued';
+    const hasPaid = st.yearbook_access === true || st.yearbook_verified === true;
 
     const statusBadge = isVer
       ? '<span class="badge badge-green">VERIFIED</span>'
