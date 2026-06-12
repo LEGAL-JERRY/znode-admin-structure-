@@ -3,494 +3,537 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Z-Node | Register</title>
+<title>Z-Node | DOS Registration</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.card{background:#fff;border-radius:20px;padding:40px;width:100%;max-width:520px;box-shadow:0 8px 40px rgba(0,0,0,0.08);border:1px solid #e8edf2;}
+.logo{text-align:center;margin-bottom:28px;}
+.logo-icon{width:48px;height:48px;background:#061416;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#10B981;font-weight:900;font-size:22px;margin:0 auto 12px;}
+.logo h1{font-size:22px;font-weight:800;color:#0f172a;}
+.logo p{font-size:13px;color:#64748b;margin-top:4px;font-weight:500;}
 
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: #F0F4F8;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+.step-bar{display:flex;gap:6px;margin-bottom:28px;}
+.step{flex:1;height:4px;border-radius:2px;background:#f1f5f9;transition:background 0.3s;}
+.step.done{background:#10B981;}
+.step.active{background:#0a2225;}
 
-.container { width: 100%; max-width: 540px; }
+.step-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:16px;}
 
-/* ── Brand strip ── */
-.brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-bottom: 28px;
-}
-.brand-mark {
-  width: 44px; height: 44px;
-  background: #0a2225;
-  border-radius: 14px;
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-weight: 900; font-size: 22px;
-  box-shadow: 0 4px 16px rgba(10,34,37,0.2);
-}
-.brand-name { font-size: 22px; font-weight: 800; color: #0a2225; letter-spacing: -0.02em; }
-.brand-sub  { font-size: 11px; font-weight: 600; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+.fg{margin-bottom:16px;}
+label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:7px;}
+input,select{width:100%;padding:12px 14px;border:1px solid #dde3ea;border-radius:10px;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color 0.2s,box-shadow 0.2s;background:#fff;color:#0f172a;}
+input:focus,select:focus{border-color:#10B981;box-shadow:0 0 0 3px rgba(16,185,129,0.1);}
+input::placeholder{color:#94a3b8;}
 
-/* ── Card ── */
-.card {
-  background: #fff;
-  border-radius: 24px;
-  padding: 36px 40px;
-  box-shadow: 0 8px 32px rgba(10,34,37,0.07), 0 1px 3px rgba(10,34,37,0.04);
-  border: 1px solid #e8edf2;
-}
+/* Searchable dropdown */
+.sel-wrap{position:relative;}
+.sel-display{width:100%;padding:12px 14px;border:1px solid #dde3ea;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color 0.2s;background:#fff;user-select:none;}
+.sel-display:hover,.sel-display.open{border-color:#10B981;}
+.sel-display.selected{border-color:#10B981;background:#f0fdf4;color:#15803d;}
+.sel-display .placeholder{color:#94a3b8;font-weight:500;}
+.sel-display .chevron{color:#94a3b8;font-size:11px;transition:transform 0.2s;flex-shrink:0;}
+.sel-display.open .chevron{transform:rotate(180deg);}
+.sel-display .sel-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 6px;border-radius:4px;margin-right:6px;}
 
-/* ── Role selector tabs ── */
-.role-tabs {
-  display: flex;
-  background: #f4f8f8;
-  border-radius: 14px;
-  padding: 5px;
-  gap: 4px;
-  margin-bottom: 28px;
-  border: 1px solid #e8edf2;
-}
-.role-tab {
-  flex: 1;
-  padding: 10px 6px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  text-align: center;
-  cursor: pointer;
-  color: #94a3b8;
-  transition: all 0.18s;
-  border: none;
-  background: transparent;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  line-height: 1.4;
-}
-.role-tab:hover { color: #475569; }
-.role-tab.active {
-  background: #fff;
-  color: #0a2225;
-  box-shadow: 0 2px 8px rgba(10,34,37,0.08);
-}
-.role-tab .tab-emoji { font-size: 16px; display: block; margin-bottom: 2px; }
+.dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1px solid #e8edf2;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.1);z-index:100;overflow:hidden;max-height:260px;display:flex;flex-direction:column;}
+.dropdown.hidden{display:none;}
+.dd-search-wrap{padding:10px 12px;border-bottom:1px solid #f1f5f9;flex-shrink:0;}
+.dd-search{width:100%;padding:8px 12px;border:1px solid #dde3ea;border-radius:8px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
+.dd-search:focus{border-color:#10B981;}
+.dd-list{overflow-y:auto;max-height:200px;}
+.dd-item{padding:10px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:background 0.12s;display:flex;align-items:center;gap:8px;color:#1e293b;}
+.dd-item:hover{background:#f0fdf4;color:#15803d;}
+.dd-item.active{background:#d1fae5;color:#065f46;font-weight:700;}
+.dd-item .dd-code{font-family:'JetBrains Mono',monospace;font-size:10px;color:#94a3b8;background:#f1f5f9;padding:2px 5px;border-radius:4px;flex-shrink:0;}
+.dd-empty{padding:14px;text-align:center;font-size:12px;color:#94a3b8;}
 
-/* ── Form ── */
-.form-section { margin-bottom: 24px; }
-.section-label {
-  font-size: 10px;
-  font-weight: 800;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #f1f5f9;
-}
+.btn{width:100%;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all 0.18s;}
+.btn-primary{background:#061416;color:#fff;}
+.btn-primary:hover{background:#0a2225;}
+.btn-primary:disabled{background:#94a3b8;cursor:not-allowed;}
+.btn-back{background:#f1f5f9;color:#64748b;margin-bottom:10px;}
+.btn-back:hover{background:#e2e8f0;}
 
-.form-row { display: flex; gap: 14px; }
-.form-group { margin-bottom: 16px; flex: 1; }
-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: #374151;
-  margin-bottom: 7px;
-  letter-spacing: 0.01em;
-}
-input, select {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #dde3ea;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: #0f172a;
-  outline: none;
-  background: #fff;
-  transition: all 0.18s;
-  appearance: none;
-}
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 13px center;
-  padding-right: 34px;
-}
-input:focus, select:focus {
-  border-color: #10B981;
-  box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
-}
-input::placeholder { color: #c4cdd6; }
-input[disabled], select[disabled] { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+.summary-box{background:#f8fafc;border:1px solid #e8edf2;border-radius:12px;padding:16px;margin-bottom:20px;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;}
+.summary-row:not(:last-child){border-bottom:1px solid #f1f5f9;}
+.summary-key{color:#64748b;font-weight:600;}
+.summary-val{color:#0f172a;font-weight:700;text-align:right;max-width:60%;}
 
-/* Role-specific accent on focus */
-body[data-role="FACULTY_LEAD"] input:focus,
-body[data-role="FACULTY_LEAD"] select:focus {
-  border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
-}
-body[data-role="SUG"] input:focus,
-body[data-role="SUG"] select:focus {
-  border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.1);
-}
+.err{color:#ef4444;font-size:12px;font-weight:600;margin-top:8px;display:none;}
+.success-screen{text-align:center;display:none;}
+.success-screen .icon{font-size:48px;margin-bottom:12px;}
+.success-screen h2{font-size:20px;font-weight:800;color:#0f172a;margin-bottom:8px;}
+.success-screen p{font-size:13px;color:#64748b;line-height:1.6;}
 
-/* ── Role info badge ── */
-.role-info {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  font-size: 12px;
-  margin-bottom: 22px;
-  line-height: 1.5;
-}
-.role-info-dos    { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
-.role-info-fac    { background: #f5f3ff; border: 1px solid #ddd6fe; color: #5b21b6; }
-.role-info-sug    { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
-.role-info-icon   { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-.role-info strong { font-weight: 700; display: block; margin-bottom: 2px; }
+.footer{text-align:center;margin-top:20px;font-size:13px;color:#64748b;}
+.footer a{color:#0f172a;font-weight:700;text-decoration:none;}
+.footer a:hover{color:#10B981;}
 
-/* ── Conditional fields ── */
-.field-conditional { display: none; }
-.field-conditional.visible { display: block; }
-.field-conditional-row { display: none; }
-.field-conditional-row.visible { display: flex; }
-
-/* ── Button ── */
-.btn-submit {
-  width: 100%;
-  padding: 14px;
-  background: #0a2225;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  letter-spacing: 0.01em;
-  margin-top: 4px;
-}
-.btn-submit:hover:not(:disabled) { background: #113136; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(10,34,37,0.15); }
-.btn-submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
-
-body[data-role="FACULTY_LEAD"] .btn-submit { background: #7c3aed; }
-body[data-role="FACULTY_LEAD"] .btn-submit:hover:not(:disabled) { background: #6d28d9; }
-body[data-role="SUG"] .btn-submit { background: #d97706; }
-body[data-role="SUG"] .btn-submit:hover:not(:disabled) { background: #b45309; }
-
-/* ── Status messages ── */
-.status { margin-top: 14px; text-align: center; font-size: 13px; font-weight: 600; min-height: 20px; }
-.status.success { color: #059669; }
-.status.error   { color: #dc2626; }
-
-/* ── Footer ── */
-.footer {
-  text-align: center;
-  margin-top: 22px;
-  font-size: 13px;
-  color: #64748b;
-}
-.footer a { color: #10B981; font-weight: 700; text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-
-/* ── Loading indicator ── */
-.loading-bar { display: none; text-align: center; color: #94a3b8; font-size: 12px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; margin-bottom: 12px; }
-
-/* ── Password strength ── */
-.pw-strength { height: 3px; border-radius: 999px; background: #e8edf2; margin-top: 7px; overflow: hidden; }
-.pw-strength-fill { height: 100%; border-radius: 999px; transition: width 0.3s, background 0.3s; width: 0%; }
-
-/* ── Dashboard links (post-register) ── */
-.dash-links { display: none; margin-top: 20px; }
-.dash-link {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: 1px solid #e8edf2;
-  text-decoration: none;
-  color: #1e293b;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.18s;
-  margin-bottom: 8px;
-}
-.dash-link:hover { border-color: #10B981; color: #059669; background: #f0fdf4; }
+.loading-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
-<body data-role="DOS">
+<body>
 
-<div class="container">
-  <div class="brand">
-    <div class="brand-mark">Z</div>
-    <div>
-      <div class="brand-name">Z-Node</div>
-      <div class="brand-sub">Officer Registration</div>
-    </div>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">Z</div>
+    <h1>DOS Registration</h1>
+    <p>Director of Socials · Department Account</p>
   </div>
 
-  <div class="card">
-
-    <!-- Role selector -->
-    <div class="role-tabs" role="tablist">
-      <button class="role-tab active" onclick="setRole('DOS')" data-role="DOS" type="button">
-        <span class="tab-emoji">🎓</span>Dept Officer<br><span style="color:#94a3b8;font-weight:600">(DOS)</span>
-      </button>
-      <button class="role-tab" onclick="setRole('FACULTY_LEAD')" data-role="FACULTY_LEAD" type="button">
-        <span class="tab-emoji">🏫</span>Faculty Lead<br><span style="color:#94a3b8;font-weight:600">(Tier 3)</span>
-      </button>
-      <button class="role-tab" onclick="setRole('SUG')" data-role="SUG" type="button">
-        <span class="tab-emoji">🏛️</span>Student Union<br><span style="color:#94a3b8;font-weight:600">(SUG)</span>
-      </button>
-    </div>
-
-    <!-- Role info badge -->
-    <div id="role-info" class="role-info role-info-dos">
-      <span class="role-info-icon">🎓</span>
-      <div>
-        <strong>Director of Socials (DOS)</strong>
-        Manage yearbook registrations and access codes for your department. Earn ₦30 per paying student.
-      </div>
-    </div>
-
-    <!-- Loading -->
-    <div id="loading-bar" class="loading-bar">Loading institutions...</div>
-
-    <form id="signup-form" autocomplete="off">
-
-      <!-- Personal info -->
-      <div class="form-section">
-        <div class="section-label">Personal Information</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="fullName" required placeholder="e.g. Amaka Okonkwo">
-          </div>
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="username" required placeholder="e.g. amaka_cs" autocomplete="off">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" id="email" required placeholder="e.g. amaka@uni.edu.ng">
-        </div>
-      </div>
-
-      <!-- Academic info -->
-      <div class="form-section">
-        <div class="section-label">Academic Assignment</div>
-        <div class="form-group">
-          <label>Institution</label>
-          <select id="institution" required>
-            <option value="">Select your institution...</option>
-          </select>
-        </div>
-
-        <!-- Faculty (shown for Faculty Lead + DOS) -->
-        <div class="form-group field-conditional visible" id="field-faculty-wrap">
-          <label>Faculty</label>
-          <input type="text" id="faculty" placeholder="e.g. Faculty of Engineering">
-        </div>
-
-        <!-- Department (DOS only) -->
-        <div class="form-group field-conditional visible" id="field-dept-wrap">
-          <label>Department</label>
-          <input type="text" id="department" placeholder="e.g. Computer Science">
-        </div>
-
-        <!-- Referral code (DOS only, optional) -->
-        <div class="form-group field-conditional visible" id="field-referral-wrap">
-          <label>Referral Code <span style="color:#94a3b8;font-weight:500">(optional)</span></label>
-          <input type="text" id="referral" placeholder="e.g. DOS-ABC123" style="font-family:'JetBrains Mono',monospace; font-size:12px;">
-        </div>
-      </div>
-
-      <!-- Security -->
-      <div class="form-section">
-        <div class="section-label">Account Security</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="password" required placeholder="Min. 8 characters" oninput="checkPasswordStrength(this.value)" autocomplete="new-password">
-            <div class="pw-strength"><div id="pw-fill" class="pw-strength-fill"></div></div>
-          </div>
-          <div class="form-group">
-            <label>Confirm Password</label>
-            <input type="password" id="confirmPassword" required placeholder="Repeat password" autocomplete="new-password">
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" id="submit-btn" class="btn-submit">Create Account</button>
-      <div id="status" class="status"></div>
-
-    </form>
-
-    <!-- Post-registration dashboard links -->
-    <div id="dash-links" class="dash-links">
-      <div class="section-label" style="margin-top:16px;">Go to your dashboard</div>
-      <a id="dash-link-main" href="#" class="dash-link">
-        <span id="dash-link-label">Open Dashboard →</span>
-        <span>↗</span>
-      </a>
-    </div>
-
+  <!-- Step progress bar -->
+  <div class="step-bar">
+    <div class="step active" id="sb-1"></div>
+    <div class="step" id="sb-2"></div>
+    <div class="step" id="sb-3"></div>
   </div>
 
-  <div class="footer">
-    <p class="text-center text-xs text-slate-400 mt-5">Already have an account? 
-  <a href="z-node-DOS.html" class="text-accent-500 font-bold hover:underline">DOS Login</a> · 
-  <a href="faculty-dashboard.html" class="text-accent-500 font-bold hover:underline">Faculty Login</a> · 
-  <a href="sug-dashboard.html" class="text-accent-500 font-bold hover:underline">SUG Login</a>
-</p>
+  <!-- ── STEP 1: Personal Info ── -->
+  <div id="step-1">
+    <div class="step-label">Step 1 of 3 · Personal Information</div>
+    <div class="fg">
+      <label>Full Name</label>
+      <input id="s1-name" type="text" placeholder="e.g. Amaka Okonkwo">
+    </div>
+    <div class="fg">
+      <label>Email Address</label>
+      <input id="s1-email" type="email" placeholder="your@email.com">
+    </div>
+    <div class="fg">
+      <label>Phone Number</label>
+      <input id="s1-phone" type="tel" placeholder="080xxxxxxxx">
+    </div>
+    <div class="fg">
+      <label>Username</label>
+      <input id="s1-username" type="text" placeholder="choose a unique username">
+    </div>
+    <p id="s1-err" class="err"></p>
+    <button class="btn btn-primary" onclick="goStep2()">Continue →</button>
   </div>
+
+  <!-- ── STEP 2: Institution & Department ── -->
+  <div id="step-2" style="display:none;">
+    <div class="step-label">Step 2 of 3 · Your Department</div>
+
+    <!-- Institution -->
+    <div class="fg">
+      <label>Institution</label>
+      <div class="sel-wrap">
+        <div class="sel-display" id="inst-display" onclick="toggleDD('inst')">
+          <span class="placeholder" id="inst-placeholder">Search your institution…</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="dropdown hidden" id="inst-dd">
+          <div class="dd-search-wrap">
+            <input class="dd-search" id="inst-search" type="text" placeholder="Type to search…" oninput="filterDD('inst', this.value)" autocomplete="off">
+          </div>
+          <div class="dd-list" id="inst-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Faculty -->
+    <div class="fg" id="faculty-fg" style="opacity:0.4;pointer-events:none;">
+      <label>Faculty</label>
+      <div class="sel-wrap">
+        <div class="sel-display" id="faculty-display" onclick="toggleDD('faculty')">
+          <span class="placeholder" id="faculty-placeholder">Select institution first…</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="dropdown hidden" id="faculty-dd">
+          <div class="dd-search-wrap">
+            <input class="dd-search" id="faculty-search" type="text" placeholder="Type to search…" oninput="filterDD('faculty', this.value)" autocomplete="off">
+          </div>
+          <div class="dd-list" id="faculty-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Department -->
+    <div class="fg" id="dept-fg" style="opacity:0.4;pointer-events:none;">
+      <label>Department</label>
+      <div class="sel-wrap">
+        <div class="sel-display" id="dept-display" onclick="toggleDD('dept')">
+          <span class="placeholder" id="dept-placeholder">Select faculty first…</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="dropdown hidden" id="dept-dd">
+          <div class="dd-search-wrap">
+            <input class="dd-search" id="dept-search" type="text" placeholder="Type to search…" oninput="filterDD('dept', this.value)" autocomplete="off">
+          </div>
+          <div class="dd-list" id="dept-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <p id="s2-err" class="err"></p>
+    <button class="btn btn-back" onclick="goStep(1)">← Back</button>
+    <button class="btn btn-primary" onclick="goStep3()">Continue →</button>
+  </div>
+
+  <!-- ── STEP 3: Password + Confirm ── -->
+  <div id="step-3" style="display:none;">
+    <div class="step-label">Step 3 of 3 · Set Password</div>
+
+    <!-- Summary -->
+    <div class="summary-box">
+      <div class="summary-row"><span class="summary-key">Name</span><span class="summary-val" id="sum-name"></span></div>
+      <div class="summary-row"><span class="summary-key">Institution</span><span class="summary-val" id="sum-inst"></span></div>
+      <div class="summary-row"><span class="summary-key">Faculty</span><span class="summary-val" id="sum-faculty"></span></div>
+      <div class="summary-row"><span class="summary-key">Department</span><span class="summary-val" id="sum-dept"></span></div>
+    </div>
+
+    <div class="fg">
+      <label>Password</label>
+      <input id="s3-password" type="password" placeholder="minimum 6 characters">
+    </div>
+    <div class="fg">
+      <label>Confirm Password</label>
+      <input id="s3-confirm" type="password" placeholder="repeat password">
+    </div>
+    <p id="s3-err" class="err"></p>
+    <button class="btn btn-back" onclick="goStep(2)" style="margin-bottom:10px;">← Back</button>
+    <button class="btn btn-primary" id="submit-btn" onclick="submitRegistration()">Create DOS Account</button>
+  </div>
+
+  <!-- ── SUCCESS ── -->
+  <div class="success-screen" id="success-screen">
+    <div class="icon">🎉</div>
+    <h2>Account Created!</h2>
+    <p>Welcome to Z-Node, <strong id="success-name"></strong>.<br>Your DOS account is pending approval. You'll be redirected shortly.</p>
+  </div>
+
+  <div class="footer">Already have an account? <a href="admin-login.html">Sign In</a></div>
 </div>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-const SUPABASE_URL = 'https://yohndnmwvgcwadkytmix.supabase.co';
+const SUPABASE_URL     = 'https://yohndnmwvgcwadkytmix.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvaG5kbm13dmdjd2Fka3l0bWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDEyODgsImV4cCI6MjA5NDYxNzI4OH0.hkUexJ-AS1GpLJL78F7iXDv5PkwuPbShj2fsGVXuEsg';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const ROLE_DASHBOARDS = { DOS: 'z-node-DOS.html', FACULTY_LEAD: 'faculty-dashboard.html', SUG: 'sug-dashboard.html' };
-const ROLE_INFO = {
-  DOS: { icon: '🎓', cls: 'role-info-dos', title: 'Director of Socials (DOS)', desc: 'Manage yearbook registrations and access codes for your department. Earn ₦30 per paying student.' },
-  FACULTY_LEAD: { icon: '🏫', cls: 'role-info-fac', title: 'Faculty Lead (Tier 3)', desc: 'Oversee all departments within your faculty. Earn ₦100 for every paying student in your faculty.' },
-  SUG: { icon: '🏛️', cls: 'role-info-sug', title: 'Student Union Government (Tier 4)', desc: 'Institution-wide oversight across all faculties. Earn ₦100 for every paying student in the institution.' }
+// ── State ─────────────────────────────────────────────────
+const state = {
+  instId: null,   instName: '',
+  facId:  null,   facName:  '',
+  deptId: null,   deptName: '',
 };
 
-const form = document.getElementById('signup-form');
-const statusEl = document.getElementById('status');
-const submitBtn = document.getElementById('submit-btn');
-const loadingBar = document.getElementById('loading-bar');
-const instSelect = document.getElementById('institution');
-const fieldFacWrap = document.getElementById('field-faculty-wrap');
-const fieldDeptWrap = document.getElementById('field-dept-wrap');
-const fieldRefWrap = document.getElementById('field-referral-wrap');
-const roleInfoEl = document.getElementById('role-info');
+// Source data
+let allInstitutions = [];
+let allNucFaculties = [];
+let allNucDepts     = [];
+let instFaculties   = [];   // faculties rows for selected institution
+let instDepts       = [];   // departments rows for selected faculty
 
-let currentRole = 'DOS';
+// Filtered views for dropdowns
+let filtered = { inst: [], faculty: [], dept: [] };
 
-window.setRole = function(role) {
-  currentRole = role;
-  document.body.dataset.role = role;
-  document.querySelectorAll('.role-tab').forEach(t => t.classList.toggle('active', t.dataset.role === role));
-
-  const info = ROLE_INFO[role];
-  roleInfoEl.className = `role-info ${info.cls}`;
-  roleInfoEl.innerHTML = `<span class="role-info-icon">${info.icon}</span><div><strong>${info.title}</strong>${info.desc}</div>`;
-
-  const showFaculty = (role === 'DOS' || role === 'FACULTY_LEAD');
-  const showDept = role === 'DOS';
-  const showRef = role === 'DOS';
-
-  fieldFacWrap.classList.toggle('visible', showFaculty);
-  fieldDeptWrap.classList.toggle('visible', showDept);
-  fieldRefWrap.classList.toggle('visible', showRef);
-
-  document.getElementById('faculty').required = showFaculty;
-  document.getElementById('department').required = showDept;
-  submitBtn.textContent = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' }[role];
-};
-
-async function loadInstitutions() {
-  loadingBar.style.display = 'block';
-  try {
-    const { data, error } = await supabase.from('institutions').select('id, name').order('name');
-    if (error) throw error;
-    instSelect.innerHTML = '<option value="">Select your institution...</option>' +
-      (data || []).map(i => `<option value="${i.id}">${i.name}</option>`).join('');
-  } catch(err) {
-    statusEl.textContent = 'Failed to safely connect to institution data registry.';
-    statusEl.className = 'status error';
-  }
-  loadingBar.style.display = 'none';
+// ── Boot: load reference data ─────────────────────────────
+async function boot() {
+  const [{ data: insts }, { data: facs }, { data: depts }] = await Promise.all([
+    db.from('institutions').select('id, name, short_name').order('name'),
+    db.from('nuc_faculties').select('id, name, code').order('name'),
+    db.from('nuc_departments').select('id, name, code, faculty_id').order('name'),
+  ]);
+  allInstitutions = insts  || [];
+  allNucFaculties = facs   || [];
+  allNucDepts     = depts  || [];
+  filtered.inst   = allInstitutions;
 }
-loadInstitutions();
+boot();
 
-window.checkPasswordStrength = function(val) {
-  const fill = document.getElementById('pw-fill');
-  let score = 0;
-  if (val.length >= 8) score++;
-  if (/[A-Z]/.test(val)) score++;
-  if (/[0-9]/.test(val)) score++;
-  if (/[^A-Za-z0-9]/.test(val)) score++;
-  fill.style.width = (score * 25) + '%';
-  fill.style.background = score <= 1 ? '#ef4444' : score === 2 ? '#f59e0b' : score === 3 ? '#10B981' : '#059669';
+// ── Dropdown engine ───────────────────────────────────────
+window.toggleDD = function(key) {
+  const dd = document.getElementById(key + '-dd');
+  const disp = document.getElementById(key + '-display');
+  const isOpen = !dd.classList.contains('hidden');
+  closeAllDD();
+  if (!isOpen) {
+    dd.classList.remove('hidden');
+    disp.classList.add('open');
+    const searchEl = document.getElementById(key + '-search');
+    if (searchEl) { searchEl.value = ''; filterDD(key, ''); setTimeout(() => searchEl.focus(), 50); }
+  }
 };
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  statusEl.textContent = '';
-  statusEl.className = 'status';
+window.filterDD = function(key, query) {
+  const q = query.toLowerCase();
+  let items = [];
+  if (key === 'inst')    items = allInstitutions.filter(i => i.name.toLowerCase().includes(q) || (i.short_name||'').toLowerCase().includes(q));
+  if (key === 'faculty') items = instFaculties.filter(f => f.name.toLowerCase().includes(q));
+  if (key === 'dept')    items = instDepts.filter(d => d.name.toLowerCase().includes(q));
+  filtered[key] = items;
+  renderDDList(key, items);
+};
 
-  const password = document.getElementById('password').value;
-  if (password !== document.getElementById('confirmPassword').value) {
-    statusEl.textContent = 'Passwords do not match.';
-    statusEl.className = 'status error'; return;
-  }
+function renderDDList(key, items) {
+  const list = document.getElementById(key + '-list');
+  if (!items.length) { list.innerHTML = '<div class="dd-empty">No results found</div>'; return; }
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Contacting registration engine...';
+  list.innerHTML = items.map(item => {
+    const isActive = (key === 'inst' && item.id === state.instId) ||
+                     (key === 'faculty' && item.id === state.facId) ||
+                     (key === 'dept' && item.id === state.deptId);
+    const code = item.short_name || item.code || '';
+    const codeHtml = code ? `<span class="dd-code">${code}</span>` : '';
+    return `<div class="dd-item ${isActive ? 'active' : ''}" onclick="selectItem('${key}', '${item.id}', ${JSON.stringify(item.name)})">
+      ${codeHtml}${item.name}
+    </div>`;
+  }).join('');
+}
 
-  // Construct payload mapping cleanly to Edge Function execution requirements
-  const registrationPayload = {
-    fullName: document.getElementById('fullName').value,
-    username: document.getElementById('username').value,
-    email: document.getElementById('email').value,
-    institutionId: instSelect.value,
-    role: currentRole,
-    faculty: document.getElementById('faculty').value,
-    department: document.getElementById('department').value,
-    referralCode: document.getElementById('referral').value,
-    password: password
-  };
+function closeAllDD() {
+  ['inst','faculty','dept'].forEach(k => {
+    document.getElementById(k + '-dd')?.classList.add('hidden');
+    document.getElementById(k + '-display')?.classList.remove('open');
+  });
+}
 
-  try {
-    // Invoke the secure Edge Function module directly
-    const { data, error } = await supabase.functions.invoke('znode-register', {
-      body: registrationPayload
-    });
-
-    if (error || data?.error) throw new Error(data?.error || error?.message || 'Registration failed.');
-
-    statusEl.textContent = '✓ System account created successfully!';
-    statusEl.className = 'status success';
-    form.reset();
-    document.getElementById('pw-fill').style.width = '0%';
-
-    // Expose Session and redirect securely
-    localStorage.setItem('znodeAdminKey', SUPABASE_ANON_KEY);
-    localStorage.setItem(`znode${currentRole.charAt(0) + currentRole.slice(1).toLowerCase().replace('_', '')}Key`, SUPABASE_ANON_KEY);
-
-    const dashFile = ROLE_DASHBOARDS[currentRole];
-    document.getElementById('dash-link-main').href = dashFile;
-    document.getElementById('dash-link-label').textContent = `Open ${ROLE_INFO[currentRole].title} Dashboard →`;
-    document.getElementById('dash-links').style.display = 'block';
-
-    setTimeout(() => { window.location.href = dashFile; }, 1600);
-
-  } catch(err) {
-    statusEl.textContent = err.message;
-    statusEl.className = 'status error';
-  }
-
-  submitBtn.disabled = false;
-  submitBtn.textContent = { DOS: 'Create DOS Account', FACULTY_LEAD: 'Create Faculty Lead Account', SUG: 'Create SUG Account' }[currentRole];
+document.addEventListener('click', e => {
+  if (!e.target.closest('.sel-wrap')) closeAllDD();
 });
 
-window.setRole('DOS');
+window.selectItem = async function(key, id, name) {
+  closeAllDD();
+
+  if (key === 'inst') {
+    state.instId = id; state.instName = name;
+    setDisplay('inst', name, '');
+    // Reset downstream
+    state.facId = null; state.facName = '';
+    state.deptId = null; state.deptName = '';
+    setDisplay('faculty', null, 'Select faculty…');
+    setDisplay('dept', null, 'Select department…');
+    document.getElementById('faculty-fg').style.opacity = '1';
+    document.getElementById('faculty-fg').style.pointerEvents = 'auto';
+    document.getElementById('dept-fg').style.opacity = '0.4';
+    document.getElementById('dept-fg').style.pointerEvents = 'none';
+    await loadFacultiesForInstitution(id);
+  }
+
+  if (key === 'faculty') {
+    state.facId = id; state.facName = name;
+    setDisplay('faculty', name, '');
+    // Reset dept
+    state.deptId = null; state.deptName = '';
+    setDisplay('dept', null, 'Select department…');
+    document.getElementById('dept-fg').style.opacity = '1';
+    document.getElementById('dept-fg').style.pointerEvents = 'auto';
+    await loadDeptsForFaculty(state.instId, id);
+  }
+
+  if (key === 'dept') {
+    state.deptId = id; state.deptName = name;
+    setDisplay('dept', name, '');
+  }
+};
+
+function setDisplay(key, name, placeholder) {
+  const disp = document.getElementById(key + '-display');
+  const ph   = document.getElementById(key + '-placeholder');
+  if (name) {
+    ph.textContent = name;
+    ph.classList.remove('placeholder');
+    disp.classList.add('selected');
+  } else {
+    ph.textContent = placeholder;
+    ph.classList.add('placeholder');
+    disp.classList.remove('selected');
+  }
+}
+
+// ── Load faculties for institution ───────────────────────
+// Strategy: check if the institution already has faculty rows in `faculties`.
+// If not, show all NUC faculties so the first DOS creates them.
+async function loadFacultiesForInstitution(instId) {
+  const { data: existing } = await db.from('faculties').select('id, name').eq('institution_id', instId).order('name');
+  if (existing && existing.length > 0) {
+    instFaculties = existing;
+  } else {
+    // Show NUC master list — selecting will create the row
+    instFaculties = allNucFaculties.map(f => ({ id: 'NUC:' + f.id, name: f.name, code: f.code, _nuc: true, _nucId: f.id }));
+  }
+  filtered.faculty = instFaculties;
+  renderDDList('faculty', instFaculties);
+}
+
+// ── Load departments for faculty ─────────────────────────
+async function loadDeptsForFaculty(instId, facId) {
+  // If facId starts with NUC: it's a not-yet-created faculty
+  const isNucFac = facId.startsWith('NUC:');
+  const realFacId = isNucFac ? null : facId;
+
+  if (!isNucFac) {
+    const { data: existing } = await db.from('departments').select('id, name').eq('institution_id', instId).eq('faculty_id', facId).order('name');
+    if (existing && existing.length > 0) {
+      instDepts = existing;
+      filtered.dept = instDepts;
+      renderDDList('dept', instDepts);
+      return;
+    }
+  }
+
+  // Fall back to NUC master for this faculty
+  const nucFacId = isNucFac ? parseInt(facId.replace('NUC:','')) : null;
+  // If real faculty, find its NUC match by name
+  let nucId = nucFacId;
+  if (!isNucFac) {
+    const match = allNucFaculties.find(f => f.name.toLowerCase() === state.facName.toLowerCase());
+    nucId = match ? match.id : null;
+  }
+
+  const depts = nucId ? allNucDepts.filter(d => d.faculty_id === nucId) : allNucDepts;
+  instDepts = depts.map(d => ({ id: 'NUC:' + d.id, name: d.name, code: d.code, _nuc: true, _nucId: d.id }));
+  filtered.dept = instDepts;
+  renderDDList('dept', instDepts);
+}
+
+// ── Step navigation ───────────────────────────────────────
+window.goStep = function(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('step-' + i).style.display = i === n ? 'block' : 'none';
+    const sb = document.getElementById('sb-' + i);
+    sb.className = 'step ' + (i < n ? 'done' : i === n ? 'active' : '');
+  });
+};
+
+window.goStep2 = function() {
+  const name = document.getElementById('s1-name').value.trim();
+  const email = document.getElementById('s1-email').value.trim();
+  const phone = document.getElementById('s1-phone').value.trim();
+  const username = document.getElementById('s1-username').value.trim();
+  const err = document.getElementById('s1-err');
+  err.style.display = 'none';
+  if (!name || !email || !username) { err.textContent = 'Name, email and username are required.'; err.style.display = 'block'; return; }
+  if (!/^\S+@\S+\.\S+$/.test(email)) { err.textContent = 'Enter a valid email address.'; err.style.display = 'block'; return; }
+  goStep(2);
+};
+
+window.goStep3 = function() {
+  const err = document.getElementById('s2-err');
+  err.style.display = 'none';
+  if (!state.instId) { err.textContent = 'Please select your institution.'; err.style.display = 'block'; return; }
+  if (!state.facId)  { err.textContent = 'Please select your faculty.'; err.style.display = 'block'; return; }
+  if (!state.deptId) { err.textContent = 'Please select your department.'; err.style.display = 'block'; return; }
+  // Populate summary
+  document.getElementById('sum-name').textContent   = document.getElementById('s1-name').value.trim();
+  document.getElementById('sum-inst').textContent   = state.instName;
+  document.getElementById('sum-faculty').textContent = state.facName;
+  document.getElementById('sum-dept').textContent   = state.deptName;
+  goStep(3);
+};
+
+// ── Password hashing ──────────────────────────────────────
+async function hashPassword(p) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(p + 'znode_salt_2026'));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── Ensure faculty/department rows exist, return real UUIDs ─
+async function ensureFacultyDeptRows(instId) {
+  let realFacId = state.facId;
+  let realDeptId = state.deptId;
+
+  // If faculty is from NUC master (not yet in faculties table), create it
+  if (state.facId.startsWith('NUC:')) {
+    const nucFacId = parseInt(state.facId.replace('NUC:',''));
+    const nucFac = allNucFaculties.find(f => f.id === nucFacId);
+    // Check if another DOS already created it between page load and now
+    const { data: existing } = await db.from('faculties').select('id').eq('institution_id', instId).eq('name', state.facName).single();
+    if (existing) {
+      realFacId = existing.id;
+    } else {
+      const { data: created, error } = await db.from('faculties').insert({ name: state.facName, institution_id: instId, status: 'ACTIVE' }).select('id').single();
+      if (error) throw new Error('Could not create faculty: ' + error.message);
+      realFacId = created.id;
+    }
+  }
+
+  // If department is from NUC master, create it
+  if (state.deptId.startsWith('NUC:')) {
+    const { data: existing } = await db.from('departments').select('id').eq('institution_id', instId).eq('faculty_id', realFacId).eq('name', state.deptName).single();
+    if (existing) {
+      realDeptId = existing.id;
+    } else {
+      const { data: created, error } = await db.from('departments').insert({ name: state.deptName, faculty_id: realFacId, institution_id: instId, status: 'ACTIVE' }).select('id').single();
+      if (error) throw new Error('Could not create department: ' + error.message);
+      realDeptId = created.id;
+    }
+  }
+
+  return { realFacId, realDeptId };
+}
+
+// ── Submit ────────────────────────────────────────────────
+window.submitRegistration = async function() {
+  const password = document.getElementById('s3-password').value;
+  const confirm  = document.getElementById('s3-confirm').value;
+  const err      = document.getElementById('s3-err');
+  const btn      = document.getElementById('submit-btn');
+  err.style.display = 'none';
+
+  if (password.length < 6) { err.textContent = 'Password must be at least 6 characters.'; err.style.display = 'block'; return; }
+  if (password !== confirm) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span>Creating account…';
+
+  try {
+    const username = document.getElementById('s1-username').value.trim();
+    // Check username taken
+    const { data: taken } = await db.from('institution_admins').select('id').eq('username', username).maybeSingle();
+    if (taken) { err.textContent = 'Username already taken. Choose another.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Create DOS Account'; return; }
+
+    const { realFacId, realDeptId } = await ensureFacultyDeptRows(state.instId);
+    const passwordHash = await hashPassword(password);
+
+    const { error } = await db.from('institution_admins').insert({
+      username,
+      full_name:     document.getElementById('s1-name').value.trim(),
+      email:         document.getElementById('s1-email').value.trim(),
+      phone:         document.getElementById('s1-phone').value.trim(),
+      institution_id: state.instId,
+      institution:   state.instName,
+      faculty:       state.facName,
+      department:    state.deptName,
+      faculty_id:    realFacId,
+      department_id: realDeptId,
+      password_hash: passwordHash,
+      role:          'DOS',
+      status:        'ACTIVE',
+      approved:      false,
+    });
+
+    if (error) throw error;
+
+    // Store session
+    localStorage.setItem('znodeDosSession', JSON.stringify({
+      username, full_name: document.getElementById('s1-name').value.trim(),
+      institution_id: state.instId, faculty_id: realFacId, department_id: realDeptId,
+      faculty: state.facName, department: state.deptName,
+    }));
+
+    document.getElementById('step-3').style.display = 'none';
+    document.getElementById('success-name').textContent = document.getElementById('s1-name').value.trim().split(' ')[0];
+    document.getElementById('success-screen').style.display = 'block';
+    document.querySelector('.footer').style.display = 'none';
+    ['sb-1','sb-2','sb-3'].forEach(id => { document.getElementById(id).className = 'step done'; });
+
+    setTimeout(() => { window.location.href = 'z-node-DOS.html'; }, 2200);
+
+  } catch(e) {
+    err.textContent = e.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Create DOS Account';
+  }
+};
 </script>
 </body>
 </html>
