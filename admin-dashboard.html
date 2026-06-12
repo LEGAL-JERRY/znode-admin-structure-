@@ -815,42 +815,84 @@ function triggerReject(id, name) {
 
 async function executeAction() {
   const btn = getEl('acm-confirm-btn');
-  btn.textContent = 'Processing...'; btn.disabled = true;
+  btn.textContent = 'Processing...'; 
+  btn.disabled = true;
+  
   try {
     if (pendingAction.type === 'APPROVE') {
       const passportId = `ZN-${crypto.randomUUID().replace(/-/g,'').substring(0,8).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
-      const { error } = await _db.from('students').update({
-        is_verified: true, rejection_reason: null,
-        znode_passport_id: passportId, updated_at: new Date().toISOString()
-      }).eq('id', pendingAction.studentId);
+      
+      // Chain .select() to get back verified modification confirmation
+      const { data, error } = await _db.from('students').update({
+        is_verified: true, 
+        rejection_reason: null,
+        znode_passport_id: passportId, 
+        updated_at: new Date().toISOString()
+      }).eq('id', pendingAction.studentId).select();
+      
       if (error) throw error;
+      
+      // If RLS blocks the update, data will return an empty array []
+      if (!data || data.length === 0) {
+        throw new Error("Database update privileges denied. Check Row-Level Security (RLS) policies.");
+      }
+      
       const idx = allStudents.findIndex(s => s.id === pendingAction.studentId);
-      if (idx !== -1) { allStudents[idx].is_verified = true; allStudents[idx].rejection_reason = null; allStudents[idx].znode_passport_id = passportId; }
+      if (idx !== -1) { 
+        allStudents[idx].is_verified = true; 
+        allStudents[idx].rejection_reason = null; 
+        allStudents[idx].znode_passport_id = passportId; 
+      }
+      
       await writeAuditLog('STUDENT_APPROVED', pendingAction.studentName, pendingAction.studentId);
       closeModal('approval-modal');
       showToast('success', `✓ ${pendingAction.studentName} approved — passport issued`);
+      
     } else {
       const reason = getEl('acm-reason').value.trim();
-      if (!reason) { alert('Rejection reason required.'); btn.textContent='Confirm Rejection'; btn.disabled=false; return; }
-      const { error } = await _db.from('students').update({
-        is_verified: false, rejection_reason: reason, updated_at: new Date().toISOString()
-      }).eq('id', pendingAction.studentId);
+      if (!reason) { 
+        alert('Rejection reason required.'); 
+        btn.textContent = 'Confirm Rejection'; 
+        btn.disabled = false; 
+        return; 
+      }
+      
+      // Chain .select() to get back rejection modification confirmation
+      const { data, error } = await _db.from('students').update({
+        is_verified: false, 
+        rejection_reason: reason, 
+        updated_at: new Date().toISOString()
+      }).eq('id', pendingAction.studentId).select();
+      
       if (error) throw error;
+      
+      // Verify row modification was successfully executed by PostgreSQL
+      if (!data || data.length === 0) {
+        throw new Error("Database update privileges denied. Check Row-Level Security (RLS) policies.");
+      }
+      
       const idx = allStudents.findIndex(s => s.id === pendingAction.studentId);
-      if (idx !== -1) { allStudents[idx].is_verified = false; allStudents[idx].rejection_reason = reason; }
+      if (idx !== -1) { 
+        allStudents[idx].is_verified = false; 
+        allStudents[idx].rejection_reason = reason; 
+      }
+      
       await writeAuditLog('STUDENT_REJECTED', pendingAction.studentName, pendingAction.studentId);
       closeModal('approval-modal');
       showToast('error', `✗ ${pendingAction.studentName}'s application rejected`);
     }
+    
     renderTelemetry();
     updatePendingBadge();
     reRenderStudents(allStudents);
+    
   } catch(err) {
     showToast('error', 'Operation failed: ' + err.message);
   }
+  
   btn.disabled = false;
   btn.textContent = pendingAction.type === 'APPROVE' ? 'Confirm Approval' : 'Confirm Rejection';
-  pendingAction = { type:null, studentId:null, studentName:null };
+  pendingAction = { type: null, studentId: null, studentName: null };
 }
 
 // ── INSTITUTIONS ──────────────────────────────────────────
