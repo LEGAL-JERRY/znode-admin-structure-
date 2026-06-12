@@ -1,20 +1,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/admin-signup" />
-    <title>Z-Node | Redirecting</title>
-    <script>
-        // Instant JavaScript fallback redirection
-        window.location.href = "/admin-signup";
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z-Node | Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #061416;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Background glow ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 600px;
+  background: radial-gradient(ellipse, rgba(16,185,129,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -200px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(ellipse, rgba(99,102,241,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 52px;
+}
+.logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.logo-icon {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #0a2225, #113136);
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: #10B981;
+  font-weight: 900; font-size: 24px;
+  box-shadow: 0 0 24px rgba(16,185,129,0.15);
+}
+.logo-text {
+  font-size: 28px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.12em;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tagline {
+  font-size: 13px;
+  color: #4a6a6e;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.header h1 span { color: #10B981; }
+.header p {
+  font-size: 14px;
+  color: #5a8a8e;
+  font-weight: 500;
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Portal grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+  max-width: 640px;
+  margin-bottom: 14px;
+}
+.grid-full {
+  width: 100%;
+  max-width: 640px;
+  margin-bottom: 40px;
+}
+
+/* ── Portal card ── */
+.portal-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px;
+  padding: 24px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+  position: relative;
+  overflow: hidden;
+}
+.portal-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.22s;
+}
+.portal-card:hover {
+  border-color: rgba(16,185,129,0.35);
+  background: rgba(16,185,129,0.04);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(16,185,129,0.2);
+}
+.portal-card:hover::before { opacity: 1; }
+
+/* Accent variants */
+.portal-card.indigo:hover { border-color: rgba(99,102,241,0.35); background: rgba(99,102,241,0.04); box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(99,102,241,0.2); }
+.portal-card.indigo::before { background: linear-gradient(135deg, rgba(99,102,241,0.06), transparent); }
+.portal-card.amber:hover  { border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.04); box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(245,158,11,0.2); }
+.portal-card.amber::before { background: linear-gradient(135deg, rgba(245,158,11,0.06), transparent); }
+.portal-card.slate:hover  { border-color: rgba(148,163,184,0.35); background: rgba(148,163,184,0.04); box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(148,163,184,0.2); }
+.portal-card.slate::before { background: linear-gradient(135deg, rgba(148,163,184,0.06), transparent); }
+.portal-card.super { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 20px; background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(6,20,22,0.8)); border-color: rgba(16,185,129,0.2); }
+.portal-card.super:hover { transform: translateY(-3px); border-color: rgba(16,185,129,0.5); box-shadow: 0 16px 50px rgba(0,0,0,0.4), 0 0 0 1px rgba(16,185,129,0.3); }
+
+.card-icon {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.icon-green  { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.2); }
+.icon-indigo { background: rgba(99,102,241,0.12);  border: 1px solid rgba(99,102,241,0.2); }
+.icon-amber  { background: rgba(245,158,11,0.12);  border: 1px solid rgba(245,158,11,0.2); }
+.icon-slate  { background: rgba(148,163,184,0.12); border: 1px solid rgba(148,163,184,0.2); }
+
+.card-body { flex: 1; }
+.card-role {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 5px;
+}
+.role-green  { color: #10B981; }
+.role-indigo { color: #818cf8; }
+.role-amber  { color: #fbbf24; }
+.role-slate  { color: #94a3b8; }
+
+.card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #f1f5f9;
+  margin-bottom: 5px;
+  letter-spacing: -0.01em;
+}
+.portal-card.super .card-title { font-size: 17px; }
+
+.card-desc {
+  font-size: 12px;
+  color: #4a6a6e;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.portal-card.super .card-desc { color: #5a8a8e; }
+
+.card-arrow {
+  margin-top: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2a5a5e;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s, gap 0.2s;
+}
+.portal-card:hover .card-arrow { color: #10B981; gap: 7px; }
+.portal-card.indigo:hover .card-arrow { color: #818cf8; }
+.portal-card.amber:hover  .card-arrow { color: #fbbf24; }
+.portal-card.slate:hover  .card-arrow { color: #94a3b8; }
+.portal-card.super .card-arrow { margin-top: 0; align-self: center; flex-shrink: 0; font-size: 18px; }
+
+/* ── Divider ── */
+.divider {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+.divider-text { font-size: 10px; font-weight: 700; color: #2a5a5e; text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
+
+/* ── New DOS CTA ── */
+.cta-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 640px;
+  margin-bottom: 40px;
+}
+.cta-card {
+  flex: 1;
+  background: rgba(16,185,129,0.06);
+  border: 1px dashed rgba(16,185,129,0.25);
+  border-radius: 14px;
+  padding: 18px 20px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.2s;
+}
+.cta-card:hover { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.5); transform: translateY(-2px); }
+.cta-plus { width: 36px; height: 36px; border-radius: 10px; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); display: flex; align-items: center; justify-content: center; color: #10B981; font-size: 20px; font-weight: 300; flex-shrink: 0; }
+.cta-text { font-size: 13px; font-weight: 700; color: #94a3b8; }
+.cta-text span { color: #10B981; }
+
+/* ── Footer ── */
+.footer {
+  font-size: 11px;
+  color: #2a4a4e;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.footer span { color: #1a3a3e; margin: 0 8px; }
+
+/* ── Animations ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.header        { animation: fade-up 0.5s ease both; }
+.grid          { animation: fade-up 0.5s 0.1s ease both; }
+.grid-full     { animation: fade-up 0.5s 0.15s ease both; }
+.divider       { animation: fade-up 0.5s 0.2s ease both; }
+.cta-row       { animation: fade-up 0.5s 0.25s ease both; }
+.footer        { animation: fade-up 0.5s 0.3s ease both; }
+
+/* ── Mobile ── */
+@media (max-width: 500px) {
+  .grid { grid-template-columns: 1fr; }
+  .portal-card.super { flex-direction: column; align-items: flex-start; }
+  .portal-card.super .card-arrow { margin-top: 4px; align-self: auto; }
+  .header h1 { font-size: 26px; }
+  .cta-row { flex-direction: column; }
+}
+</style>
 </head>
-<body style="background: #061416; color: #e6f0f1; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-    <div style="text-align: center;">
-        <p style="font-size: 1.1rem; font-weight: 500; letter-spacing: 0.05em;">CONNECTING TO Z-NODE ENGINE...</p>
-        <noscript>
-            <p>If you are not redirected, <a href="/admin-signup" style="color: #10B981; text-decoration: none; font-weight: bold;">click here</a>.</p>
-        </noscript>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="logo-wrap">
+    <div class="logo-icon">Z</div>
+    <div class="logo-text">Z-NODE</div>
+  </div>
+  <div class="tagline">Hierarchical Digital Identity · Campus Payment Protocol</div>
+  <h1>Welcome to the <span>Network</span></h1>
+  <p>Select your role to access your portal. Each tier has its own dedicated dashboard.</p>
+</div>
+
+<!-- Portal cards grid -->
+<div class="grid">
+
+  <!-- DOS -->
+  <a class="portal-card" href="z-node-DOS.html">
+    <div class="card-icon icon-green">🎓</div>
+    <div class="card-body">
+      <div class="card-role role-green">Tier 1</div>
+      <div class="card-title">Department Officer</div>
+      <div class="card-desc">Manage your department's students, access codes & yearbook.</div>
     </div>
+    <div class="card-arrow">Enter <span>→</span></div>
+  </a>
+
+  <!-- Faculty Lead -->
+  <a class="portal-card indigo" href="faculty-dashboard.html">
+    <div class="card-icon icon-indigo">🏛️</div>
+    <div class="card-body">
+      <div class="card-role role-indigo">Tier 2</div>
+      <div class="card-title">Faculty Lead</div>
+      <div class="card-desc">Oversee all departments within your faculty. Approve & monitor.</div>
+    </div>
+    <div class="card-arrow">Enter <span>→</span></div>
+  </a>
+
+  <!-- SUG -->
+  <a class="portal-card amber" href="sug-dashboard.html">
+    <div class="card-icon icon-amber">🏆</div>
+    <div class="card-body">
+      <div class="card-role role-amber">Tier 3</div>
+      <div class="card-title">SUG Executive</div>
+      <div class="card-desc">Student Union Government. Institution-wide oversight & payouts.</div>
+    </div>
+    <div class="card-arrow">Enter <span>→</span></div>
+  </a>
+
+  <!-- Worker -->
+  <a class="portal-card slate" href="worker-dashboard.html">
+    <div class="card-icon icon-slate">👷</div>
+    <div class="card-body">
+      <div class="card-role role-slate">Tier 4</div>
+      <div class="card-title">Worker</div>
+      <div class="card-desc">Field agent dashboard. Register students & track your earnings.</div>
+    </div>
+    <div class="card-arrow">Enter <span>→</span></div>
+  </a>
+
+</div>
+
+<!-- Super Admin — full width -->
+<div class="grid-full">
+  <a class="portal-card super" href="z_node_dashboard.html">
+    <div class="card-icon icon-green" style="width:52px;height:52px;font-size:24px;border-radius:14px;">⚡</div>
+    <div class="card-body">
+      <div class="card-role role-green">Super Admin · Tier 5</div>
+      <div class="card-title">Z-Node Command Centre</div>
+      <div class="card-desc">Platform-wide control. Manage all institutions, DOS accounts, revenue, payouts and system configuration.</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+</div>
+
+<!-- Divider -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-text">New to Z-Node?</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- CTA -->
+<div class="cta-row">
+  <a class="cta-card" href="admin-onboarding.html">
+    <div class="cta-plus">+</div>
+    <div class="cta-text">Register as a <span>Department Officer (DOS)</span></div>
+  </a>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  Z-NODE PROTOCOL &nbsp;<span>·</span>&nbsp; CAMPUS IDENTITY INFRASTRUCTURE &nbsp;<span>·</span>&nbsp; NG
+</div>
+
 </body>
 </html>
