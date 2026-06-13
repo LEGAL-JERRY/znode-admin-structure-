@@ -604,8 +604,9 @@ async function ensureScopeRows(instId) {
   let realDeptId = state.deptId;
 
   if (meta.needsFaculty && state.facId && state.facId.startsWith('NUC:')) {
-    const { data: existing } = await db.from('faculties').select('id')
-      .eq('institution_id', instId).eq('name', state.facName).maybeSingle();
+    const { data: existingFacRows } = await db.from('faculties').select('id')
+      .eq('institution_id', instId).eq('name', state.facName).limit(1);
+    const existing = existingFacRows && existingFacRows[0];
     if (existing) {
       realFacId = existing.id;
     } else {
@@ -618,8 +619,9 @@ async function ensureScopeRows(instId) {
   }
 
   if (meta.needsDept && state.deptId && state.deptId.startsWith('NUC:')) {
-    const { data: existing } = await db.from('departments').select('id')
-      .eq('institution_id', instId).eq('faculty_id', realFacId).eq('name', state.deptName).maybeSingle();
+    const { data: existingDeptRows } = await db.from('departments').select('id')
+      .eq('institution_id', instId).eq('faculty_id', realFacId).eq('name', state.deptName).limit(1);
+    const existing = existingDeptRows && existingDeptRows[0];
     if (existing) {
       realDeptId = existing.id;
     } else {
@@ -650,8 +652,8 @@ window.submitRegistration = async function() {
 
   try {
     const username = document.getElementById('s1-username').value.trim();
-    const { data: taken } = await db.from('institution_admins').select('id').eq('username', username).maybeSingle();
-    if (taken) { err.textContent = 'Username already taken. Choose another.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Create Account'; return; }
+    const { data: takenRows } = await db.from('institution_admins').select('id').eq('username', username).limit(1);
+    if (takenRows && takenRows.length > 0) { err.textContent = 'Username already taken. Choose another.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Create Account'; return; }
 
     const { realFacId, realDeptId } = await ensureScopeRows(state.instId);
     const passwordHash = await hashPassword(password);
@@ -698,7 +700,7 @@ window.submitRegistration = async function() {
     const redirectMap = {
       DOS:     'z-node-DOS.html',
       WORKER:  'z-node-DOS.html',
-      FACULTY: 'faculty-daashboard.html',
+      FACULTY: 'faculty-dashboard.html',
       SUG:     'sug-dashboard.html',
     };
     setTimeout(() => { window.location.href = redirectMap[state.role] || 'z-node-DOS.html'; }, 2200);
