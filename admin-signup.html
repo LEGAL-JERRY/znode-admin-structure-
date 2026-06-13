@@ -450,19 +450,19 @@ window.filterDD = function(key, query) {
   renderDDList(key, items);
 };
 
+const _ddItems = { inst: [], faculty: [], dept: [] };
 function renderDDList(key, items) {
   const list = document.getElementById(key + '-list');
   if (!items || !items.length) { list.innerHTML = '<div class="dd-empty">No results found</div>'; return; }
-  list.innerHTML = items.map(item => {
+  // Store items for lookup by index — avoids ALL special-char escaping issues
+  _ddItems[key] = items;
+  list.innerHTML = items.map((item, idx) => {
     const isActive = (key === 'inst' && item.id === state.instId) ||
                      (key === 'faculty' && item.id === state.facId) ||
                      (key === 'dept' && item.id === state.deptId);
     const code = item.short_name || item.code || '';
     const codeHtml = code ? `<span class="dd-code">${code}</span>` : '';
-    const safeName = item.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-    return `<div class="dd-item ${isActive ? 'active' : ''}" onclick="selectItem('${key}', '${item.id}', '${safeName}')">
-      ${codeHtml}${item.name}
-    </div>`;
+    return `<div class="dd-item ${isActive ? 'active' : ''}" data-ddkey="${key}" data-idx="${idx}">${codeHtml}${item.name}</div>`;
   }).join('');
 }
 
@@ -473,6 +473,16 @@ function closeAllDD() {
   });
 }
 document.addEventListener('click', e => { if (!e.target.closest('.sel-wrap')) closeAllDD(); });
+// Delegated click for dd-items — works with any special chars in names
+document.addEventListener('click', function(e) {
+  const el = e.target.closest('.dd-item[data-ddkey]');
+  if (!el) return;
+  const key = el.dataset.ddkey;
+  const idx = parseInt(el.dataset.idx);
+  const entry = _ddItems[key] && _ddItems[key][idx];
+  if (entry) selectItem(key, entry.id, entry.name);
+});
+
 
 window.selectItem = async function(key, id, name) {
   closeAllDD();
