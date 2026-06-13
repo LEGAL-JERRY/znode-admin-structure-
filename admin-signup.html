@@ -598,12 +598,14 @@ async function hashPassword(p) {
 }
 
 // ── Ensure faculty/dept rows exist, return real UUIDs ──────────────────
+// Always resolves NUC: prefixed IDs into real DB UUIDs before returning.
 async function ensureScopeRows(instId) {
   const meta = ROLE_META[state.role];
-  let realFacId  = state.facId;
-  let realDeptId = state.deptId;
+  let realFacId  = state.facId  || null;
+  let realDeptId = state.deptId || null;
 
-  if (meta.needsFaculty && state.facId && state.facId.startsWith('NUC:')) {
+  // Resolve faculty — any role that uses faculty
+  if (meta.needsFaculty && realFacId && String(realFacId).startsWith('NUC:')) {
     const { data: existingFacRows } = await db.from('faculties').select('id')
       .eq('institution_id', instId).eq('name', state.facName).limit(1);
     const existing = existingFacRows && existingFacRows[0];
@@ -613,12 +615,13 @@ async function ensureScopeRows(instId) {
       const { data: created, error } = await db.from('faculties')
         .insert({ name: state.facName, institution_id: instId, status: 'ACTIVE' })
         .select('id').single();
-      if (error) throw new Error('Could not create faculty: ' + error.message);
+      if (error) throw new Error('Could not create faculty: ' + (error.details || error.message));
       realFacId = created.id;
     }
   }
 
-  if (meta.needsDept && state.deptId && state.deptId.startsWith('NUC:')) {
+  // Resolve department — only for roles that need it
+  if (meta.needsDept && realDeptId && String(realDeptId).startsWith('NUC:')) {
     const { data: existingDeptRows } = await db.from('departments').select('id')
       .eq('institution_id', instId).eq('faculty_id', realFacId).eq('name', state.deptName).limit(1);
     const existing = existingDeptRows && existingDeptRows[0];
@@ -628,10 +631,14 @@ async function ensureScopeRows(instId) {
       const { data: created, error } = await db.from('departments')
         .insert({ name: state.deptName, faculty_id: realFacId, institution_id: instId, status: 'ACTIVE' })
         .select('id').single();
-      if (error) throw new Error('Could not create department: ' + error.message);
+      if (error) throw new Error('Could not create department: ' + (error.details || error.message));
       realDeptId = created.id;
     }
   }
+
+  // Final safety: if either ID is still NUC:-prefixed, null it out
+  if (realFacId  && String(realFacId).startsWith('NUC:'))  realFacId  = null;
+  if (realDeptId && String(realDeptId).startsWith('NUC:')) realDeptId = null;
 
   return { realFacId, realDeptId };
 }
@@ -675,8 +682,17 @@ window.submitRegistration = async function() {
     if (meta.needsFaculty && realFacId)  { payload.faculty_id = realFacId;  payload.faculty   = state.facName; }
     if (meta.needsDept    && realDeptId) { payload.department_id = realDeptId; payload.department = state.deptName; }
 
+    // Safety: never let a NUC: prefixed string reach a UUID column
+    if (payload.faculty_id    && String(payload.faculty_id).startsWith('NUC:'))    delete payload.faculty_id;
+    if (payload.department_id && String(payload.department_id).startsWith('NUC:')) delete payload.department_id;
+
     const { error } = await db.from('institution_admins').insert(payload);
-    if (error) throw error;
+    if (error) {
+      // PostgREST often wraps real errors (type mismatch, FK violation) as a
+      // generic "RLS policy" message — surface the actual detail instead.
+      const msg = error.details || error.hint || error.message || JSON.stringify(error);
+      throw new Error(msg);
+    }
 
     // Store session
     localStorage.setItem('znodeDosSession', JSON.stringify({
