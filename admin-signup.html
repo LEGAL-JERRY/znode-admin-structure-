@@ -300,10 +300,10 @@ const state = {
 };
 
 const ROLE_META = {
-  WORKER:  { label: 'Worker',         color: '#166534', bg: '#dcfce7', needsFaculty: true,  needsDept: true  },
-  DOS:     { label: 'DOS – Dept',     color: '#1e40af', bg: '#dbeafe', needsFaculty: true,  needsDept: true  },
-  FACULTY: { label: 'DOS – Faculty',  color: '#92400e', bg: '#fef3c7', needsFaculty: true,  needsDept: false },
-  SUG:     { label: 'SUG',            color: '#6b21a8', bg: '#f3e8ff', needsFaculty: false, needsDept: false },
+  WORKER:  { label: 'Worker',        color: '#166534', bg: '#dcfce7', needsFaculty: true,  needsDept: true,  dbRole: 'WORKER'       },
+  DOS:     { label: 'DOS – Dept',   color: '#1e40af', bg: '#dbeafe', needsFaculty: true,  needsDept: true,  dbRole: 'DOS'          },
+  FACULTY: { label: 'DOS – Faculty', color: '#92400e', bg: '#fef3c7', needsFaculty: true,  needsDept: false, dbRole: 'Faculty Lead' },
+  SUG:     { label: 'SUG',           color: '#6b21a8', bg: '#f3e8ff', needsFaculty: false, needsDept: false, dbRole: 'SUG'          },
 };
 
 // Reference data
@@ -684,7 +684,7 @@ window.submitRegistration = async function() {
       institution_id: state.instId,
       institution:    state.instName,
       password_hash:  passwordHash,
-      role:           state.role,
+      role:           meta.dbRole,
       status:         'ACTIVE',
       approved:       false,
     };
@@ -708,7 +708,7 @@ window.submitRegistration = async function() {
     localStorage.setItem('znodeDosSession', JSON.stringify({
       username,
       full_name:      document.getElementById('s1-name').value.trim(),
-      role:           state.role,
+      role:           meta.dbRole,
       institution_id: state.instId,
       faculty_id:     realFacId  || null,
       department_id:  realDeptId || null,
