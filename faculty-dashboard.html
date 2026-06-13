@@ -523,7 +523,7 @@ async function handleLogin() {
   if (!user || !pass) { errEl.textContent = 'Username and password required.'; errEl.classList.remove('hidden'); return; }
   showLoader('Authenticating...');
   const hash = await hashPassword(pass);
-  const { data: admin, error } = await _db.from('institution_admins').select('*').eq('username', user).eq('password_hash', hash).eq('role', 'FACULTY_LEAD').single();
+  const { data: admin, error } = await _db.from('institution_admins').select('*').eq('username', user).eq('password_hash', hash).eq('role', 'FACULTY').single();
   hideLoader();
   if (error || !admin) { errEl.textContent = 'Invalid credentials or not a Faculty Lead account.'; errEl.classList.remove('hidden'); return; }
   currentAdmin = admin;
