@@ -85,14 +85,12 @@ input::placeholder{color:#94a3b8;}
     <p>Director of Socials · Department Account</p>
   </div>
 
-  <!-- Step progress bar -->
   <div class="step-bar">
     <div class="step active" id="sb-1"></div>
     <div class="step" id="sb-2"></div>
     <div class="step" id="sb-3"></div>
   </div>
 
-  <!-- ── STEP 1: Personal Info ── -->
   <div id="step-1">
     <div class="step-label">Step 1 of 3 · Personal Information</div>
     <div class="fg">
@@ -115,11 +113,9 @@ input::placeholder{color:#94a3b8;}
     <button class="btn btn-primary" onclick="goStep2()">Continue →</button>
   </div>
 
-  <!-- ── STEP 2: Institution & Department ── -->
   <div id="step-2" style="display:none;">
     <div class="step-label">Step 2 of 3 · Your Department</div>
 
-    <!-- Institution -->
     <div class="fg">
       <label>Institution</label>
       <div class="sel-wrap">
@@ -136,7 +132,6 @@ input::placeholder{color:#94a3b8;}
       </div>
     </div>
 
-    <!-- Faculty -->
     <div class="fg" id="faculty-fg" style="opacity:0.4;pointer-events:none;">
       <label>Faculty</label>
       <div class="sel-wrap">
@@ -153,7 +148,6 @@ input::placeholder{color:#94a3b8;}
       </div>
     </div>
 
-    <!-- Department -->
     <div class="fg" id="dept-fg" style="opacity:0.4;pointer-events:none;">
       <label>Department</label>
       <div class="sel-wrap">
@@ -175,11 +169,9 @@ input::placeholder{color:#94a3b8;}
     <button class="btn btn-primary" onclick="goStep3()">Continue →</button>
   </div>
 
-  <!-- ── STEP 3: Password + Confirm ── -->
   <div id="step-3" style="display:none;">
     <div class="step-label">Step 3 of 3 · Set Password</div>
 
-    <!-- Summary -->
     <div class="summary-box">
       <div class="summary-row"><span class="summary-key">Name</span><span class="summary-val" id="sum-name"></span></div>
       <div class="summary-row"><span class="summary-key">Institution</span><span class="summary-val" id="sum-inst"></span></div>
@@ -200,14 +192,13 @@ input::placeholder{color:#94a3b8;}
     <button class="btn btn-primary" id="submit-btn" onclick="submitRegistration()">Create DOS Account</button>
   </div>
 
-  <!-- ── SUCCESS ── -->
   <div class="success-screen" id="success-screen">
     <div class="icon">🎉</div>
     <h2>Account Created!</h2>
     <p>Welcome to Z-Node, <strong id="success-name"></strong>.<br>Your DOS account is pending approval. You'll be redirected shortly.</p>
   </div>
 
-  <div class="footer">Already have an account? <a href="index.html">Sign In</a></div>
+  <div class="footer">Already have an account? <a href="signin.html">Sign In</a></div>
 </div>
 
 <script type="module">
@@ -282,7 +273,7 @@ function renderDDList(key, items) {
                      (key === 'dept' && item.id === state.deptId);
     const code = item.short_name || item.code || '';
     const codeHtml = code ? `<span class="dd-code">${code}</span>` : '';
-    return `<div class="dd-item ${isActive ? 'active' : ''}" onclick="selectItem('${key}', '${item.id}', ${JSON.stringify(item.name)})">
+    return `<div class="dd-item ${isActive ? 'active' : ''}" onclick="selectItem('${key}', '${item.id}', ${JSON.stringify(item.name).replace(/"/g, '&quot;')})">
       ${codeHtml}${item.name}
     </div>`;
   }).join('');
