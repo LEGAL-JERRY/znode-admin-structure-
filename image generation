@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Node // Obsidian Asset Export Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* GLOBAL ARCHIVAL SYSTEM */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            background-color: #050505; 
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; 
+            color: #ffffff; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 80px 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* PREMIUM GLASSMORPHIC SYSTEM DASHBOARD */
+        .dashboard-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 80px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
+        .dashboard-panel h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-panel h1::before {
+            content: ''; display: inline-block; width: 8px; height: 8px; background: #00ff66; border-radius: 50%;
+        }
+
+        .input-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 35px;
+        }
+
+        .form-field { display: flex; flex-direction: column; gap: 10px; }
+        
+        .form-field.full-width { grid-column: 1 / -1; }
+
+        .form-field label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .form-field input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 14px 18px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .form-field input:focus {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .action-dispatch {
+            width: 100%;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 18px;
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .action-dispatch:hover { background: #00ff66; transform: translateY(-1px); }
+        .action-dispatch:active { transform: translateY(0); }
+
+        /* POSTER ENGINE GRID */
+        #production-line {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 60px 40px;
+            width: 100%;
+            max-width: 1440px;
+        }
+
+        .node-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            align-items: center; 
+        }
+
+        .node-trigger-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 12px 24px;
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .node-trigger-btn:hover { background: #ffffff; color: #000000; border-color: #ffffff; }
+
+        /* HIGH FIDELITY RENDER CANVAS (800x1000 NATIVE TARGET) */
+        .canvas-container {
+            width: 800px;
+            height: 1000px;
+            background-color: #030a05;
+            background-image: radial-gradient(circle at 50% 45%, #001f0d 0%, #010502 75%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 70px 0;
+            transform-origin: top center;
+            transform: scale(0.5); /* scaled down for clean screen grid visibility */
+            margin-bottom: -500px; 
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+
+        /* Ambient Line Matrices */
+        .matrix-mesh {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 160px 160px;
+            background-position: center center;
+            z-index: 1;
+        }
+
+        .matrix-vignette {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 500px;
+            background: linear-gradient(to bottom, transparent, #010502 85%);
+            z-index: 2;
+        }
+
+        /* Structural Header Components */
+        .node-header {
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+        }
+        
+        .node-header::before, .node-header::after {
+            content: ''; position: absolute; top: 50%; width: 120px; height: 1px; background: rgba(255,255,255,0.15);
+        }
+        .node-header::before { right: 100%; margin-right: 25px; }
+        .node-header::after { left: 100%; margin-left: 25px; }
+
+        .brand-monogram {
+            width: 44px; height: 44px;
+            border: 2px solid #ffffff;
+            border-radius: 6px 6px 24px 24px;
+            position: relative;
+        }
+        .brand-monogram::after {
+            content: ''; position: absolute; bottom: -8px; left: 16px; width: 8px; height: 12px; border: 2px solid #ffffff; border-top: none;
+        }
+
+        .header-meta-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            line-height: 1.15;
+        }
+        .meta-univ { font-size: 20px; font-weight: 400; letter-spacing: 1px; color: #ffffff; }
+        .meta-dept { font-size: 20px; font-weight: 800; letter-spacing: 1.5px; color: #ffffff; }
+
+        /* The Focal Volumetric Extrusion Vector */
+        .monumental-vector-box {
+            z-index: 5;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -30px;
+        }
+
+        .monumental-digit {
+            font-size: 580px;
+            font-weight: 900;
+            color: #040404; /* True dark Core face */
+            line-height: 1;
+            letter-spacing: -12px;
+            /* Multi-pass CSS rendering mimicking structural lighting and 3D step-bevelling */
+            text-shadow: 
+                -2px -2px 0 rgba(255,255,255,0.85),
+                0px 0px 70px rgba(0, 255, 102, 0.75), 
+                0px 0px 140px rgba(0, 255, 102, 0.4),
+                8px 8px 0 #121212,
+                14px 14px 0 #080808;
+        }
+
+        /* Core Typography Footer Systems */
+        .node-footer {
+            z-index: 5;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 90%;
+        }
+
+        .structural-alert-title {
+            font-size: 68px;
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -2.5px;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .structural-sub-title {
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 1.35;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .structural-temporal-stamp {
+            font-size: 20px;
+            font-weight: 400;
+            color: #a1a1aa;
+            margin-top: 4px;
+        }
+
+        .structural-locator-url {
+            font-size: 18px;
+            font-weight: 300;
+            color: #e4e4e7;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-panel">
+        <h1>Launch Asset Engine</h1>
+        <div class="input-matrix">
+            <div class="form-field">
+                <label>Institution Name</label>
+                <input type="text" id="uniFullName" value="Federal University of Lafia">
+            </div>
+            <div class="form-field">
+                <label>Institution Abbreviation</label>
+                <input type="text" id="uniAbbr" value="FULAFIA">
+            </div>
+            <div class="form-field">
+                <label>Department Core</label>
+                <input type="text" id="deptName" value="Economics">
+            </div>
+            <div class="form-field">
+                <label>Launch Epoch (Year)</label>
+                <input type="text" id="gradYear" value="2026">
+            </div>
+            <div class="form-field full-width">
+                <label>Destination Web URL</label>
+                <input type="text" id="websiteUrl" value="www.fulafia.edu.ng/economics">
+            </div>
+        </div>
+        <button class="action-dispatch" onclick="rebuildProductionLine()">Compile Complete Asset Sequence</button>
+    </div>
+
+    <div id="production-line">
+        </div>
+
+    <script>
+        function rebuildProductionLine() {
+            const container = document.getElementById('production-line');
+            container.innerHTML = ''; // Reset core pipe
+
+            const uniFull = document.getElementById('uniFullName').value.toUpperCase();
+            const uniAbbr = document.getElementById('uniAbbr').value.toUpperCase();
+            const dept = document.getElementById('deptName').value.toUpperCase();
+            const year = document.getElementById('gradYear').value;
+            const url = document.getElementById('websiteUrl').value.toLowerCase();
+
+            // Loop down from Day 7 sequentially to Day 1
+            for (let i = 7; i >= 1; i--) {
+                // Strict grammatical safety logic over writing rules ("1 Day" vs "7 Days")
+                const temporalUnit = i === 1 ? "Day" : "Days";
+                
+                const nodeWrapper = document.createElement('div');
+                nodeWrapper.className = 'node-wrapper';
+                
+                const targetDomId = `canvas-node-day-${i}`;
+                
+                nodeWrapper.innerHTML = `
+                    <div class="canvas-container" id="${targetDomId}">
+                        <div class="matrix-mesh"></div>
+                        <div class="matrix-vignette"></div>
+                        
+                        <div class="node-header">
+                            <div class="brand-monogram"></div>
+                            <div class="header-meta-group">
+                                <span class="meta-univ">${uniAbbr}</span>
+                                <span class="meta-dept">${dept}</span>
+                            </div>
+                        </div>
+
+                        <div class="monumental-vector-box">
+                            <div class="monumental-digit">${i}</div>
+                        </div>
+
+                        <div class="node-footer">
+                            <div class="structural-alert-title">${i} ${temporalUnit} To<br>Launch</div>
+                            <div class="structural-sub-title">OFFICIAL LAUNCH OF THE<br>${dept} DEPARTMENT</div>
+                            <div class="structural-temporal-stamp">${uniFull} - YEAR ${year}</div>
+                            <div class="structural-locator-url">${url}</div>
+                        </div>
+                    </div>
+                    <button class="node-trigger-btn" onclick="processAndShareNode('${targetDomId}', 'Countdown_Day_${i}')">🚀 Share Day ${i} to WhatsApp</button>
+                `;
+                
+                container.appendChild(nodeWrapper);
+            }
+        }
+
+        // Processing & Dynamic Transcoding Engine
+        function processAndShareNode(nodeId, filenameLabel) {
+            const nodeElement = document.getElementById(nodeId);
+            const actionBtn = nodeElement.nextElementSibling;
+            const fallbackTextBackup = actionBtn.innerHTML;
+            
+            actionBtn.innerHTML = "Processing Image Stream...";
+            actionBtn.style.opacity = "0.6";
+            
+            // Isolate scaling overrides safely to feed clear pixels to html2canvas
+            const previousTransformState = nodeElement.style.transform;
+            nodeElement.style.transform = 'none';
+
+            html2canvas(nodeElement, {
+                scale: 2, // 2x grid expansion factor ensuring sharp typography exports
+                backgroundColor: "#010502", // Explicit flat backing layer prevents alpha masking artifacts on WhatsApp conversion
+                logging: false,
+                useCORS: true
+            }).then(async (renderCanvas) => {
+                // Re-apply original presentation transformation immediately
+                nodeElement.style.transform = previousTransformState || 'scale(0.5)';
+                
+                // Transcode data matrix into compressed image/jpeg binary stream
+                renderCanvas.toBlob(async (imageBlob) => {
+                    if (!imageBlob) {
+                        alert("Buffer compression error.");
+                        return;
+                    }
+
+                    // Wrap blob raw payload inside file descriptor standard structure recognizable by smartphone sharesheets
+                    const systemFile = new File([imageBlob], `${filenameLabel}.jpg`, { type: "image/jpeg" });
+
+                    // Execute Web Share API integration pipeline mapping directly into WhatsApp system context
+                    if (navigator.canShare && navigator.canShare({ files: [systemFile] })) {
+                        try {
+                            await navigator.share({
+                                files: [systemFile],
+                                title: `Launch Day ${filenameLabel.slice(-1)}`,
+                                text: `Deployment asset countdown tracking.`
+                            });
+                            actionBtn.innerHTML = "✓ Sent Successfully";
+                        } catch (shareError) {
+                            // Execution caught or cancelled by interface interruption -> redirect straight to direct pipeline
+                            console.log("Device interface bypass, falling back to local file creation.");
+                            executeDirectDownloadBypass(imageBlob, filenameLabel);
+                        }
+                    } else {
+                        // Desktop or legacy environments system callback fallback pipeline
+                        executeDirectDownloadBypass(imageBlob, filenameLabel);
+                    }
+
+                    actionBtn.innerHTML = fallbackTextBackup;
+                    actionBtn.style.opacity = "1";
+                }, "image/jpeg", 0.95); // Constant 95% quality metrics preventing heavy color artifact ring distortion
+
+            }).catch(runtimeError => {
+                console.error("System interface execution crash:", runtimeError);
+                nodeElement.style.transform = previousTransformState || 'scale(0.5)';
+                actionBtn.innerHTML = "Pipeline Crash";
+                actionBtn.style.opacity = "1";
+            });
+        }
+
+        // Direct Download Bypass Interface Engine
+        function executeDirectDownloadBypass(binaryBlob, filenameLabel) {
+            const virtualObjectUrl = URL.createObjectURL(binaryBlob);
+            const anchorLink = document.createElement('a');
+            anchorLink.download = filenameLabel + '.jpg';
+            anchorLink.href = virtualObjectUrl;
+            anchorLink.click();
+            URL.revokeObjectURL(virtualObjectUrl);
+        }
+
+        // Automatic structural build deployment on immediate script load
+        window.onload = rebuildProductionLine;
+    </script>
+</body>
+</html>
