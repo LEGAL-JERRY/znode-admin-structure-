@@ -454,12 +454,12 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
     <div id="buy-bulk" class="space-y-4 hidden">
       <div><label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Number of Vouchers</label><input id="buy-bulk-qty" type="number" min="2" max="500" value="10" class="input-field" oninput="updateBulkPrice()"></div>
       <div class="bg-brand-50 dark:bg-slate-800 border border-brand-100 dark:border-slate-700 rounded-xl p-4">
-        <div class="flex justify-between items-center mb-2"><span class="text-xs text-slate-500 font-semibold">Unit Price</span><span class="text-sm font-bold text-slate-700 dark:text-slate-300">₦2,000</span></div>
+        <div class="flex justify-between items-center mb-2"><span class="text-xs text-slate-500 font-semibold">Unit Price</span><span class="text-sm font-bold text-slate-700 dark:text-slate-300">₦500</span></div>
         <div class="flex justify-between items-center mb-2"><span class="text-xs text-slate-500 font-semibold">Quantity</span><span id="bulk-qty-display" class="text-sm font-bold text-slate-700 dark:text-slate-300">10</span></div>
         <div class="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
-        <div class="flex justify-between items-center"><span class="text-xs text-emerald-600 font-bold uppercase">Total</span><span id="bulk-total-display" class="text-xl font-black text-emerald-600 dark:text-emerald-400">₦20,000</span></div>
+        <div class="flex justify-between items-center"><span class="text-xs text-emerald-600 font-bold uppercase">Total</span><span id="bulk-total-display" class="text-xl font-black text-emerald-600 dark:text-emerald-400">₦5,000</span></div>
       </div>
-      <button onclick="initiatePurchase('bulk')" class="btn btn-green w-full py-3">Pay <span id="bulk-pay-btn-text">₦20,000</span> via Paystack</button>
+      <button onclick="initiatePurchase('bulk')" class="btn btn-green w-full py-3">Pay <span id="bulk-pay-btn-text">₦5,000</span> via Paystack</button>
     </div>
   </div>
 </div>
