@@ -446,10 +446,10 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
     <div id="buy-individual" class="space-y-4">
       <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-4 text-center">
         <p class="text-xs text-emerald-700 dark:text-emerald-400 font-bold uppercase tracking-wider mb-1">1 Voucher</p>
-        <p class="text-3xl font-black text-emerald-600 dark:text-emerald-400">₦2,000</p>
+        <p class="text-3xl font-black text-emerald-600 dark:text-emerald-400">₦500</p>
         <p class="text-xs text-slate-500 mt-1">per student yearbook access</p>
       </div>
-      <button onclick="initiatePurchase('individual')" class="btn btn-green w-full py-3">Pay ₦2,000 via Paystack</button>
+      <button onclick="initiatePurchase('individual')" class="btn btn-green w-full py-3">Pay ₦500 via Paystack</button>
     </div>
     <div id="buy-bulk" class="space-y-4 hidden">
       <div><label class="block text-[11px] font-semibold text-slate-500 mb-1.5">Number of Vouchers</label><input id="buy-bulk-qty" type="number" min="2" max="500" value="10" class="input-field" oninput="updateBulkPrice()"></div>
@@ -520,7 +520,7 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
 const SUPABASE_URL       = 'https://yohndnmwvgcwadkytmix.supabase.co';
 const SUPABASE_ANON_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvaG5kbm13dmdjd2Fka3l0bWl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDEyODgsImV4cCI6MjA5NDYxNzI4OH0.hkUexJ-AS1GpLJL78F7iXDv5PkwuPbShj2fsGVXuEsg';
 const PAYSTACK_PUBLIC_KEY = 'pk_test_dccd17d3dc8769dbe258fe66f7c1cec8658d96d9';
-const CODE_PRICE_PER_UNIT = 2000; // ₦2,000 per voucher
+const CODE_PRICE_PER_UNIT = 500; // ₦500 per voucher
 const NEXT_PAYOUT_DATE    = 'June 30, 2026';
 
 // ── VOUCHER TABLE = znode_vouchers ─────────────────────
@@ -717,10 +717,12 @@ function renderStudentsTable(students){
       <td class="font-mono text-xs text-slate-500">${s.matric_number||'—'}</td>
       <td class="text-sm font-semibold text-slate-600 dark:text-slate-400">Lvl ${s.academic_level||'—'}</td>
       <td>${verBadge}</td><td>${ybBadge}</td>
-      <td><div class="flex gap-2" onclick="event.stopPropagation()">
-        ${!hasYB?`<button onclick="openAssignCodeForStudent('${s.id}')" class="btn btn-indigo py-1.5 px-3 text-xs">Give Access</button>`:''}
-        <button onclick="openStudentDetail('${s.id}')" class="btn btn-ghost py-1.5 px-3 text-xs">View</button>
-      </div></td></tr>`;
+      <td><div class="flex gap-2 flex-wrap" onclick="event.stopPropagation()">
+  ${!isVer && !isRej ? `<button onclick="approveStudent('${s.id}')" class="btn btn-green py-1.5 px-3 text-xs">✓ Approve</button>` : ''}
+  ${!isVer && !isRej ? `<button onclick="rejectStudent('${s.id}')" class="btn btn-danger py-1.5 px-3 text-xs">✗ Reject</button>` : ''}
+  ${isVer && !hasYB ? `<button onclick="openAssignCodeForStudent('${s.id}')" class="btn btn-indigo py-1.5 px-3 text-xs">Give Access</button>` : ''}
+  <button onclick="openStudentDetail('${s.id}')" class="btn btn-ghost py-1.5 px-3 text-xs">View</button>
+</div></td></tr>`;
   }).join('');
 }
 
@@ -752,14 +754,21 @@ function openStudentDetail(studentId){
   badge.textContent=isVer?'VERIFIED':isRej?'REJECTED':'PENDING';
   badge.className='badge '+(isVer?'badge-green':isRej?'badge-red':'badge-amber');
   getEl('sdm-yearbook').innerHTML=hasYB?'<span class="text-indigo-600 font-bold">✓ Yearbook Access Active</span>':'<span class="text-slate-400">No yearbook access yet</span>';
-  const actEl=getEl('sdm-actions');
-  if(!hasYB){
-    const unusedCode=myCodes.find(c=>c.status==='unused');
-    if(unusedCode) actEl.innerHTML=`<button onclick="closeModal('student-detail-modal'); prepareAssignCode('${unusedCode.id}','${s.id}');" class="btn btn-indigo flex-1">🎟 Assign Voucher</button>`;
-    else actEl.innerHTML=`<button onclick="closeModal('student-detail-modal'); openBuyCodesModal();" class="btn btn-green flex-1">Buy Vouchers First</button>`;
-  } else {
-    actEl.innerHTML=`<div class="text-center text-indigo-600 font-bold text-sm w-full">✓ Student has yearbook access</div>`;
-  }
+const actEl = getEl('sdm-actions');
+let actionsHTML = '';
+
+if (!isVer && !isRej) {
+  actionsHTML += `<button onclick="closeModal('student-detail-modal'); approveStudent('${s.id}');" class="btn btn-green flex-1">✓ Approve</button>`;
+  actionsHTML += `<button onclick="closeModal('student-detail-modal'); rejectStudent('${s.id}');" class="btn btn-danger flex-1">✗ Reject</button>`;
+} else if (isVer && !hasYB) {
+  const unusedCode = myCodes.find(c => c.status === 'unused');
+  if (unusedCode) actionsHTML += `<button onclick="closeModal('student-detail-modal'); prepareAssignCode('${unusedCode.id}','${s.id}');" class="btn btn-indigo flex-1">🎟 Assign Voucher</button>`;
+  else actionsHTML += `<button onclick="closeModal('student-detail-modal'); openBuyCodesModal();" class="btn btn-green flex-1">Buy Vouchers First</button>`;
+} else if (hasYB) {
+  actionsHTML = `<div class="text-center text-indigo-600 font-bold text-sm w-full">✓ Student has yearbook access</div>`;
+}
+
+actEl.innerHTML = actionsHTML;
   showEl('student-detail-modal');
 }
 
@@ -1061,7 +1070,45 @@ function renderTickets(){
       <div><p class="text-xs font-bold text-slate-700 dark:text-slate-300">${t.type?.replace('_',' ')} · <span class="font-normal text-slate-400">${ts}</span></p><p class="text-[10px] text-slate-400 mt-0.5 truncate" style="max-width:200px">${t.details}</p></div>${statusBadge}</div>`;
   }).join('');
 }
+// ── STUDENT VERIFICATION ──────────────────────────────────
+async function approveStudent(studentId) {
+  if (!confirm('Approve this student and make their profile live?')) return;
+  showLoader('Approving student...');
+  try {
+    const { error } = await _db.from('students')
+      .update({ is_verified: true, rejection_reason: null })
+      .eq('id', studentId);
+    if (error) throw error;
+    await fetchStudents();
+    renderStudentsTable(myStudents);
+    renderOverview();
+    hideLoader();
+    showToast('success', '✓ Student approved and profile is now live.');
+  } catch(err) {
+    hideLoader();
+    showToast('error', 'Approval failed: ' + err.message);
+  }
+}
 
+async function rejectStudent(studentId) {
+  const reason = prompt('Enter a reason for rejection (the student will see this):');
+  if (!reason) return;
+  showLoader('Rejecting student...');
+  try {
+    const { error } = await _db.from('students')
+      .update({ is_verified: false, rejection_reason: reason })
+      .eq('id', studentId);
+    if (error) throw error;
+    await fetchStudents();
+    renderStudentsTable(myStudents);
+    renderOverview();
+    hideLoader();
+    showToast('success', 'Student rejected with reason saved.');
+  } catch(err) {
+    hideLoader();
+    showToast('error', 'Rejection failed: ' + err.message);
+  }
+}
 // ── UTILITIES ─────────────────────────────────────────────
 function toggleTheme(){const html=document.documentElement,body=document.body,isDark=html.classList.contains('dark');html.classList.toggle('dark',!isDark);html.classList.toggle('light',isDark);body.classList.toggle('dark',!isDark);body.classList.toggle('light',isDark);}
 function closeModal(id){hideEl(id);}
