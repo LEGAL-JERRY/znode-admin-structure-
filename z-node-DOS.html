@@ -8,8 +8,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://js.paystack.co/v1/inline.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script>
   tailwind.config = {
     darkMode: 'class',
@@ -105,6 +105,92 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 .dark ::-webkit-scrollbar-thumb { background: #2d3748; }
 .hidden { display: none !important; }
+
+/* ── POST ENGINE ── */
+.pe-day-btn{
+  width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;
+  border-radius:9px;border:none;background:transparent;cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;
+  transition:all .18s;text-align:left;color:#64748b;
+}
+.pe-day-btn:hover{background:rgba(16,185,129,0.06);color:#0f172a;}
+.dark .pe-day-btn:hover{background:rgba(255,255,255,0.05);color:#f1f5f9;}
+.pe-day-btn.pe-day-active{background:rgba(16,185,129,0.1);color:#059669;}
+.dark .pe-day-btn.pe-day-active{background:rgba(16,185,129,0.15);color:#10B981;}
+.pe-day-btn.pe-day-active .pe-d-num{color:#059669;}
+.dark .pe-day-btn.pe-day-active .pe-d-num{color:#10B981;}
+.pe-d-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;min-width:22px;}
+.light #pe-cap-box{color:#475569;background:#f8fafc;border:1px solid #e8edf2;border-radius:12px;padding:16px;}
+.dark  #pe-cap-box{color:#94a3b8;background:#0d1526;border:1px solid #1f2937;border-radius:12px;padding:16px;}
+#pe-cap-box::-webkit-scrollbar{width:3px;}
+#pe-cap-box::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px;}
+.dark #pe-cap-box::-webkit-scrollbar-thumb{background:#2d3748;}
+
+/* ── COUNTDOWN CARD (scoped) ── */
+.pe-countdown-card{
+  width:800px;height:1000px;background-color:#030a05;
+  background-image:radial-gradient(ellipse 70% 60% at 50% 42%,#00200a 0%,#010502 70%);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;padding:70px 0 65px;
+  font-family:'Inter',sans-serif;
+}
+.pe-countdown-card .cc-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:120px 120px;background-position:center;z-index:1;
+}
+.pe-countdown-card .cc-vignette{
+  position:absolute;bottom:0;left:0;right:0;height:55%;
+  background:linear-gradient(to bottom,transparent,#010502 80%);z-index:2;
+}
+.pe-countdown-card .cc-vignette-top{
+  position:absolute;top:0;left:0;right:0;height:25%;
+  background:linear-gradient(to top,transparent,rgba(1,5,2,0.6));z-index:2;
+}
+.pe-countdown-card .cc-header{
+  z-index:5;display:flex;align-items:center;gap:18px;position:relative;
+}
+.pe-countdown-card .cc-header::before,.pe-countdown-card .cc-header::after{
+  content:'';position:absolute;top:50%;height:1px;width:100px;
+}
+.pe-countdown-card .cc-header::before{
+  right:100%;margin-right:22px;
+  background:linear-gradient(to left,transparent,rgba(255,255,255,0.2));
+}
+.pe-countdown-card .cc-header::after{
+  left:100%;margin-left:22px;
+  background:linear-gradient(to right,transparent,rgba(255,255,255,0.2));
+}
+.pe-countdown-card .cc-monogram{
+  width:46px;height:46px;border:2.5px solid rgba(255,255,255,0.9);
+  border-radius:8px 8px 26px 26px;position:relative;flex-shrink:0;
+}
+.pe-countdown-card .cc-monogram::after{
+  content:'';position:absolute;bottom:-9px;left:16px;
+  width:9px;height:13px;border:2.5px solid rgba(255,255,255,0.9);border-top:none;
+}
+.pe-countdown-card .cc-header-text{display:flex;flex-direction:column;line-height:1.2;}
+.pe-countdown-card .cc-uni{font-size:19px;font-weight:400;letter-spacing:1px;color:#fff;}
+.pe-countdown-card .cc-dept{font-size:19px;font-weight:900;letter-spacing:1.5px;color:#fff;}
+.pe-countdown-card .cc-number-zone{
+  z-index:5;flex:1;display:flex;align-items:center;justify-content:center;margin-top:-20px;
+}
+.pe-countdown-card .cc-digit{
+  font-size:570px;font-weight:900;color:#040404;line-height:1;letter-spacing:-10px;
+  text-shadow:-2px -2px 0 rgba(255,255,255,0.8),0 0 60px rgba(0,255,102,0.8),
+    0 0 120px rgba(0,255,102,0.45),0 0 200px rgba(0,255,102,0.2),
+    8px 8px 0 #111,15px 15px 0 #070707;
+  user-select:none;
+}
+.pe-countdown-card .cc-footer{
+  z-index:5;text-align:center;display:flex;flex-direction:column;gap:14px;width:88%;
+}
+.pe-countdown-card .cc-title{font-size:66px;font-weight:400;line-height:1.1;letter-spacing:-2px;color:#fff;margin-bottom:4px;}
+.pe-countdown-card .cc-subtitle{font-size:21px;font-weight:400;line-height:1.4;letter-spacing:.5px;color:rgba(255,255,255,0.9);}
+.pe-countdown-card .cc-uni-full{font-size:19px;font-weight:400;color:#a1a1aa;margin-top:2px;}
+.pe-countdown-card .cc-url{font-size:17px;font-weight:300;color:#e4e4e7;margin-top:8px;letter-spacing:.5px;}
+#pe-render-stage{position:fixed;top:-9999px;left:-9999px;z-index:-1;width:800px;height:1000px;overflow:hidden;}
 </style>
 </head>
 <body class="light">
@@ -185,6 +271,7 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         <div class="nav-item" onclick="navTo('referrals')" data-section="referrals"><div class="nav-icon">🔗</div><span>Referrals</span></div>
         <div class="nav-item" onclick="navTo('leaderboard')" data-section="leaderboard"><div class="nav-icon">🏆</div><span>Leaderboard</span></div>
         <div class="nav-item" onclick="navTo('support')" data-section="support"><div class="nav-icon">🛟</div><span>Support</span></div>
+        <div class="nav-item" onclick="navTo('postengine')" data-section="postengine"><div class="nav-icon">📸</div><span>Post Engine</span></div>
         <div class="pt-2 mt-auto border-t border-white/5">
           <div class="nav-item text-red-400 hover:bg-red-500/10 hover:text-red-300" onclick="logout()"><div class="nav-icon bg-red-500/10 text-red-400">🚪</div><span>Sign Out</span></div>
         </div>
@@ -428,6 +515,60 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
         </div>
       </div>
 
+      <!-- POST ENGINE -->
+      <div id="sec-postengine" class="hidden">
+        <div class="mb-6 flex items-end justify-between flex-wrap gap-4">
+          <div>
+            <h2 class="section-head">📸 Post Engine</h2>
+            <p class="section-sub">7-day countdown posts for <span class="font-bold text-emerald-500" id="pe-dept-label"></span> — auto-filled from your profile.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Class Year</label>
+            <input id="pe-year-input" type="number" min="2020" max="2099" class="input-field" style="width:110px;padding:9px 14px;" oninput="peYearChanged()">
+          </div>
+        </div>
+
+        <div class="flex gap-4 items-start flex-wrap">
+          <!-- Day picker -->
+          <div class="card p-3 flex flex-col gap-0.5" style="min-width:144px;flex-shrink:0;">
+            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest px-2 mb-2">Day</p>
+            <button class="pe-day-btn" id="pe-dbtn-7" onclick="peSelectDay(7)"><span class="pe-d-num">07</span><span>Day 7</span></button>
+            <button class="pe-day-btn" id="pe-dbtn-6" onclick="peSelectDay(6)"><span class="pe-d-num">06</span><span>Day 6</span></button>
+            <button class="pe-day-btn" id="pe-dbtn-5" onclick="peSelectDay(5)"><span class="pe-d-num">05</span><span>Day 5</span></button>
+            <button class="pe-day-btn" id="pe-dbtn-4" onclick="peSelectDay(4)"><span class="pe-d-num">04</span><span>Day 4</span></button>
+            <button class="pe-day-btn" id="pe-dbtn-3" onclick="peSelectDay(3)"><span class="pe-d-num">03</span><span>Day 3</span></button>
+            <button class="pe-day-btn" id="pe-dbtn-2" onclick="peSelectDay(2)"><span class="pe-d-num">02</span><span>Day 2</span></button>
+            <button class="pe-day-btn" id="pe-dbtn-1" onclick="peSelectDay(1)"><span class="pe-d-num">01</span><span>Day 1</span></button>
+          </div>
+
+          <!-- Right panel -->
+          <div class="flex-1 flex flex-col gap-4" style="min-width:280px;">
+            <div class="flex gap-2">
+              <button id="pe-tbtn-morning" onclick="peSelectTime('morning')" class="btn btn-green text-xs flex items-center gap-2 px-4">☀️ Morning</button>
+              <button id="pe-tbtn-evening" onclick="peSelectTime('evening')" class="btn btn-ghost text-xs flex items-center gap-2 px-4">🌙 Evening</button>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <!-- Card preview -->
+              <div class="card p-4 flex flex-col items-center gap-3">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider self-start">Card Preview</p>
+                <div id="pe-card-shell" style="width:100%;position:relative;overflow:hidden;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);"></div>
+                <div class="flex gap-2 w-full">
+                  <button onclick="peDownloadCard()" id="pe-dl-btn" class="btn btn-green flex-1 text-xs">⬇️ Download</button>
+                  <button onclick="peShareWhatsApp()" id="pe-wa-btn" class="btn btn-dark flex-1 text-xs">💬 Share</button>
+                </div>
+              </div>
+              <!-- Caption -->
+              <div class="card p-4 flex flex-col gap-3">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Caption</p>
+                <div id="pe-cap-box" style="min-height:200px;max-height:320px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;font-size:12px;line-height:1.75;"></div>
+                <button onclick="peCopyCaption()" id="pe-copy-btn" class="btn btn-ghost text-xs">📋 Copy Caption</button>
+                <p id="pe-status" class="text-xs text-emerald-500 font-mono text-center" style="min-height:16px;opacity:0;transition:opacity .3s;"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -509,6 +650,7 @@ select.input-field  { appearance: none; background-image: url("data:image/svg+xm
   </div>
 </div>
 
+<div id="pe-render-stage"></div>
 <div id="toast" class="hidden">
   <div id="toast-inner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-bold">
     <span id="toast-icon"></span><span id="toast-msg"></span>
@@ -522,6 +664,7 @@ const SUPABASE_ANON_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 const PAYSTACK_PUBLIC_KEY = 'pk_live_ad4252161bf61d466256573cb5b5fd8a4d3bb07a';
 const CODE_PRICE_PER_UNIT = 500; // ₦500 per voucher
 const NEXT_PAYOUT_DATE    = 'June 30, 2026';
+const PE_LINK             = 'https://znode-1-1-dkn4r6610-legal-jerrys-projects.vercel.app/';
 
 // ── VOUCHER TABLE = znode_vouchers ─────────────────────
 // All code/access functions use znode_vouchers, NOT yearbook_access_codes
@@ -627,7 +770,7 @@ async function fetchBroadcasts(){
 }
 
 // ── NAV ───────────────────────────────────────────────────
-const SECTIONS=['overview','students','codes','yearbook','analytics','broadcast','referrals','leaderboard','support'];
+const SECTIONS=['overview','students','codes','yearbook','analytics','broadcast','referrals','leaderboard','support','postengine'];
 function navTo(section){
   SECTIONS.forEach(s=>{
     const el=getEl(`sec-${s}`);
@@ -640,6 +783,7 @@ function navTo(section){
   if(section==='referrals')   renderReferrals();
   if(section==='leaderboard') {setLbTab('dept');loadLeaderboard('dept');}
   if(section==='support')     renderTickets();
+  if(section==='postengine')  initPostEngine();
 }
 
 // ── OVERVIEW ─────────────────────────────────────────────
@@ -1121,10 +1265,257 @@ function showToast(type,msg){
   t.classList.remove('hidden'); t.classList.add('toast-show');
   setTimeout(()=>{t.classList.add('hidden');t.classList.remove('toast-show');},3500);
 }
+
+// ══════════════════════════════════════════════════
+// POST ENGINE
+// ══════════════════════════════════════════════════
+let peState = {
+  year: String(new Date().getFullYear()),
+  currentDay: 7,
+  currentTime: 'morning',
+  uniShort: '',
+  initialized: false
+};
+let peCaptions = {};
+
+async function initPostEngine() {
+  getEl('pe-dept-label').textContent = currentDOS.department || 'Department';
+
+  if (!peState.initialized) {
+    // Pre-fill year from saved yearbook settings, fall back to current year
+    try {
+      const { data } = await _db.from('dos_yearbook_settings')
+        .select('class_year').eq('dos_id', currentDOS.id).single();
+      if (data?.class_year) peState.year = String(data.class_year);
+    } catch(e) {}
+
+    // Fetch institution short name from institutions table
+    try {
+      const { data } = await _db.from('institutions')
+        .select('short_name').eq('id', currentDOS.institution_id).single();
+      peState.uniShort = data?.short_name || peDeriveShortName(currentDOS.institution || '');
+    } catch(e) {
+      peState.uniShort = peDeriveShortName(currentDOS.institution || '');
+    }
+    peState.initialized = true;
+  }
+
+  getEl('pe-year-input').value = peState.year;
+  peBuildCaptions();
+  peSelectDay(peState.currentDay);
+  peSelectTime(peState.currentTime);
+}
+
+function peDeriveShortName(name) {
+  return name.split(/\s+/).filter(w => w.length > 1).map(w => w[0]).join('').toUpperCase();
+}
+
+function peYearChanged() {
+  peState.year = getEl('pe-year-input').value || String(new Date().getFullYear());
+  peBuildCaptions();
+  peRender();
+}
+
+function peBuildCaptions() {
+  peCaptions = peMakeCaptions(currentDOS.department || 'Department', peState.year);
+}
+
+function peSelectDay(day) {
+  document.querySelectorAll('.pe-day-btn').forEach(b => b.classList.remove('pe-day-active'));
+  const btn = getEl('pe-dbtn-' + day);
+  if (btn) btn.classList.add('pe-day-active');
+  peState.currentDay = day;
+  peRender();
+}
+
+function peSelectTime(t) {
+  peState.currentTime = t;
+  getEl('pe-tbtn-morning').className = 'btn text-xs flex items-center gap-2 px-4 ' + (t === 'morning' ? 'btn-green' : 'btn-ghost');
+  getEl('pe-tbtn-evening').className = 'btn text-xs flex items-center gap-2 px-4 ' + (t === 'evening' ? 'btn-green' : 'btn-ghost');
+  peRender();
+}
+
+function peRender() {
+  const day      = peState.currentDay;
+  const time     = peState.currentTime;
+  const dept     = currentDOS.department || 'Department';
+  const uniShort = peState.uniShort;
+  const uniFull  = (currentDOS.institution || '').toUpperCase();
+  const year     = peState.year;
+  const unit     = day === 1 ? 'Day' : 'Days';
+
+  // Caption
+  getEl('pe-cap-box').textContent = peCaptions[day]?.[time] || '';
+
+  // Card preview — scale 800×1000 card to fit shell width
+  const shell = getEl('pe-card-shell');
+  shell.innerHTML = '';
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'position:absolute;inset:0;overflow:hidden;border-radius:10px;';
+  const inner = document.createElement('div');
+  inner.innerHTML = peCardHtml(day, unit, dept, uniShort, uniFull, year);
+  const card = inner.firstElementChild;
+  card.style.cssText = 'position:absolute;top:0;left:0;transform-origin:top left;';
+  wrapper.appendChild(card);
+  shell.appendChild(wrapper);
+
+  requestAnimationFrame(() => {
+    const sw    = shell.offsetWidth || 300;
+    const scale = sw / 800;
+    card.style.transform = `scale(${scale})`;
+    const h = (1000 * scale) + 'px';
+    wrapper.style.height = h;
+    shell.style.height   = h;
+  });
+
+  // Reset action states
+  getEl('pe-status').style.opacity = '0';
+  const cb = getEl('pe-copy-btn');
+  cb.textContent  = '📋 Copy Caption';
+  cb.className    = 'btn btn-ghost text-xs';
+}
+
+function peCardHtml(day, unit, dept, uniShort, uniFull, year) {
+  const e = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `<div class="pe-countdown-card">
+    <div class="cc-grid"></div>
+    <div class="cc-vignette-top"></div>
+    <div class="cc-vignette"></div>
+    <div class="cc-header">
+      <div class="cc-monogram"></div>
+      <div class="cc-header-text">
+        <span class="cc-uni">${e(uniShort)}</span>
+        <span class="cc-dept">${e(String(dept).toUpperCase())}</span>
+      </div>
+    </div>
+    <div class="cc-number-zone"><div class="cc-digit">${day}</div></div>
+    <div class="cc-footer">
+      <div class="cc-title">${day} ${unit} To<br>Launch</div>
+      <div class="cc-subtitle">OFFICIAL LAUNCH OF THE<br>${e(String(dept).toUpperCase())} DEPARTMENT</div>
+      <div class="cc-uni-full">${e(uniFull)} — YEAR ${e(String(year))}</div>
+      <div class="cc-url">${PE_LINK}</div>
+    </div>
+  </div>`;
+}
+
+async function peCaptureCard() {
+  const day      = peState.currentDay;
+  const unit     = day === 1 ? 'Day' : 'Days';
+  const dept     = currentDOS.department || 'Department';
+  const uniShort = peState.uniShort;
+  const uniFull  = (currentDOS.institution || '').toUpperCase();
+  const year     = peState.year;
+  const stage    = getEl('pe-render-stage');
+
+  stage.innerHTML = peCardHtml(day, unit, dept, uniShort, uniFull, year);
+  const card = stage.firstElementChild;
+
+  await document.fonts.ready;
+  await new Promise(r => setTimeout(r, 150));
+
+  const canvas = await html2canvas(card, {
+    scale: 2, backgroundColor: '#030a05', logging: false, useCORS: true, width: 800, height: 1000
+  });
+  stage.innerHTML = '';
+  return new Promise(resolve => canvas.toBlob(b => resolve(b), 'image/jpeg', 0.95));
+}
+
+async function peDownloadCard() {
+  const btn = getEl('pe-dl-btn'), orig = btn.innerHTML;
+  btn.innerHTML = 'Processing…'; btn.disabled = true;
+  try {
+    const blob = await peCaptureCard();
+    const dept = (currentDOS.department || 'Dept').replace(/\s+/g, '_');
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = `${dept}_Countdown_Day${peState.currentDay}_${peState.currentTime}.jpg`;
+    a.click();
+    URL.revokeObjectURL(url);
+    peShowStatus('Image downloaded ✓');
+  } catch(e) { peShowStatus('Download failed'); }
+  finally { btn.innerHTML = orig; btn.disabled = false; }
+}
+
+async function peShareWhatsApp() {
+  const btn = getEl('pe-wa-btn'), orig = btn.innerHTML;
+  btn.innerHTML = 'Preparing…'; btn.disabled = true;
+  try {
+    const blob    = await peCaptureCard();
+    const dept    = currentDOS.department || 'Dept';
+    const file    = new File([blob], `Countdown_Day${peState.currentDay}.jpg`, { type: 'image/jpeg' });
+    const caption = peCaptions[peState.currentDay]?.[peState.currentTime] || '';
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], text: caption, title: `${dept} — Day ${peState.currentDay}` });
+      peShowStatus('Shared ✓');
+    } else {
+      // Desktop fallback: download image + copy caption
+      const url = URL.createObjectURL(blob);
+      const a   = document.createElement('a');
+      a.href = url; a.download = `Countdown_Day${peState.currentDay}.jpg`;
+      a.click(); URL.revokeObjectURL(url);
+      await navigator.clipboard.writeText(caption).catch(() => {});
+      peShowStatus('Image saved · Caption copied → paste both into WhatsApp');
+    }
+  } catch(e) { if (e.name !== 'AbortError') peShowStatus('Share failed'); }
+  finally { btn.innerHTML = orig; btn.disabled = false; }
+}
+
+async function peCopyCaption() {
+  const text = peCaptions[peState.currentDay]?.[peState.currentTime] || '';
+  try { await navigator.clipboard.writeText(text); } catch(e) {
+    const el = document.createElement('textarea');
+    el.value = text; el.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  }
+  const btn = getEl('pe-copy-btn');
+  btn.textContent = '✓ Copied!'; btn.className = 'btn btn-green text-xs';
+  peShowStatus('Caption copied ✓');
+  setTimeout(() => { btn.textContent = '📋 Copy Caption'; btn.className = 'btn btn-ghost text-xs'; }, 2500);
+}
+
+function peShowStatus(msg) {
+  const el = getEl('pe-status');
+  el.textContent = msg; el.style.opacity = '1';
+  setTimeout(() => { el.style.opacity = '0'; }, 3500);
+}
+
+function peMakeCaptions(dept, year) {
+  const L = PE_LINK;
+  return {
+    7: {
+      morning: `Good morning, ${dept} ${year} graduating set! 🎓\n\nToday is the day. The ${dept} Yearbook officially opens for sign-up.\n\nThis isn't just another app — it's a permanent record of our graduating class. Years from now, when people ask "were you part of the set that started this?" — you'll be able to say yes.\n\nSign up here: ${L}\n\nThis window is open for 7 days only. Once it closes, the yearbook is finalized and published — no late entries after that.\n\nYour spot. Your number. Forever.\n\n7 days remaining in this window.`,
+      evening: `Day 1 is wrapping up, ${dept} fam 🌙\n\nA good number of you have already signed up today — and we're just getting started.\n\nQuick reminder: signing up is free, but to actually appear in the yearbook, you need to either pay ₦500 or enter your voucher code from your DOS.\n\nIf you haven't joined yet — what are you waiting for?\n\nSign up here: ${L}\n\n6 days remaining in this window.`
+    },
+    6: {
+      morning: `Good morning ${dept} ${year}! ☀️\n\nDay 2 of our 7-day window. If you signed up yesterday but haven't unlocked your profile yet, today's a good day to do that.\n\nQuick recap — how to sign up: tap the link, fill in your details, pay ₦500 (card/transfer) or enter your voucher code, and you're in — permanently.\n\nSign up here: ${L}\n\n5 days remaining in this window.`,
+      evening: `We're 2 days into the window, ${dept} fam 🌙\n\nSome of you are already signed up and ready to go. If you're still on the fence, remember — this isn't staying open forever.\n\nOnce the window closes, the yearbook is finalized and published. No additions after that point.\n\nSign up here: ${L}\n\n5 days remaining in this window.`
+    },
+    5: {
+      morning: `Good morning ${dept} set! ☀️\n\nWe're at the halfway mark. If you've been putting off signing up, today's a great day to just do it — it takes less than 2 minutes.\n\nTap link → enter details → pay ₦500 or use voucher → you're permanently part of the yearbook.\n\nSign up here: ${L}\n\n4 days remaining in this window.`,
+      evening: `Halfway through the week, ${dept} fam 🌙\n\nThe energy has been good so far. More of you are showing up and locking in your spot every day.\n\nIf you're just seeing this for the first time: this is the ${dept} ${year} Yearbook. A one-time permanent digital record of our graduating set. ₦500 to be included, 7 days to join.\n\nSign up here: ${L}\n\n4 days remaining in this window.`
+    },
+    4: {
+      morning: `Good morning ${dept} ${year}! ☀️\n\nDay 4. We're now past the halfway point — meaning there's less time ahead of us than behind us.\n\nTap the link, enter your details, pay ₦500 or use your voucher, and you're in the yearbook permanently.\n\nSign up here: ${L}\n\n3 days remaining in this window.`,
+      evening: `3 days left, ${dept} fam. Let that sink in for a second 🌙\n\nAfter this window closes, there's no second round for this set. No "let me do it next week." This is it.\n\nIf you've been telling yourself you'll do it "later" — later is running out.\n\nSign up here: ${L}\n\n3 days remaining in this window.`
+    },
+    3: {
+      morning: `Good morning ${dept} set! ☀️\n\n3 days left after today. We're entering the final stretch.\n\nQuick how-to: tap link → fill details → pay ₦500 or enter voucher → locked in forever.\n\nIf you have your voucher code from your DOS, this takes less than a minute. No card needed.\n\nSign up here: ${L}\n\n2 days remaining after today.`,
+      evening: `2 days left after tonight, ${dept} fam 🌙\n\nWe're genuinely close to the end of this window. If you've been planning to join "before it closes" — this is that moment.\n\nDon't be the one person from our set who's missing when this gets published.\n\nSign up here: ${L}\n\n2 days remaining after tonight.`
+    },
+    2: {
+      morning: `Good morning ${dept} ${year}! ☀️\n\n2 days left. This is no longer a "plenty of time" situation — it's a "do it today" situation.\n\nTap link → details → pay ₦500 or voucher → you're in.\n\nIf you've lost your voucher code or having issues signing up, reach out to your DOS directly.\n\nSign up here: ${L}\n\n2 days remaining in this window.`,
+      evening: `Tomorrow is the final day, ${dept} fam 🌙\n\nAfter tomorrow, this window closes for good. The yearbook gets finalized and published — with everyone who's in, in, and everyone who isn't, out.\n\nIf you're not signed up yet, tomorrow is your last chance. Don't let this be something you regret skipping.\n\nSign up here: ${L}\n\n1 day remaining — tomorrow is the final day.`
+    },
+    1: {
+      morning: `Good morning ${dept} ${year} — today's the day 🎓\n\nThis is the LAST DAY to sign up and secure your spot in the ${dept} Yearbook. After tonight, the window closes completely.\n\nLast call — tap the link, enter your details, pay ₦500 or enter your voucher code, and you're permanently part of the yearbook.\n\nNo extensions. No late entries. This is it.\n\nSign up here: ${L}\n\nFINAL DAY — window closes tonight.`,
+      evening: `This is it, ${dept} fam. The window closes tonight 🌙\n\nIf you're in already — thank you for being part of this from day one. This set's story is now permanently recorded.\n\nIf you're not in yet and you're reading this — there's still a small window left tonight. After that, the yearbook is finalized for good.\n\nLast chance: ${L}\n\nWelcome to a permanent piece of ${dept} history.\n\nWindow closes at midnight tonight.`
+    }
+  };
+}
 </script>
 </body>
 </html>
 
 
-You are out of free messages until 10:20 PM
-Claude Fabl
